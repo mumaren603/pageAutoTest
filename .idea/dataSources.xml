@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="241-3.0测试库" uuid="605e2515-17b4-47ff-8774-dda0a032d84e">
+      <driver-ref>oracle</driver-ref>
+      <synchronize>true</synchronize>
+      <remarks>3.0测试库</remarks>
+      <auto-commit>false</auto-commit>
+      <jdbc-driver>oracle.jdbc.OracleDriver</jdbc-driver>
+      <jdbc-url>jdbc:oracle:thin:@172.16.17.241:1521:orcl</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="247-权籍库" uuid="439407d0-beab-4a96-89c7-1ac75ebfcee8">
+      <driver-ref>oracle</driver-ref>
+      <synchronize>true</synchronize>
+      <remarks>权籍库</remarks>
+      <auto-commit>false</auto-commit>
+      <jdbc-driver>oracle.jdbc.OracleDriver</jdbc-driver>
+      <jdbc-url>jdbc:oracle:thin:@172.16.17.247:1521:tzkjk</jdbc-url>
+    </data-source>
+  </component>
+</project>

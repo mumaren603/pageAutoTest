@@ -1,0 +1,17 @@
+initdata:
+  #流程
+  lcInfo:
+    qllx: 国有建设用地使用权及房屋所有权
+    djlx: 转移登记
+    ywlxID: BF8570D83B5F4B95A0AD22D9603477D2 # 裁定过户批量（房）
+  #小类
+  params:
+    ywxl:
+    sffz: 1
+    sfpl: 1
+    cqType:
+
+
+
+
+

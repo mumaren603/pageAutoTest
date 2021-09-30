@@ -1,0 +1,14 @@
+initdata:
+  #流程
+  lcInfo:
+    qllx: 国有建设用地使用权及房屋所有权
+    djlx: 转移登记
+    ywlxID: 08B6FBC363E745C3ABF0DFDD13ECCD0B #预告转现（200040213）
+  #小类
+  params:
+    ywxl:
+    fwlb:
+    sffz: 1
+    cqType:
+
+

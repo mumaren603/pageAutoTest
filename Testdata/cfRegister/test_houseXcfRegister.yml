@@ -1,0 +1,11 @@
+initdata:
+  #流程
+  lcInfo:
+    qllx: 查封登记
+    djlx:
+    ywlxID: 4F8E285959114451A95C5CFC31FD9E0F #续查封登记（房屋）
+  #小类
+  params:
+    ywxl:
+    sffz:
+    cqType: 1

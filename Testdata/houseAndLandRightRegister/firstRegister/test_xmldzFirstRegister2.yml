@@ -1,0 +1,12 @@
+initdata:
+  #流程
+  lcInfo:
+    qllx: 国有建设用地使用权及房屋所有权
+    djlx: 首次登记
+    ywlxID: 608286609F5C429CB32BA42C56F7C7F7  #项目类多幢
+  #小类
+  params:
+    ywxl:
+    sffz: 1
+    sfpl: 1
+    sfztfz: 0 #按幢发证

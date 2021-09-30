@@ -1,0 +1,15 @@
+initdata:
+  #流程
+  lcInfo:
+    qllx: 预告登记
+    djlx: 首次登记
+    ywlxID: 1CEDE7DF7E0F481BB5AF3C8700028F1B  #商品房（经适房）预告首次
+  #小类
+  params:
+    ywxl: 预售商品房预告登记
+    sfpl: 0
+    sffz: 1
+    cqType:
+    ygType: 0
+
+

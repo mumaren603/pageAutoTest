@@ -1,0 +1,13 @@
+initdata:
+  #流程
+  lcInfo:
+    qllx: 查封登记
+    djlx:
+    ywlxID: 36F20BC9FC524657A1D79B776A1C0CF5    # 批量续查封（净地）
+  #小类
+  params:
+    ywxl:
+    sffz:
+    cqType: 0
+    sfpl: 1
+

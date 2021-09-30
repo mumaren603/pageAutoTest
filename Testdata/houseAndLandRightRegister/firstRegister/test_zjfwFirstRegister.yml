@@ -1,0 +1,7 @@
+initdata:
+  qllx: 国有建设用地使用权及房屋所有权
+  djlx: 首次登记
+  ywlxID: 167090000070 #自建房屋（02102）
+  params:
+    ywxl: 单位自建房
+

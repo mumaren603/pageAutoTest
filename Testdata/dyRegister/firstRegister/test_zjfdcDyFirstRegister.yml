@@ -1,0 +1,13 @@
+initdata:
+  #流程
+  lcInfo:
+    qllx: 抵押权
+    djlx: 首次登记
+    ywlxID: 497903B0B8404E60B70C27DB2C7674F7 #在建房地产
+  #小类
+  params:
+    ywxl:
+    fwlb: 商品房
+    sffz: 1
+    cqType:
+

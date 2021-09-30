@@ -1,0 +1,15 @@
+initdata:
+  #流程
+  lcInfo:
+    qllx: 国有建设用地使用权及房屋所有权
+    djlx: 转移登记
+    ywlxID: 807BD8C295404AA19F2275CB830E5F4C  #房屋首次转移登记
+  #小类
+  params:
+    ywxl: 市场化商品房转移登记
+    fwlb:
+    sffz: 1
+    cqType:
+
+
+

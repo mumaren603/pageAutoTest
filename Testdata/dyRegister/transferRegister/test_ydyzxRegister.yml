@@ -1,0 +1,12 @@
+initdata:
+  #流程
+  lcInfo:
+    qllx: 抵押权
+    djlx: 转移登记
+    ywlxID:  7FCA6894051F46CDBC603DE0E430D1EA #预抵押转现
+  #小类
+  params:
+    ywxl:
+    sffz: 1
+    cqType:
+

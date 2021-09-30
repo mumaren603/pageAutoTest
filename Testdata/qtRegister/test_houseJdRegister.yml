@@ -1,0 +1,13 @@
+initdata:
+  #流程
+  lcInfo:
+    qllx: 其他登记
+    djlx:
+    ywlxID: 009B74A8CD6C42C18B6F2C0F16FAC912 # 解冻登记（房屋）
+  #小类
+  params:
+    ywxl:
+    sffz:
+    sfpl: 1
+    cqType: 1
+

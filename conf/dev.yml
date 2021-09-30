@@ -1,0 +1,15 @@
+envinfo:
+  #浏览器驱动
+  browserDriver: D:/python/pageAutoTest/chromeDriver/chromedriver.exe
+  #url
+  url:
+  #数据库
+  db:
+    qj:
+    dj:
+  #登录用户
+  loginUser:
+    user:
+    passwd:
+
+

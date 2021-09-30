@@ -1,0 +1,14 @@
+initdata:
+  #流程
+  lcInfo:
+    qllx: 抵押权
+    djlx: 变更登记
+    ywlxID: B99F96081EE34064A11CD70B389CA019  #批量抵押变更（房屋）
+  #小类
+  params:
+    ywxl:
+    sfpl: 1
+    sffz: 1
+    cqType:
+
+

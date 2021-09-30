@@ -1,0 +1,9 @@
+initdata:
+  #流程
+  lcInfo:
+    qllx: 预告登记
+    djlx: 注销登记
+    ywlxID: C956D29C47DE4699AD31A620F82961EC  #商品房预告注销登记
+  #小类
+  params:
+    ywxl:

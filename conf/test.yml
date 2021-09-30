@@ -1,0 +1,16 @@
+envinfo:
+  #浏览器驱动
+  browserDriver: D:/python/pageAutoTest/chromeDriver/chromedriver.exe
+  #url
+  url: http://172.16.17.235:9999
+#  url: http://192.168.1.235:9999
+  #数据库
+  db:
+#    qj: KJK/KJK@192.168.1.247:1521/tzkjk
+#    dj: djpt/djpt@192.168.1.241:1521/orcl
+    qj: CSK/Cgk2021#@172.16.17.251:1521/orcl
+    dj: djpt/Djpt2021#@172.16.17.241:1521/orcl
+  #登录用户
+  loginUser:
+    user: zjx
+    passwd: 123

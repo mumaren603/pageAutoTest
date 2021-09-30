@@ -1,0 +1,12 @@
+initdata:
+  #流程
+  lcInfo:
+    qllx: 抵押权
+    djlx: 首次登记
+    ywlxID: 6DD4B4B44C724FCAAEF3A21BD49E1232  #不动产抵押（03102）
+  #小类
+  params:
+    ywxl:
+    sffz: 1
+    cqType:
+

@@ -1,0 +1,13 @@
+initdata:
+  #流程
+  lcInfo:
+    qllx: 查封登记
+    djlx:
+    ywlxID: 6DFC6A6D5D214896AB5216424A8E02BE # 查封登记（包括轮候查封）（05001）
+  #小类
+  params:
+    ywxl:
+    fwlb:
+    sffz:
+    cqType: 1
+

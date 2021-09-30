@@ -1,0 +1,16 @@
+initdata:
+  #流程
+  lcInfo:
+    qllx: 国有建设用地使用权及房屋所有权
+    djlx: 转移登记
+    ywlxID: E53B3B2C4EE0453D9BCAD57B0107F184 # 裁定过户（房）
+  #小类
+  params:
+    ywxl:
+    sffz: 1
+    cqType:
+
+
+
+
+

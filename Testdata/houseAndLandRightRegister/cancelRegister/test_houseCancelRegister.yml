@@ -1,0 +1,12 @@
+initdata:
+  #流程
+  lcInfo:
+    qllx: 国有建设用地使用权及房屋所有权
+    djlx: 注销登记
+    ywlxID: 167010001441  #注销登记
+  #小类
+  params:
+    ywxl:
+    fwlb:
+    sffz:
+    cqType:

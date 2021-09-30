@@ -1,0 +1,13 @@
+initdata:
+  #流程
+  lcInfo:
+    qllx: 其他登记
+    djlx:
+    ywlxID: ACAF8531B13B43FC8CB4D521E46FCA58 # 冻结登记（房屋）
+  #小类
+  params:
+    ywxl:
+    sffz:
+    sfpl: 1
+    cqType: 1
+

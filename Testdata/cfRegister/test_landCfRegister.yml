@@ -1,0 +1,12 @@
+initdata:
+  #流程
+  lcInfo:
+    qllx: 查封登记
+    djlx:
+    ywlxID: 87F9D867EFD04220805987CC776A7A9F    # 净地查封登记
+  #小类
+  params:
+    ywxl: 查封
+    sffz:
+    cqType: 0
+

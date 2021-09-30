@@ -1,0 +1,12 @@
+initdata:
+  #流程
+  lcInfo:
+    qllx: 国有建设用地使用权及房屋所有权
+    djlx: 首次登记
+    ywlxID: 191B4FB37DD148448BC64944C01A78C1  #建筑物区分业主共有部分
+  #小类
+  params:
+    ywxl:
+    sffz: 1
+    sfpl: 1
+    cqType:

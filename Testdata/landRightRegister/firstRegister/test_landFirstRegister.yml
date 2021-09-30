@@ -1,0 +1,14 @@
+initdata:
+  #流程
+  lcInfo:
+    qllx: 国有建设用地使用权
+    djlx: 首次登记
+    ywlxID: C49536D5C50F4F609FACAAAE805EC510 #出让用地
+  #小类
+  params:
+    ywxl:
+    sfpl:
+    sffz: 1
+    cqType:
+
+

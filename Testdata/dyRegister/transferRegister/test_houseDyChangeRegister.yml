@@ -1,0 +1,13 @@
+initdata:
+  #流程
+  lcInfo:
+    qllx: 抵押权
+    djlx: 转移登记
+    ywlxID: 167090000095 #不动产抵押转移（03202）
+  #小类
+  params:
+    ywxl:
+    fwlb: 商品房
+    sffz:
+    cqType:
+
