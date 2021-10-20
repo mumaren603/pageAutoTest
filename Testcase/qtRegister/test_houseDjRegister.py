@@ -31,7 +31,7 @@ class Test_houseDjRegister():
         dbInfo = login[1]
         bdcdyh = dataInit(dbInfo).getHouseDjRegisterData()
         logger.debug("<--------其他登记--冻结登记（房屋）-------->")
-        logger.debug(">>>>>界面操作start<<<<<")
+        logger.debug("<--------界面操作start-------->")
 
         # 办件中心
         taskCenter(self.driver).common()
@@ -49,19 +49,19 @@ class Test_houseDjRegister():
         blyjPage(self.driver).blyjHandle()
         # 受理(登簿)
         submitPage(self.driver).slHandle()
-        logger.debug(">>>>>界面操作end<<<<<")
+        logger.debug("<--------界面操作end------->")
 
         # 数据库校验
         try:
-            logger.debug(">>>>>归档数据检查start<<<<<")
+            logger.debug("<--------归档数据检查start-------->")
             resDataCheck = dataResCheck(dbInfo).qtxzRegisterDataCheck(bdcdyh,self.data)
             assert resDataCheck
-            logger.debug(">>>>>归档数据检查end<<<<<")
+            logger.debug("<--------归档数据检查end------->")
         except AssertionError:
             raise
 
     def teardown(self):
-        logger.debug(">>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<\n")
+        logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n")
         # 退出系统
         logout(self.driver).logout()
         # 退出浏览器

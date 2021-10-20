@@ -5,8 +5,8 @@ from Common.logFunc import loggerConf
 logger = loggerConf().getLogger()
 
 def collect_static_data(param):
-    logger.debug(">>>>>>>>>>>>>>测试用例执行start<<<<<<<<<<<<<<<")
-    logger.debug(">>>读取初始化配置数据start<<<")
+    logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>测试用例执行start<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+    logger.debug("<--------读取初始化配置数据start-------->")
     logger.debug("配置文件参数为：%s" % param)
     rootdir = os.path.dirname(os.path.dirname(__file__))
     configFile = param+'.yml'

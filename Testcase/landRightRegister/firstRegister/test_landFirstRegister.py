@@ -38,7 +38,7 @@ class Test_landFirstRegister():
         # 获取办件数据
         bdcdyh = dataInit(dbInfo).getLandFirstRegisterData()
         logger.debug("<--------国有建设用地使用权--首次登记--出让登记start-------->")
-        logger.debug(">>>>>界面操作start<<<<<")
+        logger.debug("<--------界面操作start-------->")
 
         # 办件中心
         taskCenter(self.driver).common()
@@ -68,7 +68,7 @@ class Test_landFirstRegister():
         # szfzPage(self.driver).szHandle(bdcdyh,cmdopt)
         # # 发证
         # szfzPage(self.driver).fzHandle(bdcdyh,cmdopt)
-        logger.debug(">>>>>界面操作end<<<<<")
+        logger.debug("<--------界面操作end------->")
 
         try:
             logger.debug("<--------归档数据检查start-------->")
@@ -80,7 +80,7 @@ class Test_landFirstRegister():
         logger.debug("<--------国有建设用地使用权--首次登记--出让登记end-------->")
 
     def teardown(self):
-        logger.debug(">>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<\n")
+        logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n")
         # 退出系统
         logout(self.driver).logout()
         # 退出浏览器

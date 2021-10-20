@@ -37,7 +37,7 @@ class Test_jzwqfyzgybfFirstRegister():
         # 获取办件数据
         bdcdyh = dataInit(dbInfo).getJzwqfyzgybfFirstRegisterData()
         logger.debug("#####国有建设用地使用权及房屋所有权--首次登记--建筑物区分业主共有部分")
-        logger.debug(">>>>>界面操作start<<<<<")
+        logger.debug("<--------界面操作start-------->")
 
         #办件中心
         taskCenter(self.driver).common()
@@ -63,7 +63,7 @@ class Test_jzwqfyzgybfFirstRegister():
         submitPage(self.driver).shHandle(bdcdyh)
         # 登簿
         submitPage(self.driver).dbHandle(bdcdyh,self.data)
-        logger.debug(">>>>>界面操作end<<<<<")
+        logger.debug("<--------界面操作end------->")
 
         # 数据库验证
         try:
@@ -75,7 +75,7 @@ class Test_jzwqfyzgybfFirstRegister():
             raise
 
     def teardown(self):
-        logger.debug(">>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<")
+        logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n")
         # 退出系统
         logout(self.driver).logout()
         # 退出浏览器

@@ -23,7 +23,7 @@ def login(request,getConfValue):
     logger.debug("登录用户信息：%s" % login_user)
 
     db_info = getConfValue.get('envinfo').get('db',None)
-    logger.debug(">>>读取初始化配置数据end<<<")
+    logger.debug("<--------读取初始化配置数据end-------->")
 
     if driver_path and login_url and login_user:
         driver = webdriver.Chrome(executable_path=driver_path)

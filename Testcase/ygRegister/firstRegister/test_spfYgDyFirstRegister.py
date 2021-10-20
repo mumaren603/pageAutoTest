@@ -34,7 +34,7 @@ class Test_spfYgDyFirstRegister():
         # 获取办件数据
         bdcdyh = dataInit(dbInfo).getSpfYgDyRegisterData()
         logger.debug("<--------预告登记--首次登记--商品房（经适房）抵押start-------->")
-        logger.debug(">>>>>界面操作start<<<<<")
+        logger.debug("<--------界面操作start-------->")
 
         # 办件中心
         taskCenter(self.driver).common()
@@ -64,7 +64,7 @@ class Test_spfYgDyFirstRegister():
         submitPage(self.driver).shHandle(bdcdyh)
         # 登簿
         submitPage(self.driver).dbHandle(bdcdyh, self.data)
-        logger.debug(">>>>>界面操作end<<<<<")
+        logger.debug("<--------界面操作end------->")
 
         # 数据库校验
         try:
@@ -77,7 +77,7 @@ class Test_spfYgDyFirstRegister():
         logger.debug("<--------预告登记--首次登记--商品房（经适房）抵押end-------->")
 
     def teardown(self):
-        logger.debug(">>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<\n")
+        logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n")
         # 退出系统
         logout(self.driver).logout()
         # 关闭浏览器

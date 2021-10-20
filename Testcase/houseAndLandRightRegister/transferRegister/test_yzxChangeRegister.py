@@ -34,8 +34,8 @@ class Test_yzxChangeRegister():
         dbInfo = login[1]
         # 获取办件数据
         bdcdyh = dataInit(dbInfo).getYzxRegisterData()
-        logger.debug("#####有建设用地使用权及房屋所有权--转移登记--预告转现#####")
-        logger.debug(">>>>>界面操作start<<<<<")
+        logger.debug("<--------国有建设用地使用权及房屋所有权--首次登记--预告转现start-------->")
+        logger.debug("<--------界面操作start-------->")
 
         # 办件中心
         taskCenter(self.driver).common()
@@ -63,19 +63,21 @@ class Test_yzxChangeRegister():
         submitPage(self.driver).slHandle()
         # 登簿
         submitPage(self.driver).dbHandle(bdcdyh, self.data)
-        logger.debug(">>>>>界面操作end<<<<<")
+        logger.debug("<--------界面操作end------->")
 
         # 数据库检查
         try:
-            logger.debug(">>>>>归档数据检查start<<<<<")
+            logger.debug("<--------归档数据检查start-------->")
             resDataCheck = dataResCheck(dbInfo).houseRegisterDataCheck(bdcdyh, self.data)
             assert resDataCheck
-            logger.debug(">>>>>归档数据检查end<<<<<")
+            logger.debug("<--------归档数据检查end------->")
         except AssertionError:
             raise
+        logger.debug("<--------国有建设用地使用权及房屋所有权--首次登记--预告转现end-------->")
+
 
     def teardown(self):
-        logger.debug(">>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<\n")
+        logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n")
         # 退出系统
         logout(self.driver).logout()
         # 退出浏览器

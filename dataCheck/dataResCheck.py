@@ -157,35 +157,49 @@ class dataResCheck():
                 res_yw_sqxx_ywh = self.db_dj_conn.SqlExecute(sql_yw_sqxx_ywh)
                 logger.debug("yw_sqxx表查询ywh为：%s" %res_yw_sqxx_ywh)
 
-            sql_dj_fdcq2_id = "select id from dj_fdcq2 where zt='1' and sfyx=1 and ywh='" + res_yw_sqxx_ywh + "'"
+            sql_dj_fdcq2_id = "select id from dj_fdcq2 where ywh='" + res_yw_sqxx_ywh + "'"
             res_dj_fdcq2_id = str(self.db_dj_conn.SqlExecute(sql_dj_fdcq2_id))
-            logger.debug("dj_fdcq2表查询id为：%s" %res_dj_fdcq2_id)
+            logger.debug("dj_fdcq2表查询id为：%s" % res_dj_fdcq2_id)
 
-            sql_dj_hxx_djbid = "select djbid from dj_hxx where zt='1' and sfyx=1 and cqbid='" + res_dj_fdcq2_id + "'"
-            res_dj_hxx_djbid = str(self.db_dj_conn.SqlExecute(sql_dj_hxx_djbid))
-            logger.debug("dj_hxx表查询djbid为：%s" %res_dj_hxx_djbid)
+            sql_dj_fdcq2_djbid = "select djbid from dj_fdcq2 where ywh='" + res_yw_sqxx_ywh + "'"
+            res_dj_fdcq2_djbid = str(self.db_dj_conn.SqlExecute(sql_dj_fdcq2_djbid))
+            logger.debug("dj_fdcq2表查询djbid为：%s" % res_dj_fdcq2_djbid)
 
-            sql_dj_fdcq2_djben_zs = "select count(1) from dj_fdcq2_djben_zs where sfyx=1 and qlbid='" + res_dj_fdcq2_id + "'"
+            sql_dj_fdcq2 = "select count(1) from dj_fdcq2 where zt='1' and sfyx=1 and ywh='" + res_yw_sqxx_ywh + "'"
+            res_dj_fdcq2 = self.db_dj_conn.SqlExecute(sql_dj_fdcq2)
+            logger.debug("dj_fdcq2表查询sql：%s" % sql_dj_fdcq2)
+            logger.debug("dj_fdcq2表查询记录为：%d" % res_dj_fdcq2)
+
+            sql_dj_hxx = "select count(1) from dj_hxx where zt='1' and sfyx=1 and cqbid='" + res_dj_fdcq2_id + "'"
+            res_dj_hxx = self.db_dj_conn.SqlExecute(sql_dj_hxx)
+            logger.debug("dj_hxx表查询sql：%s" % sql_dj_hxx)
+            logger.debug("dj_hxx表查询记录为：%d" % res_dj_hxx)
+
+            sql_dj_fdcq2_djben_zs = "select count(1) from dj_fdcq2_djben_zs where sfyx=1 and  qlbid='" + res_dj_fdcq2_id + "'"
             res_dj_fdcq2_djben_zs = self.db_dj_conn.SqlExecute(sql_dj_fdcq2_djben_zs)
-            logger.debug("dj_fdcq2_djben_zs表查询记录为：%d" %res_dj_fdcq2_djben_zs)
+            logger.debug("dj_fdcq2_djben_zs表查询sql：%s" % sql_dj_fdcq2_djben_zs)
+            logger.debug("dj_fdcq2_djben_zs表查询记录为：%d" % res_dj_fdcq2_djben_zs)
 
-            sql_dj_djben = "select count(1) from dj_djben where zt='1' and sfyx=1 and id='" + res_dj_hxx_djbid + "'"
+            sql_dj_djben = "select count(1) from dj_djben where zt='1' and sfyx=1 and sfysczql=1 and id='" + res_dj_fdcq2_djbid + "'"
             res_dj_djben = self.db_dj_conn.SqlExecute(sql_dj_djben)
-            logger.debug("dj_djben表查询记录为：%d" %res_dj_djben)
+            logger.debug("dj_djben表查询sql：%s" % sql_dj_djben)
+            logger.debug("dj_djben表查询记录为：%d" % res_dj_djben)
 
             sql_dj_zs = "select count(1) from dj_zs where zt='1' and sfyx=1 and cqbid='" + res_dj_fdcq2_id + "'"
             res_dj_zs = self.db_dj_conn.SqlExecute(sql_dj_zs)
+            logger.debug("dj_zs表查询sql：%s" % sql_dj_zs)
             logger.debug("dj_zs表查询记录为：%d" % res_dj_zs)
 
             sql_dj_qlrgl = "select count(1) from  dj_qlrgl where zt='1' and sfyx=1 and qlbid='" + res_dj_fdcq2_id + "'"
             res_dj_qlrgl = self.db_dj_conn.SqlExecute(sql_dj_qlrgl)
+            logger.debug("dj_qlrgl表查询sql：%s" % sql_dj_qlrgl)
             logger.debug("dj_qlrgl表查询记录为：%d" % res_dj_qlrgl)
 
             sql_dj_qlr = "select count(1) from dj_qlr where zt='1' and sfyx=1 and id in (select ryqkid from dj_qlrgl where zt='1' and sfyx=1 and qlbid='" + res_dj_fdcq2_id + "')"
             res_dj_qlr = self.db_dj_conn.SqlExecute(sql_dj_qlr)
             logger.debug("dj_qlr表查询记录为：%d" % res_dj_qlr)
 
-            if res_dj_fdcq2_id and res_dj_hxx_djbid and res_dj_fdcq2_djben_zs and res_dj_djben and sql_dj_zs and res_dj_qlrgl and res_dj_qlr :
+            if res_dj_fdcq2 and res_dj_hxx and res_dj_fdcq2_djben_zs and res_dj_djben and sql_dj_zs and res_dj_qlrgl and res_dj_qlr :
                 logger.debug("数据库数据归档正确。")
                 return True
             else:
@@ -197,49 +211,6 @@ class dataResCheck():
             # 关闭数据库连接
             self.db_dj_conn.closeConn()
             self.db_qj_conn.closeConn()
-
-        # try:
-        #     sql_dj_fdcq2 = "select count(1) from dj_fdcq2 where zt='1' and sfyx=1 and bdcdyh='" + bdcdyh + "'"
-        #     res_dj_fdcq2 = self.db_dj_conn.SqlExecute(sql_dj_fdcq2)
-        #     print("dj_fdcq2:", res_dj_fdcq2,type(res_dj_fdcq2))
-        #
-        #     sql_dj_hxx = "select count(1) from dj_hxx where zt='1' and sfyx=1 and bdcdyh='" + bdcdyh + "'"
-        #     res_dj_hxx = self.db_dj_conn.SqlExecute(sql_dj_hxx)
-        #     print("dj_hxx:", res_dj_hxx,type(res_dj_hxx))
-        #
-        #     sql_dj_djben = "select count(1) from dj_djben t where zt='1' and sfyx=1 and sfysczql=1 and id in(select djbid from dj_fdcq2 where bdcdyh='" + bdcdyh + "')"
-        #     res_dj_djben = self.db_dj_conn.SqlExecute(sql_dj_djben)
-        #     print("dj_djben:", res_dj_djben,type(res_dj_djben))
-        #
-        #     sql_dj_fdcq2_djben_zs = "select count(1) from dj_fdcq2_djben_zs where sfyx=1 and bdcdyh='" + bdcdyh + "'and qlrmc='" + qlrmc + "'"
-        #     res_dj_fdcq2_djben_zs = self.db_dj_conn.SqlExecute(sql_dj_fdcq2_djben_zs)
-        #     print("dj_fdcq2_djben_zs:", res_dj_fdcq2_djben_zs,type(res_dj_fdcq2_djben_zs))
-        #
-        #     sql_dj_qlrgl ="select count(1) from  dj_qlrgl where zt='1' and sfyx=1 and ryzl='1'and bdcdyh='"+ bdcdyh +"'and qlrmc='" + qlrmc + "'"
-        #     res_dj_qlrgl = self.db_dj_conn.SqlExecute(sql_dj_qlrgl)
-        #     print("dj_qlrgl:", res_dj_qlrgl,type(res_dj_qlrgl))
-        #
-        #     sql_dj_qlr = "select count(1) from dj_qlr where id in(select ryqkid from dj_qlrgl where zt='1' and sfyx=1 and ryzl='1'and bdcdyh='"+ bdcdyh +"'and qlrmc='" + qlrmc + "')"
-        #     res_dj_qlr = self.db_dj_conn.SqlExecute(sql_dj_qlr)
-        #     print("dj_qlr:", res_dj_qlr,type(res_dj_qlr))
-        #
-        #     sql_dj_zs = "select count(1) from dj_zs where zt='1' and sfyx=1 and bdcdyh='" + bdcdyh + "'and qlr = '" + qlrmc + "'"
-        #     res_dj_zs = self.db_dj_conn.SqlExecute(sql_dj_zs)
-        #     print("dj_zs:", res_dj_zs,type(res_dj_zs))
-        #
-        #     if res_dj_fdcq2 and res_dj_hxx and res_dj_fdcq2_djben_zs and res_dj_djben and res_dj_djben and res_dj_qlrgl and res_dj_qlr and res_dj_zs:
-        #         print("数据库数据归档正确!")
-        #         return True
-        #     else:
-        #         print("数据库数据归档错误!")
-        #         return False
-        #
-        # except Exception as e:
-        #         print(e)
-        # finally:
-        #     # 关闭数据库连接
-        #     self.db_dj_conn.closeConn()
-        #     self.db_qj_conn.closeConn()
 
     # 分户转移
     # def fhTransferRegisterDataCheck(self,bdcdyh,data):
@@ -364,35 +335,49 @@ class dataResCheck():
                 res_yw_sqxx_ywh = self.db_dj_conn.SqlExecute(sql_yw_sqxx_ywh)
                 logger.debug("yw_sqxx表查询ywh为：%s" %res_yw_sqxx_ywh)
 
-            sql_dj_fdcq2_id = "select id from dj_fdcq2 where zt='1' and sfyx=1 and ywh='" + res_yw_sqxx_ywh + "'"
+            sql_dj_fdcq2_id = "select id from dj_fdcq2 where ywh='" + res_yw_sqxx_ywh + "'"
             res_dj_fdcq2_id = str(self.db_dj_conn.SqlExecute(sql_dj_fdcq2_id))
-            logger.debug("dj_fdcq2表查询id为：%s" %res_dj_fdcq2_id)
+            logger.debug("dj_fdcq2表查询id为：%s" % res_dj_fdcq2_id)
 
-            sql_dj_hxx_djbid = "select djbid from dj_hxx where zt='1' and sfyx=1 and cqbid='" + res_dj_fdcq2_id + "'"
-            res_dj_hxx_djbid = str(self.db_dj_conn.SqlExecute(sql_dj_hxx_djbid))
-            logger.debug("dj_hxx表查询djbid为：%s" %res_dj_hxx_djbid)
+            sql_dj_fdcq2_djbid = "select djbid from dj_fdcq2 where ywh='" + res_yw_sqxx_ywh + "'"
+            res_dj_fdcq2_djbid = str(self.db_dj_conn.SqlExecute(sql_dj_fdcq2_djbid))
+            logger.debug("dj_fdcq2表查询djbid为：%s" % res_dj_fdcq2_djbid)
 
-            sql_dj_fdcq2_djben_zs = "select count(1) from dj_fdcq2_djben_zs where sfyx=1 and sfsfcd=0 and qlbid='" + res_dj_fdcq2_id + "'"
+            sql_dj_fdcq2 = "select count(1) from dj_fdcq2 where zt='1' and sfyx=1 and ywh='" + res_yw_sqxx_ywh + "'"
+            res_dj_fdcq2 = self.db_dj_conn.SqlExecute(sql_dj_fdcq2)
+            logger.debug("dj_fdcq2表查询sql：%s" % sql_dj_fdcq2)
+            logger.debug("dj_fdcq2表查询记录为：%d" % res_dj_fdcq2)
+
+            sql_dj_hxx = "select count(1) from dj_hxx where zt='1' and sfyx=1 and cqbid='" + res_dj_fdcq2_id + "'"
+            res_dj_hxx = self.db_dj_conn.SqlExecute(sql_dj_hxx)
+            logger.debug("dj_hxx表查询sql：%s" % sql_dj_hxx)
+            logger.debug("dj_hxx表查询记录为：%d" % res_dj_hxx)
+
+            sql_dj_fdcq2_djben_zs = "select count(1) from dj_fdcq2_djben_zs where sfyx=1 and sfsfcd=0 and  qlbid='" + res_dj_fdcq2_id + "'"
             res_dj_fdcq2_djben_zs = self.db_dj_conn.SqlExecute(sql_dj_fdcq2_djben_zs)
-            logger.debug("dj_fdcq2_djben_zs表查询记录为：%d" %res_dj_fdcq2_djben_zs)
+            logger.debug("dj_fdcq2_djben_zs表查询sql：%s" % sql_dj_fdcq2_djben_zs)
+            logger.debug("dj_fdcq2_djben_zs表查询记录为：%d" % res_dj_fdcq2_djben_zs)
 
-            sql_dj_djben = "select count(1) from dj_djben where zt='1' and sfyx=1 and sfsfcd =0 and id='" + res_dj_hxx_djbid + "'"
+            sql_dj_djben = "select count(1) from dj_djben where zt='1' and sfyx=1 and sfysczql=1 and sfsfcd=0 and id='" + res_dj_fdcq2_djbid + "'"
             res_dj_djben = self.db_dj_conn.SqlExecute(sql_dj_djben)
-            logger.debug("dj_djben表查询记录为：%d" %res_dj_djben)
+            logger.debug("dj_djben表查询sql：%s" % sql_dj_djben)
+            logger.debug("dj_djben表查询记录为：%d" % res_dj_djben)
 
             sql_dj_zs = "select count(1) from dj_zs where zt='1' and sfyx=1 and cqbid='" + res_dj_fdcq2_id + "'"
             res_dj_zs = self.db_dj_conn.SqlExecute(sql_dj_zs)
+            logger.debug("dj_zs表查询sql：%s" % sql_dj_zs)
             logger.debug("dj_zs表查询记录为：%d" % res_dj_zs)
 
             sql_dj_qlrgl = "select count(1) from  dj_qlrgl where zt='1' and sfyx=1 and qlbid='" + res_dj_fdcq2_id + "'"
             res_dj_qlrgl = self.db_dj_conn.SqlExecute(sql_dj_qlrgl)
+            logger.debug("dj_qlrgl表查询sql：%s" % sql_dj_qlrgl)
             logger.debug("dj_qlrgl表查询记录为：%d" % res_dj_qlrgl)
 
             sql_dj_qlr = "select count(1) from dj_qlr where zt='1' and sfyx=1 and id in (select ryqkid from dj_qlrgl where zt='1' and sfyx=1 and qlbid='" + res_dj_fdcq2_id + "')"
             res_dj_qlr = self.db_dj_conn.SqlExecute(sql_dj_qlr)
             logger.debug("dj_qlr表查询记录为：%d" % res_dj_qlr)
 
-            if res_dj_fdcq2_id and res_dj_fdcq2_id and res_dj_fdcq2_djben_zs and res_dj_djben and sql_dj_zs and res_dj_qlrgl and res_dj_qlr :
+            if res_dj_fdcq2 and res_dj_hxx and res_dj_fdcq2_djben_zs and res_dj_djben and sql_dj_zs and res_dj_qlrgl and res_dj_qlr :
                 logger.debug("数据库数据归档正确。")
                 return True
             else:
@@ -602,7 +587,7 @@ class dataResCheck():
             logger.debug("dj_zs表查询sql：%s" % sql_dj_zs)
             logger.debug("dj_zs表查询记录为：%d" % res_dj_zs)
 
-            sql_dj_qlrgl = "select count(1) from  dj_qlrgl where zt='2' and sfyx=1 and ryzl in (1,2) and qlbid='" + res_dj_fdcq2_id + "'"
+            sql_dj_qlrgl = "select count(1) from  dj_qlrgl where zt='2' and sfyx=1 and qlbid='" + res_dj_fdcq2_id + "'"
             res_dj_qlrgl = self.db_dj_conn.SqlExecute(sql_dj_qlrgl)
             logger.debug("dj_qlrgl表查询sql：%s" % sql_dj_qlrgl)
             logger.debug("dj_qlrgl表查询记录为：%d" % res_dj_qlrgl)

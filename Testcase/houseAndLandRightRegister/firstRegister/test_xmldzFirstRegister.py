@@ -40,7 +40,7 @@ class Test_xmldzFirstRegister():
         bdcdyh2 = dataInit(dbInfo).getXmldzFirstRegisterData2(bdcdyh)
 
         logger.debug("<--------国有建设用地使用权及房屋所有权--首次登记--项目类多幢（按整体发证）start-------->")
-        logger.debug(">>>>>界面操作start<<<<<")
+        logger.debug("<--------界面操作start-------->")
 
         #办件中心
         taskCenter(self.driver).common()
@@ -66,7 +66,7 @@ class Test_xmldzFirstRegister():
         submitPage(self.driver).shHandle(bdcdyh)
         # 登簿
         submitPage(self.driver).dbHandle(bdcdyh,self.data)
-        logger.debug(">>>>>界面操作end<<<<<")
+        logger.debug("<--------界面操作end------->")
 
         # 数据库验证
         try:
@@ -79,7 +79,7 @@ class Test_xmldzFirstRegister():
         logger.debug("<--------国有建设用地使用权及房屋所有权--首次登记--项目类多幢（按整体发证）end-------->")
 
     def teardown(self):
-        logger.debug(">>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<\n")
+        logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n")
         # 退出系统
         logout(self.driver).logout()
         # 退出浏览器

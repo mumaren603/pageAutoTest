@@ -31,7 +31,7 @@ class Test_landCdghTransferRegister():
         # 获取办件数据
         bdcdyh = dataInit(dbInfo).getLandCdghTransferRegisterData()
         logger.debug("<--------国有建设用地使用权--转移登记--裁定过户start-------->")
-        logger.debug(">>>>>界面操作start<<<<<")
+        logger.debug("<--------界面操作start-------->")
 
         # 办件中心
         taskCenter(self.driver).common()
@@ -57,7 +57,7 @@ class Test_landCdghTransferRegister():
         # submitPage(self.driver).shHandle()
         # 登簿
         submitPage(self.driver).dbHandle(bdcdyh,self.data)
-        logger.debug(">>>>>界面操作end<<<<<")
+        logger.debug("<--------界面操作end------->")
 
         try:
             logger.debug("<--------归档数据检查start-------->")
@@ -69,7 +69,7 @@ class Test_landCdghTransferRegister():
         logger.debug("<--------国有建设用地使用权--转移登记--裁定过户end-------->")
 
     def teardown(self):
-        logger.debug(">>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<\n")
+        logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n")
         # 退出系统
         logout(self.driver).logout()
         # 退出浏览器

@@ -34,7 +34,7 @@ class Test_landCancelRegister():
         # 获取办件数据
         bdcdyh = dataInit(dbInfo).getLandChangeRegisterData()
         logger.debug("<--------国有建设用地使用权--注销登记--注销登记start-------->")
-        logger.debug(">>>>>界面操作start<<<<<")
+        logger.debug("<--------界面操作start-------->")
 
         # 办件中心
         taskCenter(self.driver).common()
@@ -60,7 +60,7 @@ class Test_landCancelRegister():
         submitPage(self.driver).slHandle()
         # 登簿
         submitPage(self.driver).dbHandle(bdcdyh, self.data)
-        logger.debug(">>>>>界面操作end<<<<<")
+        logger.debug("<--------界面操作end------->")
 
         # 数据库校验
         try:
@@ -73,7 +73,7 @@ class Test_landCancelRegister():
         logger.debug("<--------国有建设用地使用权--注销登记--注销登记end-------->")
 
     def teardown(self):
-        logger.debug(">>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<\n")
+        logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n")
         # 退出系统
         logout(self.driver).logout()
         # 退出浏览器
