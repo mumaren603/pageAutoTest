@@ -49,8 +49,6 @@ class Test_houseDjRegister():
         blyjPage(self.driver).blyjHandle()
         # 受理(登簿)
         submitPage(self.driver).slHandle()
-        # 登出
-        logout(self.driver).logout()
         logger.debug(">>>>>界面操作end<<<<<")
 
         # 数据库校验
@@ -63,7 +61,10 @@ class Test_houseDjRegister():
             raise
 
     def teardown(self):
-        logger.debug(">>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<")
+        logger.debug(">>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<\n")
+        # 退出系统
+        logout(self.driver).logout()
+        # 退出浏览器
         self.driver.quit()
 
 

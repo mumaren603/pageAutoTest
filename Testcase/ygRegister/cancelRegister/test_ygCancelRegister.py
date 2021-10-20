@@ -60,8 +60,6 @@ class Test_ygCancelRegister():
         submitPage(self.driver).slHandle()
         # 登簿
         submitPage(self.driver).dbHandle(bdcdyh, self.data)
-        # 登出
-        logout(self.driver).logout()
         logger.debug(">>>>>界面操作end<<<<<")
 
         # 数据库校验
@@ -75,8 +73,11 @@ class Test_ygCancelRegister():
         logger.debug("<--------预告登记--注销登记--预告注销end-------->")
 
     def teardown(self):
-        logger.debug(">>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<")
-        # self.driver.quit()
+        logger.debug(">>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<\n")
+        # 退出系统
+        logout(self.driver).logout()
+        # 退出浏览器
+        self.driver.quit()
 
 if __name__ == '__main__':
     pytest.main(['-v', 'test_ygCancelRegister'])

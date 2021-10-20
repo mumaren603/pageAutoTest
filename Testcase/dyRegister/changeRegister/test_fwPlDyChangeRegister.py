@@ -59,8 +59,6 @@ class Test_fwPlDyChangeRegister():
         submitPage(self.driver).slHandle()
         # 登簿
         submitPage(self.driver).dbHandle(bdcdyh, self.data)
-        # 登出
-        logout(self.driver).logout()
 
         # 数据库校验
         logger.debug("<--------归档数据检查-------->")
@@ -71,6 +69,9 @@ class Test_fwPlDyChangeRegister():
             raise
 
     def teardown(self):
+        # 退出系统
+        logout(self.driver).logout()
+        # 退出浏览器
         self.driver.quit()
 
 if __name__ == '__main__':

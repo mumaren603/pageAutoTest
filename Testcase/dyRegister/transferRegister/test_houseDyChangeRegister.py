@@ -57,8 +57,6 @@ class Test_houseDyChangeRegister():
         submitPage(self.driver).shHandle(bdcdyh)
         # 登簿
         submitPage(self.driver).dbHandle(bdcdyh)
-        # 登出
-        logout(self.driver).logout()
 
         # 数据库检查
         try:
@@ -69,6 +67,9 @@ class Test_houseDyChangeRegister():
             raise
 
     def teardown(self):
+        # 退出系统
+        logout(self.driver).logout()
+        # 退出浏览器
         self.driver.quit()
 
 if __name__ == '__main__':

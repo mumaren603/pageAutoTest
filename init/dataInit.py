@@ -62,7 +62,7 @@ class dataInit():
             return queryRes
     '''
 
-    # 净地转移/变更登记
+    # 净地转移/变更登记/注销
     def getLandChangeRegisterData(self):
         logger.debug(">>>>>查询入参数据start<<<<<")
         querySQL = "select distinct a.bdcdyh " \
@@ -88,6 +88,12 @@ class dataInit():
         logger.debug("查询sql为：%s" % querySQL)
         logger.debug("查询办件数据-->%s" % queryRes)
         if queryRes:
+            # 检查该数据是否存在多条产权（内蒙古允许）
+            queryJsydsyqSQL = "select count(1) from dj_jsydsyq where zt='1' and sfyx=1 and bdcdyh='" + queryRes + "'"
+            queryjsydsyqSQLRes = self.db_dj_conn.SqlExecute(queryJsydsyqSQL)
+            if queryjsydsyqSQLRes > 1:
+                logger.error("该单元存在多条现势数据，请检查！")
+                return dataInit(self.dbInfo).getLandChangeRegisterData()
             # 检查该数据是否存在待办件
             querySqxxSQL = "select count(1) from yw_sqxx where ajzt='1' and sfyx=1 and bdcdyh='" + queryRes + "'"
             querySqxxzbSQL = "select count(1) from yw_sqxx t where t.SFYX = '1' and t.ajzt in ('1', '3', '6') and t.id in (select z.sqbid from yw_sqxxzb z where z.sfyx = '1' and bdcdyh = '" + queryRes + "')"
@@ -105,21 +111,6 @@ class dataInit():
         else:
             logger.error("未查询到登记有效数据，请检查sql语句正确性或数据库是否存在符合条件数据。")
             sys.exit(-1)
-
-        # 检查该数据是否存在待办件
-        querySqxxSQL = "select count(1) from ywbdk.yw_sqxx where ajzt='1' and sfyx=1 and bdcdyh='" + queryRes + "'"
-        querySqxxzbSQL = "select count(1) from YWBDK.yw_sqxx t where t.SFYX = '1' and t.ajzt in ('1', '3', '6') and t.id in (select z.sqbid from ywbdk.yw_sqxxzb z where z.sfyx = '1' and bdcdyh = '" + queryRes + "')"
-        querySqxxSQLRes = self.db_dj_conn.SqlExecute(querySqxxSQL)
-        querySqxxzbSQLRes = self.db_dj_conn.SqlExecute(querySqxxzbSQL)
-        if querySqxxSQLRes or querySqxxzbSQLRes:
-            logger.warning("登记平台该土地信息已登记，重新获取数据！")
-            return dataInit(self.dbInfo).getLandChangeRegisterData()
-        else:
-            logger.debug("待登记办件数据-->%s" % queryRes)
-            logger.debug(">>>>>查询入参数据end<<<<<")
-            self.db_qj_conn.closeConn()
-            self.db_dj_conn.closeConn()
-            return queryRes
 
     # 净地裁定过户
     def getLandCdghTransferRegisterData(self):
@@ -148,7 +139,7 @@ class dataInit():
             queryQtxzSQL = "select count(1) from dj_qtxz where zt='1' and sfyx=1 and bdcdyh='" + queryRes + "'"
             queryQtxzSQLRes = self.db_dj_conn.SqlExecute(queryQtxzSQL)
             if queryQtxzSQLRes > 1:
-                logger.error("根据产权表id查询到多条其他限制信息")
+                logger.error("该单元存在多条现势限制数据，请检查！")
                 return dataInit(self.dbInfo).getLandCdghTransferRegisterData()
             # 检查该数据是否存在待办件
             querySqxxSQL = "select count(1) from yw_sqxx where ajzt='1' and sfyx=1 and bdcdyh='" + queryRes + "'"
@@ -183,33 +174,6 @@ class dataInit():
             self.db_dj_conn.closeConn()
             return queryRes
 
-    # 土地注销登记数据（没有房屋）
-    def getLandCancleRegisterData(self):
-        logger.debug(">>>>>查询入参数据start<<<<<")
-        querySQL = "select a.bdcdyh from (select djbid,bdcdyh from djjgk.dj_jsydsyq where qllx = '3' and zt = '1' and sfyx = 1 and bdcdyh not like '%9999%') a inner join (select id,bdcdyh from djjgk.dj_djben where sfdy = 0 and sfcf = 0 and sfzzdj = 0 and sfysczql = 1 and zt = '1' and sfyx = 1) b on a.djbid = b.id and rownum < 50 order by dbms_random.value()"
-        queryRes = self.db_dj_conn.SqlExecute(querySQL)
-        logger.debug("查询sql为：%s" % querySQL)
-        logger.debug("查询办件数据-->%s" % queryRes)
-        # 检查该土地上是否存在现势房产
-        queryHouseSQL = "select count(1) from djjgk.dj_fdcq2 where zt='1' and sfyx=1 and zddm='" + queryRes[:19] + "'"
-        queryHouseSQLRes = self.db_dj_conn.SqlExecute(queryHouseSQL)
-        # 检查该数据是否存在待办件
-        querySqxxSQL = "select count(1) from ywbdk.yw_sqxx where ajzt='1' and sfyx=1 and bdcdyh='" + queryRes + "'"
-        querySqxxzbSQL = "select count(1) from YWBDK.yw_sqxx t where t.SFYX = '1' and t.ajzt in ('1', '3', '6') and t.id in (select z.sqbid from ywbdk.yw_sqxxzb z where z.sfyx = '1' and bdcdyh = '" + queryRes + "')"
-        querySqxxSQLRes = self.db_dj_conn.SqlExecute(querySqxxSQL)
-        querySqxxzbSQLRes = self.db_dj_conn.SqlExecute(querySqxxzbSQL)
-        if queryHouseSQLRes:
-            logger.warning("该土地上存在现势房产，重新获取数据！")
-            return dataInit(self.dbInfo).getLandCancleRegisterData()
-        elif querySqxxSQLRes or querySqxxzbSQLRes:
-            logger.warning("该数据已在办理中，重新获取数据！")
-            return dataInit(self.dbInfo).getLandCancleRegisterData()
-        else:
-            logger.debug("待登记办件数据-->%s" % queryRes)
-            logger.debug(">>>>>查询入参数据end<<<<<")
-            self.db_dj_conn.closeConn()
-            self.db_qj_conn.closeConn()
-            return queryRes
 
     ####################国有建设用地使用权及房屋所有权##################
     # 商品房首次登记
@@ -487,16 +451,12 @@ class dataInit():
         logger.debug("查询sql为：%s" % querySQL)
         logger.debug("查询办件数据-->%s" % queryRes)
         if queryRes:
-            #检查该数据是否有附属设施（3.0版本校验）
-            queryFsssSQL = "select id from dj_fsss t where zt='1' and sfyx=1 and ssbdcdyh='" + queryRes + "'"
-            queryFsssRes = self.db_dj_conn.SqlExecute(queryFsssSQL)
-            if queryFsssRes:
-                logger.debug("主产权下存在附属设施信息。")
-                queryFsssxxSQL = "select count(1) from dj_fsssxx where cqbid='" + str(queryFsssRes) + "'"
-                queryFsssxxRes = self.db_dj_conn.SqlExecute(queryFsssxxSQL)
-                if not queryFsssxxRes:
-                    logger.error("DJ_FSSSXX表数据为空，不符合业务办理条件，重新查找数据。。")
-                    return dataInit(self.dbInfo).getSpfOrClfChangeRegisterData()
+            # 检查该数据是否存在多条产权
+            queryFdcq2SQL = "select count(1) from dj_fdcq2 where zt='1' and sfyx=1 and bdcdyh='" + queryRes + "'"
+            queryFdcq2SQLRes = self.db_dj_conn.SqlExecute(queryFdcq2SQL)
+            if queryFdcq2SQLRes > 1:
+                logger.warning("该单元存在多条现势数据，请检查！")
+                return dataInit(self.dbInfo).getSpfOrClfChangeRegisterData()
             # 检查该数据是否存在待办件
             querySqxxSQL = "select count(1) from yw_sqxx where ajzt='1' and sfyx=1 and bdcdyh='" + queryRes + "'"
             querySqxxzbSQL = "select count(1) from yw_sqxx t where t.SFYX = '1' and t.ajzt in ('1', '3', '6') and t.id in (select z.sqbid from yw_sqxxzb z where z.sfyx = '1' and bdcdyh = '" + queryRes + "')"
@@ -506,14 +466,31 @@ class dataInit():
                 logger.warning("该数据已在办理中，重新获取数据！")
                 return dataInit(self.dbInfo).getSpfOrClfChangeRegisterData()
             else:
-                logger.debug("待登记办件数据-->%s" % queryRes)
-                logger.debug(">>>>>查询入参数据end<<<<<")
-                self.db_qj_conn.closeConn()
-                self.db_dj_conn.closeConn()
-                return queryRes
+                # 检查该数据是否有附属设施（3.0版本校验）
+                queryFsssSQL = "select id from dj_fsss t where zt='1' and sfyx=1 and ssbdcdyh='" + queryRes + "'"
+                queryFsssRes = self.db_dj_conn.SqlExecute(queryFsssSQL)
+                if queryFsssRes:
+                    logger.debug("主产权下存在附属设施信息。")
+                    queryFsssxxSQL = "select count(1) from dj_fsssxx where cqbid='" + str(queryFsssRes) + "'"
+                    queryFsssxxRes = self.db_dj_conn.SqlExecute(queryFsssxxSQL)
+                    if not queryFsssxxRes:
+                        logger.error("DJ_FSSSXX表数据为空，不符合业务办理条件，重新查找数据。。")
+                        return dataInit(self.dbInfo).getSpfOrClfChangeRegisterData()
+                    else:
+                        logger.debug("待登记办件数据-->%s" % queryRes)
+                        logger.debug(">>>>>查询入参数据end<<<<<")
+                        self.db_qj_conn.closeConn()
+                        self.db_dj_conn.closeConn()
+                        return queryRes
+                else:
+                    logger.debug("待登记办件数据-->%s" % queryRes)
+                    logger.debug(">>>>>查询入参数据end<<<<<")
+                    self.db_qj_conn.closeConn()
+                    self.db_dj_conn.closeConn()
+                    return queryRes
+
         else:
             logger.error("未查询到有效数据，请检查sql语句正确性或数据库是否存在符合条件数据。")
-
 
     # 预转现
     def getYzxRegisterData(self):
@@ -560,6 +537,16 @@ class dataInit():
         logger.debug("查询sql为：%s" % querySQL)
         logger.debug("查询办件数据-->%s" % queryRes)
         if queryRes:
+            #检查该数据是否有附属设施（3.0版本校验）
+            queryFsssSQL = "select id from dj_fsss t where zt='1' and sfyx=1 and ssbdcdyh='" + queryRes + "'"
+            queryFsssRes = self.db_dj_conn.SqlExecute(queryFsssSQL)
+            if queryFsssRes:
+                logger.debug("主产权下存在附属设施信息。")
+                queryFsssxxSQL = "select count(1) from dj_fsssxx where cqbid='" + str(queryFsssRes) + "'"
+                queryFsssxxRes = self.db_dj_conn.SqlExecute(queryFsssxxSQL)
+                if not queryFsssxxRes:
+                    logger.error("DJ_FSSSXX表数据为空，不符合业务办理条件，重新查找数据。。")
+                    return dataInit(self.dbInfo).getCdghChangeRegisterData()
             # 检查该数据是否存在待办件
             querySqxxSQL = "select count(1) from yw_sqxx where ajzt='1' and sfyx=1 and bdcdyh='" + queryRes + "'"
             querySqxxzbSQL = "select count(1) from yw_sqxx t where t.SFYX = '1' and t.ajzt in ('1', '3', '6') and t.id in (select z.sqbid from yw_sqxxzb z where z.sfyx = '1' and bdcdyh = '" + queryRes + "')"
@@ -580,31 +567,20 @@ class dataInit():
     # 分户转移
     def getFhTransferRegisterData(self):
         logger.debug(">>>>>查询入参数据start<<<<<")
-        # querySQL =  "select a.bdcdyh " \
-        #             "from dj_fdcq2_djben_zs  a,dj_fdcq2 b " \
-        #             "where a.qlbid = b.id " \
-        #             "and a.sfdh =1 " \
-        #             "and a.sfyx = 1 " \
-        #             "and b.sfdz = 1 " \
-        #             "and b.zt = '1' " \
-        #             "and b.sfyx=1  " \
-        #             "and rownum <50 " \
-        #             "order by dbms_random.value()"
-
         querySQL = "select distinct a.bdcdyh " \
                    "from dj_fdcq2_djben_zs a ,dj_fdcq2 b " \
                    "where a.qlbid = b.id " \
                    "and b.id in " \
-                   "(select cqbid  from dj_fsssxx where zt='1' and sfyx=1  and fssslx='1' group by cqbid having count(cqbid) < 4)" \
+                   "(select cqbid  from dj_hxx where zt='1' and sfyx=1  and sfdz=1 and sfdh=1 group by cqbid having count(cqbid) < 4)" \
                    "and a.sfdh = 1 " \
                    "and a.sfyx = 1 " \
                    "and b.sfdz = 1 " \
+                   "and b.sfdh = 1 " \
                    "and b.zt = '1' " \
                    "and b.sfyx = 1 " \
                    "and a.bdcdyh > '0' " \
                    "and rownum < 50 " \
                    "order by dbms_random.value()"
-
         queryRes = self.db_dj_conn.SqlExecute(querySQL)
         logger.debug("查询sql为：%s" % querySQL)
         logger.debug("查询办件数据-->%s" % queryRes)
@@ -618,56 +594,19 @@ class dataInit():
                 logger.warning("该数据已在办理中，重新获取数据！")
                 return dataInit(self.dbInfo).getFhTransferRegisterData()
             else:
-                queryFsssxxSQL = "select count(1) from dj_fsssxx where zt='1' and sfyx=1 and cqbid=(select id from dj_fdcq2 where zt='1' and sfyx=1 and bdcdyh='" + queryRes + "')"
-                queryFsssxxSQLRes = self.db_dj_conn.SqlExecute(queryFsssxxSQL)
-                if queryFsssxxSQLRes:
-                    logger.debug("查询到该主产权关联的dj_fsssxx表数据条数为-->%d" % queryFsssxxSQLRes)
+                queryHxxSQL = "select count(1) from dj_hxx where zt='1' and sfyx=1 and cqbid=(select id from dj_fdcq2 where zt='1' and sfyx=1 and bdcdyh='" + queryRes + "')"
+                queryHxxSQLRes = self.db_dj_conn.SqlExecute(queryHxxSQL)
+                if queryHxxSQLRes:
+                    logger.debug("查询到该主产权关联的dj_hxx表数据条数为-->%d" % queryHxxSQLRes)
                     logger.debug("待登记办件数据-->%s" % queryRes)
                     logger.debug(">>>>>查询入参数据end<<<<<")
                     self.db_qj_conn.closeConn()
                     self.db_dj_conn.closeConn()
-                    return queryRes,queryFsssxxSQLRes
+                    return queryRes,queryHxxSQLRes
                 else:
                     logger.error("查询dj_fsssxx表数据条数为0,请检查sql语句正确性或数据库是否存在符合条件数据。")
         else:
             logger.error("未查询到有效数据，请检查sql语句正确性或数据库是否存在符合条件数据。")
-
-    # 预转现登记查询数据
-    # def getYzxRegisterData(self):
-    #     querySQL = "select bdcdyh from (select bdcdyh,djbid from DJJGK.DJ_YG where zt='1' and sfyx=1 and bdcdyh>'0'and jzmj>'0')a inner join (select id from DJJGK.DJ_DJBEN where zt='1' and sfyx=1 and sfysczql=1)b on a.djbid = b.id and rownum <30 order by dbms_random.value()"
-    #     queryRes = self.db_dj_conn.SqlExecute(querySQL)
-    #     print("DJJGK查询数据：%s" % queryRes)
-    #     # 检查数据是否有查封
-    #     cfzt = xzZtQuery(self.dbInfo).cfZtQuery(queryRes)
-    #     print('cfzt', cfzt)
-    #     # 检查数据是否有异议
-    #     yyzt = xzZtQuery(self.dbInfo).yyZtQuery(queryRes)
-    #     print('yyzt', yyzt)
-    #     # 检查数据是否有预抵押
-    #     ydyzt = xzZtQuery(self.dbInfo).ydyZtQuery(queryRes)
-    #     print('ydyzt', ydyzt)
-    #     # 检查数据是否在办件
-    #     zbzt = xzZtQuery(self.dbInfo).zbZtQuery(queryRes)
-    #     zbzt1 =zbzt[0]
-    #     zbzt2 = zbzt[1]
-    #
-    #     if zbzt1 or zbzt2:
-    #         print("数据在办，重新选择选取数据！")
-    #         return dataInit(self.dbInfo).getSpfOrClfChangeRegisterData()  # 递归
-    #     if cfzt:
-    #         print("数据查封，重新选择选取数据！")
-    #         return dataInit(self.dbInfo).getSpfOrClfChangeRegisterData()  # 递归
-    #     if yyzt:
-    #         print("数据异议，重新选择选取数据！")
-    #         return dataInit(self.dbInfo).getSpfOrClfChangeRegisterData()  # 递归
-    #     if ydyzt:
-    #         print("数据预抵押，重新选择选取数据！")
-    #         return dataInit(self.dbInfo).getSpfOrClfChangeRegisterData()  # 递归
-    #     else:
-    #         print("数据符合！数据为：%s" % queryRes)
-    #         self.db_qj_conn.closeConn()
-    #         self.db_dj_conn.closeConn()
-    #         return queryRes
 
     ##-------------------------抵押登记----------------------------##
     # 土地首次抵押查询数据

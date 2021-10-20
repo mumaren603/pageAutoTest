@@ -3,10 +3,9 @@ initdata:
   lcInfo:
     qllx: 国有建设用地使用权及房屋所有权
     djlx: 注销登记
-    ywlxID: 167010001441  #注销登记
+    ywlxID: 7C936E3656FA459DA3EE2F767A18C62F  #注销登记
   #小类
   params:
     ywxl:
-    fwlb:
     sffz:
-    cqType:
+

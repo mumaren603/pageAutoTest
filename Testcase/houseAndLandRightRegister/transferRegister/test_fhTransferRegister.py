@@ -36,7 +36,8 @@ class Test_fhTransferRegister():
         res = dataInit(dbInfo).getFhTransferRegisterData()
         bdcdyh=res[0]
         fsssxxCount = res[1]
-        logger.debug("#####有建设用地使用权及房屋所有权--转移登记--分户转移#####")
+
+        logger.debug("<--------国有建设用地使用权及房屋所有权--转移登记--分户转移start-------->")
         logger.debug(">>>>>界面操作start<<<<<")
 
         # 办件中心
@@ -63,8 +64,6 @@ class Test_fhTransferRegister():
         submitPage(self.driver).slHandle()
         # 登簿
         submitPage(self.driver).dbHandle(bdcdyh, self.data)
-        # 登出
-        logout(self.driver).logout()
         logger.debug(">>>>>界面操作end<<<<<")
 
         # 数据库校验
@@ -75,10 +74,14 @@ class Test_fhTransferRegister():
         #     logger.debug(">>>>>归档数据检查end<<<<<")
         # except AssertionError:
         #     raise
+        logger.debug("<--------国有建设用地使用权及房屋所有权--转移登记--分户转移end-------->")
 
     def teardown(self):
-        logger.debug(">>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<")
-        # self.driver.quit()
+        logger.debug(">>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<\n")
+        # 退出系统
+        logout(self.driver).logout()
+        # 退出浏览器
+        self.driver.quit()
 
 if __name__ == '__main__':
     pytest.main(['-v','test_fhTransferRegister'])

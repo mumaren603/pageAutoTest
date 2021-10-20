@@ -57,8 +57,6 @@ class Test_landCdghTransferRegister():
         # submitPage(self.driver).shHandle()
         # 登簿
         submitPage(self.driver).dbHandle(bdcdyh,self.data)
-        # 登出
-        logout(self.driver).logout()
         logger.debug(">>>>>界面操作end<<<<<")
 
         try:
@@ -72,6 +70,10 @@ class Test_landCdghTransferRegister():
 
     def teardown(self):
         logger.debug(">>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<\n")
+        # 退出系统
+        logout(self.driver).logout()
+        # 退出浏览器
+        self.driver.quit()
 
 if __name__ == '__main__':
     pytest.main(['-v', 'test_landCdghTransferRegister'])

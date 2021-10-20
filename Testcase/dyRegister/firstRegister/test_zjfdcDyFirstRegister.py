@@ -63,8 +63,6 @@ class Test_zjfdcDyFirstRegister():
         submitPage(self.driver).shHandle(bdcdyh, cmdopt, self.splc)
         # 登簿
         submitPage(self.driver).dbHandle(bdcdyh)
-        # 登出
-        logout(self.driver).logout()
 
         # # 数据库验证
         # qlrmc = self.qlrParams.get("qlrmc")
@@ -77,6 +75,9 @@ class Test_zjfdcDyFirstRegister():
         #         raise
 
     def teardown(self):
+        # 退出系统
+        logout(self.driver).logout()
+        # 退出浏览器
         self.driver.quit()
 
 if __name__ == '__main__':

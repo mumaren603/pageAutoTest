@@ -56,14 +56,12 @@ class Test_ydyCancelRegister():
         # htxxPage(self.driver).xwjlHandle()
         # 办理意见表
         blyjPage(self.driver).blyjHandle()
-
         # 受理
         submitPage(self.driver).slHandle()
         # 登簿
         submitPage(self.driver).dbHandle(bdcdyh, self.data)
-        # 登出
-        logout(self.driver).logout()
         logger.debug(">>>>>界面操作end<<<<<")
+
         # 数据库校验
         try:
             logger.debug("<--------归档数据检查start-------->")
@@ -75,7 +73,10 @@ class Test_ydyCancelRegister():
         logger.debug("<--------预告登记--注销登记--预告抵押注销登记end-------->")
 
     def teardown(self):
-        logger.debug(">>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<")
+        logger.debug(">>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<\n")
+        # 退出系统
+        logout(self.driver).logout()
+        # 退出浏览器
         self.driver.quit()
 
 if __name__ == '__main__':

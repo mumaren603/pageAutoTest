@@ -8,6 +8,7 @@ from pageObject.sqbPage import sqbPage
 from pageObject.bdcjbxxPage import bdcjbxxPage
 from pageObject.sflzbPage import sflzbPage
 from pageObject.blyjPage import blyjPage
+from pageObject.logout import logout
 from dataCheck.dataResCheck import dataResCheck
 from utils.getTestdata import getTestcaseData,getTestdataPath
 from pageObject.submitPage import submitPage
@@ -15,7 +16,7 @@ from Common.logFunc import loggerConf
 
 logger = loggerConf().getLogger()
 
-@pytest.mark.smoke
+@pytest.mark.test
 @pytest.mark.all
 class Test_spfFirstRegister():
     def setup(self):
@@ -74,7 +75,11 @@ class Test_spfFirstRegister():
 
     def teardown(self):
         logger.debug(">>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<")
+        # 退出系统
+        logout(self.driver).logout()
+        # 退出浏览器
         self.driver.quit()
+
 
 if __name__ == '__main__':
     pytest.main(['-v', 'test_spfFristRegister'])

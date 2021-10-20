@@ -68,8 +68,6 @@ class Test_landFirstRegister():
         # szfzPage(self.driver).szHandle(bdcdyh,cmdopt)
         # # 发证
         # szfzPage(self.driver).fzHandle(bdcdyh,cmdopt)
-        # 登出
-        logout(self.driver).logout()
         logger.debug(">>>>>界面操作end<<<<<")
 
         try:
@@ -83,6 +81,9 @@ class Test_landFirstRegister():
 
     def teardown(self):
         logger.debug(">>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<\n")
+        # 退出系统
+        logout(self.driver).logout()
+        # 退出浏览器
         self.driver.quit()
 
 if __name__ == '__main__':

@@ -52,8 +52,6 @@ class Test_dyCancelRegister():
         submitPage(self.driver).slHandle()
         # 登簿
         submitPage(self.driver).dbHandle(bdcdyh, self.params)
-        # 登出
-        logout(self.driver).logout()
 
         # 数据库验证
         try:
@@ -64,6 +62,9 @@ class Test_dyCancelRegister():
             raise
 
     def teardown(self):
+        # 退出系统
+        logout(self.driver).logout()
+        # 退出浏览器
         self.driver.quit()
 
 if __name__ == '__main__':

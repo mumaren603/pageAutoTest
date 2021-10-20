@@ -17,7 +17,7 @@ from Common.logFunc import loggerConf
 
 logger = loggerConf().getLogger()
 
-# @pytest.mark.xfail('bug #17847')
+# @pytest.mark.xfail('bug #17847--未解决')
 @pytest.mark.test
 class Test_spfYgDyFirstRegister():
     def setup(self):
@@ -45,7 +45,7 @@ class Test_spfYgDyFirstRegister():
         # 收件单
         sjdPage(self.driver).sjdHandle(self.data)
         # 申请人情况
-        sqrqkPage(self.driver).sqrqkHandle(self.data)
+        sqrqkPage(self.driver).sqrqkHandle(self.data,12)
         # 申请表
         sqbPage(self.driver).sqbHandle(self.data)
         # 不动产基本信息
@@ -64,10 +64,7 @@ class Test_spfYgDyFirstRegister():
         submitPage(self.driver).shHandle(bdcdyh)
         # 登簿
         submitPage(self.driver).dbHandle(bdcdyh, self.data)
-        # 登出
-        logout(self.driver).logout()
         logger.debug(">>>>>界面操作end<<<<<")
-
 
         # 数据库校验
         try:
@@ -80,7 +77,10 @@ class Test_spfYgDyFirstRegister():
         logger.debug("<--------预告登记--首次登记--商品房（经适房）抵押end-------->")
 
     def teardown(self):
-        logger.debug(">>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<")
+        logger.debug(">>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<\n")
+        # 退出系统
+        logout(self.driver).logout()
+        # 关闭浏览器
         self.driver.quit()
 
 if __name__ == '__main__':

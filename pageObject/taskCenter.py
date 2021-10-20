@@ -138,8 +138,8 @@ class taskCenter():
                 elif djlx == '注销登记':
                     WebTools(self.driver).mouse_click('xpath', "//ul[contains(@xid,'subUl1')]/li[4]/a")
                     # 房屋首次转移登记（含商品房、经适房、安置房）
-                    if ywlxID ==167010001441:
-                        WebTools(self.driver).mouse_doubleClick('xpath', "//div[@ywlxid=167010001441]/div[1]")
+                    if ywlxID =='7C936E3656FA459DA3EE2F767A18C62F':
+                        WebTools(self.driver).mouse_doubleClick('xpath', "//div[@ywlxid='7C936E3656FA459DA3EE2F767A18C62F']/div[1]")
                         time.sleep(2)
                 else:
                     print("登记类型（%s）不存在！" % self.djlx)

@@ -27,11 +27,12 @@ class Test_landTransferRegister():
         '''
         :流程 国有建设用地使用权--转移登记--转移登记
         '''
-        logger.debug("<--------国有建设用地使用权--转移登记--转移登记-------->")
         self.driver = login[0]
         dbInfo = login[1]
         # 获取办件数据
         bdcdyh = dataInit(dbInfo).getLandChangeRegisterData()
+        logger.debug("<--------国有建设用地使用权--转移登记--转移登记start-------->")
+        logger.debug(">>>>>界面操作start<<<<<")
 
         # 办件中心
         taskCenter(self.driver).common()
@@ -61,19 +62,22 @@ class Test_landTransferRegister():
         # szfzPage(self.driver).szHandle(bdcdyh, cmdopt)
         # # 发证
         # szfzPage(self.driver).fzHandle(bdcdyh, cmdopt)
-        # 登出
-        logout(self.driver).logout()
+        logger.debug(">>>>>界面操作end<<<<<")
 
-
-        # 数据库检查
-        logger.debug("<--------归档数据检查-------->")
         try:
-            resDataCheck = dataResCheck(dbInfo).landRegisterDataCheck(bdcdyh,self.data)
+            logger.debug("<--------归档数据检查start-------->")
+            resDataCheck = dataResCheck(dbInfo).landRegisterDataCheck(bdcdyh, self.data)
             assert resDataCheck
+            logger.debug("<--------归档数据检查end-------->")
         except AssertionError:
             raise
+        logger.debug("<--------国有建设用地使用权--转移登记--转移登记end-------->")
 
     def teardown(self):
+        logger.debug(">>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<\n")
+        # 退出系统
+        logout(self.driver).logout()
+        # 退出浏览器
         self.driver.quit()
 
 if __name__ == '__main__':

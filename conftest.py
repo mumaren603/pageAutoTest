@@ -6,7 +6,7 @@ from utils.getConfig import collect_static_data
 def pytest_addoption(parser):
     '''parser:用户命令行参数与ini文件值的解析器'''
     parser.addoption("--env",       #注册一个命令行选项
-                     default='bttest',
+                     default='test',
                      dest='env',
                      help="将自定义命令行参数 ’--cmdopt' 添加到 pytest 配置中"
                      )

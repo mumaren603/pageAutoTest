@@ -62,16 +62,15 @@ class sqbPage():
 
         try:
             WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.XPATH, "//input[@xid='ywh']")))
-            print('1111111')
+            logger.debug("申请表ywh已加载")
         # 批量查封/
         except (NoSuchElementException,TimeoutException,ElementNotVisibleException):
             WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.XPATH, "//*[@xid='sqbTable']//input[@xid='YWH']")))
-            print('3333333')
+            logger.debug("申请表ywh已加载2")
         except (NoSuchElementException,TimeoutException,ElementNotVisibleException):
             WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.XPATH, "//input[@xid='YWH']")))
-            print('2222222')
+            logger.debug("申请表ywh已加载3")
         except Exception as e:
-            print('0000000')
             logger.error("申请表页面加载失败，未识别到【业务号】字段,具体异常：%s" %e)
             import sys
             sys.exit(-1)
@@ -100,41 +99,42 @@ class sqbPage():
                 WebTools(self.driver).input_clear('xpath', "//input[@xid='tdsyqdymj']")
                 WebTools(self.driver).input_content('xpath', "//input[@xid='tdsyqdymj']", '0.01')
         elif qllx =='国有建设用地使用权及房屋所有权':
-            # 分户转移,批量转移,建筑物区分业主共有部分
-            if ywlxID =='CD62B1699DEB4496AF8D5D5590E945AB' or ywlxID =='7E9CABA30D4749D499654390D0ED4DDB' or ywlxID == '191B4FB37DD148448BC64944C01A78C1' :
-                pass
-            # 项目类多幢(是否整体发证,默认“是”）
-            # 整体发证
-            if sfztfz == 1:
-                WebTools(self.driver).mouse_click('xpath',"//input[@name='SFZTFZ' and @value='1']")
-            # 按幢发证
-            elif sfztfz == 0:
-                WebTools(self.driver).mouse_click('xpath', "//input[@name='SFZTFZ' and @value='0']")
-            else:
-                # 宗地面积
-                WebTools(self.driver).input_clear('xpath',"//input[@xid='zdmj']")
-                WebTools(self.driver).input_content('xpath',"//input[@xid='zdmj']",0)
-                # 土地使用权面积
-                WebTools(self.driver).check_element_is_exists('xpath', "//input[@xid='tdsyqmj']")
-                WebTools(self.driver).input_clear('xpath', "//input[@xid='tdsyqmj']")
-                WebTools(self.driver).input_content('xpath', "//input[@xid='tdsyqmj']", '1000')
-
-                # 将页面滚动条拖到底部
-                self.driver.execute_script("document.documentElement.scrollTop=550")
-                # self.driver.execute_script("arguments[0].scrollIntoView();", "//span[@xid='createQL']")
-                # ActionChains(self.driver).move_to_element("//span[@xid='createQL']").perform()
-                # WebTools(self.driver).drag_scrollBar("//span[@xid='createQL']")
-
-                # 权利其他状况
-                # 房屋首次登记
-                if ywlxID == 'F711B2126C44409D903254C246FCD569':
+            if djlx != '注销登记':
+                # 分户转移,批量转移,建筑物区分业主共有部分
+                if ywlxID =='CD62B1699DEB4496AF8D5D5590E945AB' or ywlxID =='7E9CABA30D4749D499654390D0ED4DDB' or ywlxID == '191B4FB37DD148448BC64944C01A78C1' :
                     pass
-                    # WebTools(self.driver).mouse_click('xpath',"//span[@xid='createQLForDHDZ']")
+                # 项目类多幢(是否整体发证,默认“是”）
+                # 整体发证
+                if sfztfz == 1:
+                    WebTools(self.driver).mouse_click('xpath',"//input[@name='SFZTFZ' and @value='1']")
+                # 按幢发证
+                elif sfztfz == 0:
+                    WebTools(self.driver).mouse_click('xpath', "//input[@name='SFZTFZ' and @value='0']")
                 else:
-                    WebTools(self.driver).mouse_click('xpath', "//span[@xid='createQL']")
-                # 附记
-                WebTools(self.driver).mouse_click('xpath', "//span[@xid='createFJ']")
-                time.sleep(1)
+                    # 宗地面积
+                    WebTools(self.driver).input_clear('xpath', "//input[@xid='zdmj']")
+                    WebTools(self.driver).input_content('xpath', "//input[@xid='zdmj']", 0)
+                    # 土地使用权面积
+                    WebTools(self.driver).check_element_is_exists('xpath', "//input[@xid='tdsyqmj']")
+                    WebTools(self.driver).input_clear('xpath', "//input[@xid='tdsyqmj']")
+                    WebTools(self.driver).input_content('xpath', "//input[@xid='tdsyqmj']", '1000')
+
+                    # 将页面滚动条拖到底部
+                    self.driver.execute_script("document.documentElement.scrollTop=550")
+                    # self.driver.execute_script("arguments[0].scrollIntoView();", "//span[@xid='createQL']")
+                    # ActionChains(self.driver).move_to_element("//span[@xid='createQL']").perform()
+                    # WebTools(self.driver).drag_scrollBar("//span[@xid='createQL']")
+
+                    # 权利其他状况
+                    # 房屋首次登记
+                    if ywlxID == 'F711B2126C44409D903254C246FCD569':
+                        pass
+                        # WebTools(self.driver).mouse_click('xpath',"//span[@xid='createQLForDHDZ']")
+                    else:
+                        WebTools(self.driver).mouse_click('xpath', "//span[@xid='createQL']")
+                    # 附记
+                    WebTools(self.driver).mouse_click('xpath', "//span[@xid='createFJ']")
+                    time.sleep(1)
 
                     # 裁定过户(房)，批量裁定过户（房）流程需校验申请表界面裁决信息是否存在
                     # if ywlxID == 'E53B3B2C4EE0453D9BCAD57B0107F184' or ywlxID == 'BF8570D83B5F4B95A0AD22D9603477D2':
@@ -240,16 +240,22 @@ class sqbPage():
                 # 查封机关
                 # WebTools(self.driver).input_content('xpath',"//input[@xid='cfjg']",'北京市中级人民法院')
                 WebTools(self.driver).input_content('xpath',"//th[contains(text(),'查封机关')]/../td[1]/input[1]",'北京市中级人民法院')
+                # 查封文件名称
+                # WebTools(self.driver).input_content('xpath',"//input[@xid='cfjg']",'北京市中级人民法院')
+                WebTools(self.driver).input_content('xpath', "//th[contains(text(),'查封文件名称')]/../td[1]/input[1]",'xx查封文件')
                 # 查封文号
                 # WebTools(self.driver).input_content('xpath',"//input[@xid='cfwh']",currentTime)
                 WebTools(self.driver).input_content('xpath', "//th[contains(text(),'查封文号')]/../td[1]/input[1]", currentTime)
+                # 申请执行人
+                # WebTools(self.driver).input_content('xpath',"//input[@xid='CFQSRQ']",currentDate)
+                WebTools(self.driver).input_content('xpath', "//th[contains(text(),'申请执行人')]/../td[1]/input[1]",'张三')
                 # 查封起始日期
                 # WebTools(self.driver).input_content('xpath',"//input[@xid='CFQSRQ']",currentDate)
                 WebTools(self.driver).input_content('xpath', "//th[contains(text(),'查封起始日期')]/../td[1]/input[1]", currentDate)
                 # 查封期限
                 WebTools(self.driver).mouse_click('xpath', "//input[@xid='btnAdd2']")
                 # 来文日期
-                # WebTools(self.driver).input_content('xpath',"//input[@xid='lwrq']",currentDate)
+                WebTools(self.driver).input_clear('xpath', "//th[contains(text(),'来文日期')]/../td[2]/input[1]")
                 WebTools(self.driver).input_content('xpath', "//th[contains(text(),'来文日期')]/../td[2]/input[1]", currentDate)
                 # 查封范围
                 # WebTools(self.driver).input_content('xpath', "//input[@xid='cffw']", "该产权所有，包括附着物（测试）。")

@@ -61,8 +61,6 @@ class Test_ydyzxRegister():
         submitPage(self.driver).slHandle()
         # 登簿
         submitPage(self.driver).dbHandle(bdcdyh, self.data)
-        # 登出
-        logout(self.driver).logout()
         logger.debug("<--------抵押权--转移登记--预告抵押转现end-------->")
 
         # 数据库校验
@@ -74,6 +72,9 @@ class Test_ydyzxRegister():
         #     raise
 
     def teardown(self):
+        # 退出系统
+        logout(self.driver).logout()
+        # 退出浏览器
         self.driver.quit()
 
 if __name__ == '__main__':
