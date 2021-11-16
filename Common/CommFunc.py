@@ -9,15 +9,17 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException,TimeoutException,ElementNotVisibleException
-from Common.logFunc import loggerConf
+from Common.LogFunc import loggerConf
 
 logger = loggerConf().getLogger()
 
 # ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 # sys.path.append(ROOT_DIR)
 
-
 class WebTools(object):
+    '''
+    封装页面基本操作，如鼠标点击，输入框填写值，校验元素是否存在等
+    '''
     def __init__(self,driver):
         self.driver = driver
         self.browser_type = None
