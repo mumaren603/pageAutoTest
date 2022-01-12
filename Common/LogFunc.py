@@ -6,16 +6,17 @@ class loggerConf():
     def __init__(self):
         #创建一个Logger
         self.logger = logging.getLogger(__name__)
-        self.logger.setLevel(logging.DEBUG)               #设置总日志级别
+        self.logger.setLevel(logging.DEBUG)               # 设置总日志级别
 
     def getLogger(self):
         if not self.logger.handlers:
             # 创建一个handler,用于输出到控制台
             stream_handler = logging.StreamHandler()
-            stream_handler.setLevel(logging.ERROR)  # 设置控制台输出日志级别
+            stream_handler.setLevel(logging.ERROR)        # 设置控制台输出日志级别
 
             # 定义handler的输出格式
-            log_format = logging.Formatter('%(asctime)s - %(filename)s - %(levelname)s - %(message)s')
+            # log_format = logging.Formatter('%(asctime)s - %(filename)s - %(levelname)s - %(message)s')
+            log_format = logging.Formatter('%(asctime)s - %(levelname)s - %(process)d - %(module)s - %(filename)s[line:%(lineno)d]: %(message)s')
 
             # 获取当前py所在的父目录（不包括当前文件）
             fileParPath = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
@@ -41,4 +42,4 @@ class loggerConf():
 
         return self.logger
 
-loggerConf().getLogger()
+# loggerConf().getLogger()

@@ -10,11 +10,11 @@ class verificator():
         self.qjObj = QJ_DB()
 
     # 多条产权数据校验（内蒙古允许）
-    def tooManyCqResultVerify(self,type,code,queryData):
+    def tooManyCqResultVerify(self,type,queryData,*args):
         '''
         :param type: 0 净地；1 房地
-        :param code: 0 内蒙；1 江苏
         :param queryData: 查询入参
+        :param *args: tuple  0 内蒙；1 江苏
         :return:
         '''
         if type == 0:
@@ -25,10 +25,11 @@ class verificator():
             if queryjsydsyqSQLRes > 1:
                 logger.error("该单元在dj_jsydsyq存在多条现势数据，请检查！")
                 return
-            if code == 1:
-                if queryTdxxSQLRes >1:
-                    logger.error("该单元在dj_tdxx表存在多条现势数据，请检查！")
-                    return
+            if args:
+                if args[0] == 1:
+                    if queryTdxxSQLRes >1:
+                        logger.error("该单元在dj_tdxx表存在多条现势数据，请检查！")
+                        return
             return True
         elif type == 1:
             queryFdcq2SQL = "select count(1) from dj_fdcq2 where zt='1' and sfyx=1 and bdcdyh='" + queryData + "'"
@@ -65,10 +66,10 @@ class verificator():
         :return:
         '''
         # 检查该数据是否在登记平台做过登记,如果做过登记，发起流程会校验住，确保数据在权藉存在，在登记平台未做过登记
-        queryJsydsyqSQL = "select count(1) from dj_djben where zt='1' and sfyx=1 and sfysczql=1 and (bdcdyh='" + queryData + "' or zddm='" + queryData + "')"
+        queryJsydsyqSQL = "select count(1) from dj_jsydsyq where zt='1' and sfyx=1 and (bdcdyh='" + queryData + "' or zddm='" + queryData + "')"
         queryJsydsyqSQLRes = self.djObj.fetchone(queryJsydsyqSQL)
         if queryJsydsyqSQLRes:
-            logger.warning("登记平台该土地信息已登记，请检查！")
+            logger.warning("登记平台该土地信息已登记")
             return
         return True
 
@@ -81,7 +82,7 @@ class verificator():
         queryDjbenSQL = "select count(1) from dj_djben where zt='1' and sfyx=1 and sfysczql=1 and bdcdyh='" + queryData + "'"
         queryDjbenSQLRes = self.djObj.fetchone(queryDjbenSQL)
         if queryDjbenSQLRes:
-            logger.warning("登记平台该房屋信息已登记，请检查！")
+            logger.warning("登记平台该房屋信息已登记")
             return
         return True
 
@@ -98,6 +99,19 @@ class verificator():
             return
         return True
 
+    # 多条产权宽表数据校验
+    def tooManyCqFdcq2DjbenZsResultVerify(self,queryData):
+        '''
+        :param queryData: 查询入参
+        :return:
+        '''
+        queryDjbenSQL = "select count(1) from dj_fdcq2_djben_zs where sfyx=1 and bdcdyh='" + queryData + "'"
+        queryDjbenSQLRes = self.djObj.fetchone(queryDjbenSQL)
+        if queryDjbenSQLRes != 1:
+            logger.warning("查询单元存在多条现势产权宽表记录或不存在现势记录")
+            return
+        return True
+
     # 产权下是否有附属设施校验
     def fsssIsExistsVerify(self,queryData):
         # 检查该数据是否有附属设施（3.0版本校验）
@@ -109,7 +123,7 @@ class verificator():
             queryFsssxxSQL = "select count(1) from dj_fsssxx where cqbid='" + str(queryFsssRes) + "'"
             queryFsssxxRes = self.djObj.fetchone(queryFsssxxSQL)
             if not queryFsssxxRes:
-                logger.error("DJ_FSSSXX表数据为空，不符合业务办理条件，重新查找数据。。")
+                logger.error("DJ_FSSSXX表数据为空，不符合业务办理条件，重新查找数据。")
                 return
             return True
         else:
