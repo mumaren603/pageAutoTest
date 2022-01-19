@@ -13,7 +13,7 @@ from utils.getTestdata import getTestcaseData,getTestdataPath
 from pageObject.submitPage import submitPage
 from pageObject.logout import logout
 from dataCheck.dataResCheck import dataResCheck
-from Common.logFunc import loggerConf
+from Common.LogFunc import loggerConf
 
 logger = loggerConf().getLogger()
 
@@ -32,7 +32,7 @@ class Test_fwPlDyChangeRegister():
         self.driver = login[0]
         dbInfo = login[1]
         # 获取办件数据
-        bdcdyh = dataInit(dbInfo).getHouseDyChangeRegisterData()
+        bdcdyh = dataInit().getHouseDyChangeRegisterData()
         logger.debug("<--------抵押权--变更登记--批量抵押变更-------->")
 
         # 办件中心
@@ -63,7 +63,7 @@ class Test_fwPlDyChangeRegister():
         # 数据库校验
         logger.debug("<--------归档数据检查-------->")
         try:
-            resDataCheck = dataResCheck(dbInfo).dyRegisterDataCheck(bdcdyh,self.data)
+            resDataCheck = dataResCheck().dyRegisterDataCheck(bdcdyh,self.data)
             assert resDataCheck
         except AssertionError:
             raise

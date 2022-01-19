@@ -1,6 +1,6 @@
 import os
 import yaml
-from Common.logFunc import loggerConf
+from Common.LogFunc import loggerConf
 
 logger = loggerConf().getLogger()
 

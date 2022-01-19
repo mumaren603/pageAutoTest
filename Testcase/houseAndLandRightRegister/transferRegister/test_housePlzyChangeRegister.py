@@ -13,12 +13,12 @@ from pageObject.logout import logout
 from dataCheck.dataResCheck import dataResCheck
 from utils.getTestdata import getTestcaseData,getTestdataPath
 from pageObject.submitPage import submitPage
-from Common.logFunc import loggerConf
+from Common.LogFunc import loggerConf
 
 logger = loggerConf().getLogger()
 
 
-@pytest.mark.all
+@pytest.mark.test
 class Test_housePlzyChangeRegister():
     def setup(self):
         '''初始化用户数据获取'''
@@ -33,7 +33,7 @@ class Test_housePlzyChangeRegister():
         self.driver = login[0]
         dbInfo = login[1]
         # 获取办件数据
-        bdcdyh = dataInit(dbInfo).getSpfOrClfChangeRegisterData()
+        bdcdyh = dataInit().getHouseCqRegisterData()
         logger.debug("#####有建设用地使用权及房屋所有权--转移登记--房的批量转移#####")
         logger.debug("<--------界面操作start-------->")
 
@@ -56,7 +56,7 @@ class Test_housePlzyChangeRegister():
         # # 房地产买卖合同
         # htxxPage(self.driver).fdcmmhtHandle()
         # 询问笔录
-        htxxPage(self.driver).xwjlHandle()
+        # htxxPage(self.driver).xwjlHandle()
         # 办理意见表
         blyjPage(self.driver).blyjHandle()
         # 受理
@@ -68,7 +68,7 @@ class Test_housePlzyChangeRegister():
         # 数据库校验
         try:
             logger.debug("<--------归档数据检查start-------->")
-            resDataCheck = dataResCheck(dbInfo).houseRegisterDataCheck(bdcdyh, self.data)
+            resDataCheck = dataResCheck().houseRegisterDataCheck(bdcdyh, self.data)
             assert resDataCheck
             logger.debug("<--------归档数据检查end------->")
         except AssertionError:

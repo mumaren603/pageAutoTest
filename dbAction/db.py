@@ -1,6 +1,6 @@
 #Author: ls Liu
 import cx_Oracle as Oracle
-from Common.logFunc import loggerConf
+from Common.LogFunc import loggerConf
 import sys
 
 logger = loggerConf().getLogger()

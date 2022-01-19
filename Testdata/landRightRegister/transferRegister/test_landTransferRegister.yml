@@ -8,6 +8,6 @@ initdata:
   params:
     ywxl:
     sffz: 1
-    cqType:
+    cqType: 0
 
 

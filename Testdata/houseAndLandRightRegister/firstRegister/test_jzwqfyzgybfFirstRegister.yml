@@ -8,5 +8,5 @@ initdata:
   params:
     ywxl:
     sffz: 1
-    sfpl: 1
-    cqType:
+    sfpl:
+    cqType: 1

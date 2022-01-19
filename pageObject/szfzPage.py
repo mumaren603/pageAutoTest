@@ -1,5 +1,5 @@
 import time
-from Common.CommonFunc import WebTools
+from Common.CommFunc import WebTools
 
 class szfzPage():
     def __init__(self,driver):

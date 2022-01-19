@@ -10,7 +10,7 @@ from pageObject.logout import logout
 from dataCheck.dataResCheck import dataResCheck
 from utils.getTestdata import getTestcaseData,getTestdataPath
 from pageObject.submitPage import submitPage
-from Common.logFunc import loggerConf
+from Common.LogFunc import loggerConf
 
 logger = loggerConf().getLogger()
 
@@ -27,11 +27,12 @@ class Test_housePlcfRegister():
         :流程 查封登记--批量查封登记（房屋）
         :return:
         '''
-        logger.debug("<--------查封登记-->批量查封登记（房屋）-------->")
         self.driver = login[0]
         dbInfo = login[1]
         # 获取办件数据
-        bdcdyh = dataInit(dbInfo).getHouseCfRegisterData()
+        bdcdyh = dataInit().getHouseCfRegisterData()
+        logger.debug("<--------查封登记--查封--批量查封登记（房屋）start-------->")
+        logger.debug("<--------界面操作start-------->")
 
         # 办件中心
         taskCenter(self.driver).common()
@@ -53,16 +54,21 @@ class Test_housePlcfRegister():
         # submitPage(self.driver).shHandle(bdcdyh)
         # 登簿
         submitPage(self.driver).dbHandle(bdcdyh,self.data)
+        logger.debug("<--------界面操作end-------->")
 
         # 数据库校验
-        logger.debug("<--------归档数据检查-------->")
         try:
-            resDataCheck = dataResCheck(dbInfo).cfRegisterDataCheck(bdcdyh,self.data)
+            logger.debug("<--------归档数据检查start-------->")
+            resDataCheck = dataResCheck().cfRegisterDataCheck(bdcdyh,self.data)
             assert resDataCheck
+            logger.debug("<--------归档数据检查end-------->")
         except AssertionError:
             raise
+        logger.debug("<--------查封登记--查封--批量查封登记（房屋）start-------->")
+
 
     def teardown(self):
+        logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n")
         # 退出系统
         logout(self.driver).logout()
         # 退出浏览器

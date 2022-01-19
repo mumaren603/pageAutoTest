@@ -2,8 +2,8 @@ initdata:
   #流程
   lcInfo:
     qllx: 查封登记
-    djlx:
-    ywlxID: 24A5B1DEA6124BCEA1C38626996BFF97 # 批量查封登记（房屋）
+    djlx: 查封
+    ywlxID: 24A5B1DEA6124BCEA1C38626996BFF97 # 批量续查封登记
   #小类
   params:
     ywxl:

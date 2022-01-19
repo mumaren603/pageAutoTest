@@ -1,0 +1,10 @@
+initdata:
+  #流程
+  lcInfo:
+    qllx: 查封登记
+    djlx: 预查封
+    ywlxID: 7C472DAB0C1D46E1B782689C057B552E  #批量预售合同查封（房屋）
+  #小类
+  params:
+    sfpl: 1
+    cqType: 1

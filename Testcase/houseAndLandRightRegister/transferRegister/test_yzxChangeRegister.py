@@ -13,7 +13,7 @@ from pageObject.logout import logout
 from dataCheck.dataResCheck import dataResCheck
 from utils.getTestdata import getTestcaseData,getTestdataPath
 from pageObject.submitPage import submitPage
-from Common.logFunc import loggerConf
+from Common.LogFunc import loggerConf
 
 logger = loggerConf().getLogger()
 
@@ -33,7 +33,7 @@ class Test_yzxChangeRegister():
         self.driver = login[0]
         dbInfo = login[1]
         # 获取办件数据
-        bdcdyh = dataInit(dbInfo).getYzxRegisterData()
+        bdcdyh = dataInit().getYzxRegisterData()
         logger.debug("<--------国有建设用地使用权及房屋所有权--首次登记--预告转现start-------->")
         logger.debug("<--------界面操作start-------->")
 
@@ -56,7 +56,7 @@ class Test_yzxChangeRegister():
         # 房地产买卖合同
         # htxxPage(self.driver).fdcmmhtHandle()
         # 询问笔录
-        htxxPage(self.driver).xwjlHandle()
+        # htxxPage(self.driver).xwjlHandle()
         # 办理意见表
         blyjPage(self.driver).blyjHandle()
         # 受理 审核
@@ -68,7 +68,7 @@ class Test_yzxChangeRegister():
         # 数据库检查
         try:
             logger.debug("<--------归档数据检查start-------->")
-            resDataCheck = dataResCheck(dbInfo).houseRegisterDataCheck(bdcdyh, self.data)
+            resDataCheck = dataResCheck().houseRegisterDataCheck(bdcdyh, self.data)
             assert resDataCheck
             logger.debug("<--------归档数据检查end------->")
         except AssertionError:

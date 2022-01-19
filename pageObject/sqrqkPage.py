@@ -1,5 +1,5 @@
 import time
-from Common.CommonFunc import WebTools
+from Common.CommFunc import WebTools
 from init.userInfoInit import generateAddr,generateCertNum,generateDYQLRName,generateTelnum,generateQLRName
 
 class sqrqkPage():
@@ -36,7 +36,7 @@ class sqrqkPage():
 
         if qllx =='国有建设用地使用权' or qllx == '国有建设用地使用权及房屋所有权':
             if djlx == '首次登记':
-                WebTools(self.driver).mouse_click('xpath', "//div[contains(text(),'申请人信息')]/../div[2]/span[3]")
+                WebTools(self.driver).mouse_click('xpath', "//div[contains(text(),'申请人信息')]/..//*[contains(text(),'新增')]")
                 time.sleep(1)
                 # 姓名
                 WebTools(self.driver).input_content('xpath', "//input[@xid='SQRMC']", qlrmc)
@@ -165,9 +165,9 @@ class sqrqkPage():
             elif djlx =='转移登记':
                 # 预抵押转现
                 if ywlxID == '7FCA6894051F46CDBC603DE0E430D1EA':
-                    WebTools(self.driver).mouse_click('xpath',"//table[contains(@xid,'underTable')]//tr[1]/td[10]//span[1]")
-                    self.driver.execute_script("document.documentElement.scrollTop=250")
-                    time.sleep(1)
+                    WebTools(self.driver).mouse_click('xpath',"//table[contains(@xid,'underTable')]//span[contains(text(),'编辑')]")
+                    # 将页面滚动条拖到指定元素（登记原因）
+                    WebTools(self.driver).srollBarToElement("//input[@xid='ZJYXQ']")
                     # 是否通知
                     WebTools(self.driver).mouse_click('name', 'SFTZR')
                     # 电话
@@ -294,7 +294,24 @@ class sqrqkPage():
                 WebTools(self.driver).input_content('xpath', "//input[@xid='SQRTXDZ']", qlrtxdz)
             else:
                 pass
-
+        elif qllx == '查封登记':
+            if djlx == '司法裁定':
+                WebTools(self.driver).mouse_click('xpath', "//div[contains(text(),'申请人信息')]/../div[2]/span[3]")
+                time.sleep(1)
+                # 姓名
+                WebTools(self.driver).input_content('xpath', "//input[@xid='SQRMC']", qlrmc)
+                # 是否通知
+                WebTools(self.driver).mouse_click('name', 'SFTZR')
+                # 证件类型
+                WebTools(self.driver).choose_droplist_value('SQRZJZL', 'xpath', "//select[@name='SQRZJZL']/option[4]")
+                # 证件号码
+                WebTools(self.driver).input_content('xpath', "//input[@xid='SQRZJH']", qlrzjhm)
+                # 电话
+                WebTools(self.driver).input_content('xpath', "//input[@xid='SQRDHHM']", qlrdhhm)
+                # 通讯地址
+                WebTools(self.driver).input_content('xpath', "//input[@xid='SQRTXDZ']", qlrtxdz)
+                # 共有方式
+                WebTools(self.driver).choose_droplist_value('GYFS', 'xpath', "//select[@name='GYFS']/option[2]")
 
         # 公共操作
         if djlx != '注销登记':

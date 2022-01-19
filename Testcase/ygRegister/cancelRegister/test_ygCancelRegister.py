@@ -13,7 +13,7 @@ from utils.getTestdata import getTestcaseData,getTestdataPath
 from pageObject.submitPage import submitPage
 from pageObject.logout import logout
 from dataCheck.dataResCheck import dataResCheck
-from Common.logFunc import loggerConf
+from Common.LogFunc import loggerConf
 
 logger = loggerConf().getLogger()
 
@@ -32,7 +32,7 @@ class Test_ygCancelRegister():
         self.driver = login[0]
         dbInfo = login[1]
         # 获取办件数据
-        bdcdyh = dataInit(dbInfo).getYgCancelRegisterData()
+        bdcdyh = dataInit().getYgCancelRegisterData()
         logger.debug("<--------预告登记--注销登记--预告注销登记start-------->")
         logger.debug("<--------界面操作start-------->")
 
@@ -65,7 +65,7 @@ class Test_ygCancelRegister():
         # 数据库校验
         try:
             logger.debug("<--------归档数据检查start-------->")
-            resDataCheck = dataResCheck(dbInfo).ygCancelRegisterDataCheck(bdcdyh, self.data)
+            resDataCheck = dataResCheck().ygCancelRegisterDataCheck(bdcdyh, self.data)
             assert resDataCheck
             logger.debug("<--------归档数据检查end-------->")
         except AssertionError:

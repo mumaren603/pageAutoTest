@@ -2,10 +2,9 @@ initdata:
   #流程
   lcInfo:
     qllx: 查封登记
-    djlx:
+    djlx: 预查封
     ywlxID: A7325035C9E24F7784B50AC1E965FFD7 #预查封（房屋）
   #小类
   params:
-    ywxl:
-    sffz:
-    cqType:
+    cqType: 1
+    sfpl: 0

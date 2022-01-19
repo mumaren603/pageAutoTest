@@ -10,7 +10,7 @@ from pageObject.logout import logout
 from dataCheck.dataResCheck import dataResCheck
 from utils.getTestdata import getTestcaseData,getTestdataPath
 from pageObject.submitPage import submitPage
-from Common.logFunc import loggerConf
+from Common.LogFunc import loggerConf
 
 logger = loggerConf().getLogger()
 
@@ -29,7 +29,7 @@ class Test_houseJdRegister():
         '''
         self.driver = login[0]
         dbInfo = login[1]
-        bdcdyh = dataInit(dbInfo).getHouseDjRegisterData()
+        bdcdyh = dataInit().getHouseDjRegisterData()
         logger.debug("<--------其他登记--解冻登记（房屋）-------->")
         logger.debug("<--------界面操作start-------->")
 
@@ -54,7 +54,7 @@ class Test_houseJdRegister():
         # 数据库校验
         try:
             logger.debug("<--------归档数据检查start-------->")
-            resDataCheck = dataResCheck(dbInfo).djRegisterDataCheck(bdcdyh,self.data)
+            resDataCheck = dataResCheck().djRegisterDataCheck(bdcdyh,self.data)
             assert resDataCheck
             logger.debug("<--------归档数据检查end------->")
         except AssertionError:

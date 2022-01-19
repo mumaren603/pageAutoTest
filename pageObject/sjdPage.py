@@ -4,7 +4,10 @@
 :bdcdyh 不动产单元号，区分净地和房屋
 '''
 import time
-from Common.CommonFunc import WebTools
+from Common.CommFunc import WebTools
+from Common.LogFunc import loggerConf
+
+logger = loggerConf().getLogger()
 
 class sjdPage():
     def __init__(self,driver):
@@ -42,13 +45,9 @@ class sjdPage():
         # else:
         #     WebTools(self.driver).check_element_is_exists('xpath',"//input[@xid='YWH']")
 
+        # 业务小类选择
         if qllx == '国有建设用地使用权':
-            # 转移登记(净地)
-            if ywlxID ==167090000064:
-                if ywxl == '买卖':
-                    WebTools(self.driver).choose_droplist_value('ywxl', 'xpath', "//select[@name='ywxl']/option[3]")
-                elif ywxl == '建设用地转移登记':
-                    WebTools(self.driver).choose_droplist_value('ywxl', 'xpath', "//select[@name='ywxl']/option[4]")
+            pass
         elif qllx == '国有建设用地使用权及房屋所有权':
             # 房屋首次转移登记
             if ywxl:
@@ -90,20 +89,21 @@ class sjdPage():
         # 查封登记--业务小类
         elif qllx == '查封登记':
             if ywxl:
-                if ywxl == '查封':
-                    WebTools(self.driver).choose_droplist_value('ywxl', 'xpath', "//select[@name='ywxl']/option[2]")
-                elif ywxl == '轮候查封':
-                    WebTools(self.driver).choose_droplist_value('ywxl', 'xpath', "//select[@name='ywxl']/option[3]")
+                # 司法裁定（房和地）
+                if ywlxID == '4858445B1488454F970428A2436F54D5' or ywlxID == '8FEAF5CC34DF49C88B7E3139F8C0B18A' :
+                    if ywxl == '司法裁定':
+                        WebTools(self.driver).choose_droplist_value('ywxl', 'xpath', "//select[@name='ywxl']/option[2]")
+                    elif ywxl == '法院拍卖解封':
+                        WebTools(self.driver).choose_droplist_value('ywxl', 'xpath', "//select[@name='ywxl']/option[3]")
+                # 普通查封流程
                 else:
-                    print("%s收件单业务小类必选！" % qllx)
-                    return
-            # 司法裁定（房和地）
-            if ywlxID == '4858445B1488454F970428A2436F54D5' or ywlxID == '8FEAF5CC34DF49C88B7E3139F8C0B18A' :
-                if ywxl == '司法裁定':
-                    WebTools(self.driver).choose_droplist_value('ywxl', 'xpath', "//select[@name='ywxl']/option[2]")
-
-
-
+                    if ywxl == '查封':
+                        WebTools(self.driver).choose_droplist_value('ywxl', 'xpath', "//select[@name='ywxl']/option[2]")
+                    elif ywxl == '轮候查封':
+                        WebTools(self.driver).choose_droplist_value('ywxl', 'xpath', "//select[@name='ywxl']/option[3]")
+                    else:
+                        logger.error("%s收件单业务小类必选！" % qllx)
+                        return
         # 是否发证
         if sffz == 1:
             # 领证地址

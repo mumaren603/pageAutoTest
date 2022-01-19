@@ -13,7 +13,7 @@ from pageObject.logout import logout
 from dataCheck.dataResCheck import dataResCheck
 from utils.getTestdata import getTestcaseData,getTestdataPath
 from pageObject.szfzPage import szfzPage
-from Common.logFunc import loggerConf
+from Common.LogFunc import loggerConf
 
 logger = loggerConf().getLogger()
 
@@ -36,7 +36,7 @@ class Test_landFirstRegister():
         self.driver = login[0]
         dbInfo = login[1]
         # 获取办件数据
-        bdcdyh = dataInit(dbInfo).getLandFirstRegisterData()
+        bdcdyh = dataInit().getLandCqNotRegisterData()
         logger.debug("<--------国有建设用地使用权--首次登记--出让登记start-------->")
         logger.debug("<--------界面操作start-------->")
 
@@ -72,7 +72,7 @@ class Test_landFirstRegister():
 
         try:
             logger.debug("<--------归档数据检查start-------->")
-            resDataCheck = dataResCheck(dbInfo).landRegisterDataCheck(bdcdyh,self.data)
+            resDataCheck = dataResCheck().landRegisterDataCheck(bdcdyh,self.data)
             assert resDataCheck
             logger.debug("<--------归档数据检查end-------->")
         except AssertionError:

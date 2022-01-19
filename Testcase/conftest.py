@@ -1,11 +1,11 @@
 import pytest
 from selenium import webdriver
-from Common.CommonFunc import WebTools
+from Common.CommFunc import WebTools
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
-from Common.logFunc import loggerConf
+from Common.LogFunc import loggerConf
 
 logger = loggerConf().getLogger()
 

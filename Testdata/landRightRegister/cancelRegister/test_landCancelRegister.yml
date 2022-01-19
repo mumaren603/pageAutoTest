@@ -7,4 +7,4 @@ initdata:
   #小类
   params:
     ywxl:
-    cqType:
+    cqType: 0

@@ -3,12 +3,12 @@ initdata:
   lcInfo:
     qllx: 抵押权
     djlx: 首次登记
-    ywlxID: 119C2FCCC994404A95EB225E9A5EB926  #批量抵押（房屋）
+    ywlxID: 3394FD609E5F4963AC02AAA07619D535  #批量抵押（房屋）
   #小类
   params:
     ywxl:
     sfpl: 1
     sffz: 1
-    cqType:
+    cqType: 1
 
 

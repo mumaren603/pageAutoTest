@@ -3,9 +3,10 @@
 :param driver  浏览器驱动
 '''
 import time
-from Common.CommonFunc import WebTools
+from Common.CommFunc import WebTools
 from pageObject.queryFunc import queryFunc
-from Common.logFunc import loggerConf
+from Common.LogFunc import loggerConf
+import sys
 
 logger = loggerConf().getLogger()
 
@@ -26,10 +27,29 @@ class bdcjbxxPage():
         qllx = data.get('initdata').get('lcInfo',None).get('qllx',None)
         djlx = data.get('initdata').get('lcInfo', None).get('djlx', None)
         ywlxID = data.get('initdata').get('lcInfo', None).get('ywlxID', None)
+        sfpl = data.get('initdata').get('params', None).get('sfpl', None)
+        cqType = data.get('initdata').get('params', None).get('cqType', None)
+
 
         WebTools(self.driver).check_element_is_exists('link_text','不动产基本信息')
         WebTools(self.driver).mouse_click('link_text', '不动产基本信息')
-        self.driver.execute_script("document.documentElement.scrollTop=0")
+
+        # 等待页面元素加载
+        # 批量
+        if sfpl == 1:
+            WebTools(self.driver).check_element_is_exists('xpath', "//div[@xid='headTitle']")
+        #建筑物区分业主共有部分 需特别处理，属于批量流程，但yml中sfpl参数不赋值，因为涉及到数据查询。
+        elif ywlxID == '191B4FB37DD148448BC64944C01A78C1':
+            WebTools(self.driver).check_element_is_exists('xpath', "//div[@xid='headTitle']")
+        # 非批量
+        else:
+            if cqType == 0:
+                WebTools(self.driver).check_element_is_exists('xpath', "//span[contains(text(),'土地信息')]")
+            elif cqType == 1:
+                WebTools(self.driver).check_element_is_exists('xpath', "//span[contains(text(),'不动产信息')]")
+            else:
+                logger.error("产权类型【cqType】未传值，请检查yml文件")
+                sys.exit(-1)
 
         if qllx =='国有建设用地使用权及房屋所有权':
             # 分户转移
@@ -70,26 +90,11 @@ class bdcjbxxPage():
                 # WebTools(self.driver).check_element_is_exists('xpath',"//span[@xid='generate']")
                 # WebTools(self.driver).mouse_click('xpath',"//span[@xid='generate']")
             else:
-                WebTools(self.driver).check_element_is_exists('xpath', '//td[@xid="FWLX"]')
-
-                js22 = '$("input[xid=\'ZH\']").val(2323)'
-                FWLX = self.driver.execute_script(js22)
-
-
-                # FWLX = self.driver.execute_script("document.querySelector($('input[xid=\"ZH\"]').val(60))")
-                print('FWLX',FWLX)
-
-                WebTools(self.driver).input_content('xpath','//input[@xid="QDJG"]',80)
-
-
-                # self.driver.execute_script("document.documentElement.scrollTop=200")
                 WebTools(self.driver).input_clear('xpath','//input[@xid="QDJG"]')
                 WebTools(self.driver).input_content('xpath','//input[@xid="QDJG"]',80)
-                # WebTools(self.driver).choose_droplist_value('QDFS','xpath','//select[@name="QDFS"]')
         elif qllx == '国有建设用地使用权':
             WebTools(self.driver).check_element_is_exists('xpath', '//td[@xid="TDQLXZ"]')
-            WebTools(self.driver).input_clear('xpath','//input[@xid="QDJG"]')
-            WebTools(self.driver).input_content('xpath','//input[@xid="QDJG"]',80)
+
 
 
 

@@ -1,5 +1,5 @@
 '''合同信息页面'''
-from Common.CommonFunc import WebTools
+from Common.CommFunc import WebTools
 import time
 
 class htxxPage():

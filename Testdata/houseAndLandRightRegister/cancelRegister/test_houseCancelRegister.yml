@@ -6,6 +6,6 @@ initdata:
     ywlxID: 7C936E3656FA459DA3EE2F767A18C62F  #注销登记
   #小类
   params:
-    ywxl:
-    sffz:
+    cqType: 1
+
 

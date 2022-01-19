@@ -3,7 +3,7 @@
 :param driver  浏览器驱动
 '''
 import time
-from Common.CommonFunc import WebTools
+from Common.CommFunc import WebTools
 
 class sflzbPage():
     def __init__(self,driver):

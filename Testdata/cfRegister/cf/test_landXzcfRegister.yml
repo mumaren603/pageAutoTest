@@ -1,0 +1,10 @@
+initdata:
+  #流程
+  lcInfo:
+    qllx: 查封登记
+    djlx: 查封
+    ywlxID: 9549D08993DB44138AC1A433A346C3BC    # 土地小证查封
+  #小类
+  params:
+    cqType:
+

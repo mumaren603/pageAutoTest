@@ -13,11 +13,11 @@ from utils.getTestdata import getTestcaseData,getTestdataPath
 from pageObject.submitPage import submitPage
 from pageObject.logout import logout
 from dataCheck.dataResCheck import dataResCheck
-from Common.logFunc import loggerConf
+from Common.LogFunc import loggerConf
 
 logger = loggerConf().getLogger()
 
-@pytest.mark.xfail('3.0需求改造')
+@pytest.mark.test
 @pytest.mark.all
 class Test_fwPlDyRegister():
     def setup(self):
@@ -32,9 +32,10 @@ class Test_fwPlDyRegister():
         self.driver = login[0]
         dbInfo = login[1]
         # 获取办件数据
-        bdcdyh = dataInit(dbInfo).getHouseFirstDyRegisterData()
-        # bdcdyh = dataInit(dbInfo).getHousePlDyRegisterData()
-        logger.debug("<--------抵押权--首次登记--土地抵押-------->")
+        bdcdyh = dataInit().getHouseFirstDyRegisterData()
+        # bdcdyh = dataInit().getHousePlDyRegisterData()
+        logger.debug("<--------抵押权--首次登记--批量抵押（发多本证）start-------->")
+        logger.debug("<--------界面操作start-------->")
 
         # 办件中心
         taskCenter(self.driver).common()
@@ -60,20 +61,26 @@ class Test_fwPlDyRegister():
         submitPage(self.driver).slHandle()
         # 登簿
         submitPage(self.driver).dbHandle(bdcdyh, self.data)
+        logger.debug("<--------界面操作end-------->")
 
         # 数据库校验
-        logger.debug("<--------归档数据检查-------->")
         try:
-            resDataCheck = dataResCheck(dbInfo).dyRegisterDataCheck(bdcdyh,self.data)
+            logger.debug("<--------归档数据检查start-------->")
+            resDataCheck = dataResCheck().dyRegisterDataCheck(bdcdyh,self.data)
             assert resDataCheck
+            logger.debug("<--------归档数据检查end-------->")
         except AssertionError:
             raise
+        logger.debug("<--------抵押权--首次登记--不动产抵押end-------->")
+
 
     def teardown(self):
-        # 退出系统
-        logout(self.driver).logout()
-        # 退出浏览器
-        self.driver.quit()
+        logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n")
+
+        # # 退出系统
+        # logout(self.driver).logout()
+        # # 退出浏览器
+        # self.driver.quit()
 
 if __name__ == '__main__':
     pytest.main(['-v', 'test_fwPlDyRegister'])

@@ -1,0 +1,11 @@
+initdata:
+  #流程
+  lcInfo:
+    qllx: 国有建设用地使用权及房屋所有权
+    djlx: 首次登记
+    ywlxID: 91436F614E6F43409B5A8FE2F0290F8F  #首次批量
+  #小类
+  params:
+    sfpl: 1
+    sffz: 1
+    cqType: 1

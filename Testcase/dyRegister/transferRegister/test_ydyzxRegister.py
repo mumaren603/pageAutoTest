@@ -13,7 +13,7 @@ from pageObject.submitPage import submitPage
 from utils.getTestdata import getTestcaseData,getTestdataPath
 from pageObject.logout import logout
 from dataCheck.dataResCheck import dataResCheck
-from Common.logFunc import loggerConf
+from Common.LogFunc import loggerConf
 
 logger = loggerConf().getLogger()
 
@@ -32,7 +32,7 @@ class Test_ydyzxRegister():
         self.driver = login[0]
         dbInfo = login[1]
         # 获取办件数据
-        bdcdyh = dataInit(dbInfo).getYdyzxRegisterData()
+        bdcdyh = dataInit().getYdyzxRegisterData()
         logger.debug("<--------抵押权--转移登记--预告抵押转现start-------->")
 
         # 办件中心
@@ -54,7 +54,7 @@ class Test_ydyzxRegister():
         # 房地产抵押合同
         # htxxPage(self.driver).dyhtHandle()
         # 询问笔录
-        htxxPage(self.driver).xwjlHandle()
+        # htxxPage(self.driver).xwjlHandle()
         # 办理意见表
         blyjPage(self.driver).blyjHandle()
         # 受理 审核
@@ -65,11 +65,11 @@ class Test_ydyzxRegister():
 
         # 数据库校验
         logger.debug("<--------归档数据检查-------->")
-        # try:
-        #     resDataCheck = dataResCheck(dbInfo).dyRegisterDataCheck(bdcdyh, self.data)
-        #     assert resDataCheck
-        # except AssertionError:
-        #     raise
+        try:
+            resDataCheck = dataResCheck().dyRegisterDataCheck(bdcdyh, self.data)
+            assert resDataCheck
+        except AssertionError:
+            raise
 
     def teardown(self):
         # 退出系统

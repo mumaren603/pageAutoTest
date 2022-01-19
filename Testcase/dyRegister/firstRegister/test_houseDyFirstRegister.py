@@ -13,7 +13,7 @@ from utils.getTestdata import getTestcaseData,getTestdataPath
 from pageObject.submitPage import submitPage
 from pageObject.logout import logout
 from dataCheck.dataResCheck import dataResCheck
-from Common.logFunc import loggerConf
+from Common.LogFunc import loggerConf
 
 logger = loggerConf().getLogger()
 
@@ -32,8 +32,9 @@ class Test_houseDyFirstRegister():
         self.driver = login[0]
         dbInfo = login[1]
         # 获取办件数据
-        bdcdyh = dataInit(dbInfo).getHouseFirstDyRegisterData()
-        logger.debug("<--------抵押权--首次登记--不动产抵押start-------->")
+        bdcdyh = dataInit().getHouseCqRegisterData()
+        logger.debug("<--------抵押权--首次登记--土地抵押start-------->")
+        logger.debug("<--------界面操作start-------->")
 
         # 办件中心
         taskCenter(self.driver).common()
@@ -54,20 +55,20 @@ class Test_houseDyFirstRegister():
         # 房地产抵押合同
         # htxxPage(self.driver).dyhtHandle()
         # 询问笔录
-        htxxPage(self.driver).xwjlHandle()
+        # htxxPage(self.driver).xwjlHandle()
         # 办理意见表
         blyjPage(self.driver).blyjHandle()
         # 受理
         submitPage(self.driver).slHandle()
-        # 审核
-        submitPage(self.driver).shHandle(bdcdyh)
         # 登簿
         submitPage(self.driver).dbHandle(bdcdyh, self.data)
+        logger.debug("<--------界面操作end-------->")
+
 
         # 数据库校验
-        logger.debug("<--------归档数据检查start-------->")
         try:
-            resDataCheck = dataResCheck(dbInfo).dyRegisterDataCheck(bdcdyh, self.data)
+            logger.debug("<--------归档数据检查start-------->")
+            resDataCheck = dataResCheck().dyRegisterDataCheck(bdcdyh, self.data)
             assert resDataCheck
             logger.debug("<--------归档数据检查end-------->")
         except AssertionError:
@@ -75,6 +76,7 @@ class Test_houseDyFirstRegister():
         logger.debug("<--------抵押权--首次登记--不动产抵押end-------->")
 
     def teardown(self):
+        logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n")
         # 退出系统
         logout(self.driver).logout()
         # 退出浏览器

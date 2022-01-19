@@ -1,0 +1,11 @@
+initdata:
+  #流程
+  lcInfo:
+    qllx: 查封登记
+    djlx: 司法裁定
+    ywlxID: 8FEAF5CC34DF49C88B7E3139F8C0B18A # 司法裁定(净地)
+  #小类
+  params:
+    ywxl: 法院拍卖解封
+    sfpl: 0
+    cqType: 0

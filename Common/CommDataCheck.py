@@ -135,6 +135,31 @@ class verificator():
             logger.error("数据查询异常,具体详见：%s" % e)
             sys.exit(-1)
 
+    # 获取预查封关联数据（id,djbid,zsbid）
+    def getYcfRealtionData(self,bdcdyh,data):
+        ywh = self.getYwh(bdcdyh,data)
+        try:
+            sql_dj_ycf_data = "select id,djbid,cqbid,hid from dj_ycf where ywh='" + ywh + "'"
+            res_dj_ycf_data = self.djObj.fetchone2(sql_dj_ycf_data)
+            logger.debug("dj_ycf表id,djbid,cqbid分别为：%s，%s，%s，%s" % res_dj_ycf_data)
+            return res_dj_ycf_data
+        except Exception as e:
+            logger.error("数据查询异常,具体详见：%s" % e)
+            sys.exit(-1)
+
+    # 获取司法裁定关联数据（id,djbid,zsbid）
+    def getSfcdRealtionData(self,bdcdyh,data):
+        ywh = self.getYwh(bdcdyh,data)
+        try:
+            sql_dj_qtxz_data = "select id,djbid,cqbid from dj_qtxz where ywh='" + ywh + "'"
+            res_dj_qtxz_data = self.djObj.fetchone2(sql_dj_qtxz_data)
+            logger.debug("dj_qtxz表id,djbid,cqbid分别为：%s，%s，%s" % res_dj_qtxz_data)
+            return res_dj_qtxz_data
+        except Exception as e:
+            logger.error("数据查询异常,具体详见：%s" % e)
+            sys.exit(-1)
+
+
     # 净地产权登簿检查
     def getLandCqRegisterRes(self,bdcdyh,data):
         sfcd = data.get('initdata').get('params', None).get('sfcd', None)
@@ -538,7 +563,7 @@ class verificator():
             res_djbid = str(res_djbid)
             res_cqbid = str(res_cqbid)
 
-            #判断查封数量，如果未做过查封，查询到是首封数据，反正则是轮候查封数据
+            # 判断查封数量，如果查封数据只有1条，查询到是首封；如果查封数据大于1条，则是轮候查封。
             sql_dj_cf_count = "select count(1) from dj_cf where zt='1' and sfyx=1 and bdcdyh='" + bdcdyh + "'"
             res_dj_cf_count = self.djObj.fetchone(sql_dj_cf_count)
             logger.debug("dj_cf表查询sql：%s" % sql_dj_cf_count)
@@ -561,7 +586,7 @@ class verificator():
                 logger.error("dj_cf表查询数据为空，请检查")
                 sys.exit(-1)
 
-            sql_dj_djben = "select count(1) from dj_djben where zt='1' and sfyx=1 and sfcf=1 and sfysczql=1 and id ='" + res_djbid + "'"
+            sql_dj_djben = "select count(1) from dj_djben where zt='1' and sfyx=1 and sfcf=1 and id ='" + res_djbid + "'"
             res_dj_djben = self.djObj.fetchone(sql_dj_djben)
             resList.append(res_dj_djben)
             logger.debug("dj_djben表查询sql：%s" % sql_dj_djben)
@@ -593,6 +618,114 @@ class verificator():
                     resList.append(res_dj_dy_djben_zm)
                     logger.debug("dj_dy_djben_zm表查询sql：%s" % sql_dj_dy_djben_zm)
                     logger.debug("dj_dy_djben_zm表查询记录为：%d" % res_dj_dy_djben_zm)
+
+            if not resList:
+                logger.error("查询结果为空，请检查！")
+                sys.exit(-1)
+            return resList
+
+        except Exception as e:
+            logger.error("登簿入库检查异常，请检查SQL语法，具体详见：%s" % e)
+            sys.exit(-1)
+
+    # 预查封登簿检查
+    def getYcfRegisterRes(self,bdcdyh,data):
+        resList = []
+        try:
+            res_id, res_djbid, res_cqbid,res_hid = self.getYcfRealtionData(bdcdyh, data)
+            res_id = str(res_id)
+            res_djbid = str(res_djbid)
+            res_cqbid = str(res_cqbid)
+            if res_hid:
+                res_hid = str(res_hid)
+
+            # 判断查封数量，如果查封数据只有1条，查询到是首封；如果查封数据大于1条，则是轮候查封。
+            sql_dj_ycf_count = "select count(1) from dj_ycf where zt='1' and sfyx=1 and bdcdyh='" + bdcdyh + "'"
+            res_dj_ycf_count = self.djObj.fetchone(sql_dj_ycf_count)
+            logger.debug("dj_ycf表查询sql：%s" % sql_dj_ycf_count)
+            logger.debug("该单元共存在%d条现势查封。" % res_dj_ycf_count)
+            # 轮候查封
+            if res_dj_ycf_count > 1:
+                sql_dj_ycf = "select count(1) from dj_ycf where zt='1' and sfyx=1 and cflx='4' and id='" + res_id + "'"
+                res_dj_ycf = self.djObj.fetchone(sql_dj_ycf)
+                resList.append(res_dj_ycf)
+                logger.debug("dj_ycf表查询sql：%s" % sql_dj_ycf)
+                logger.debug("dj_ycf表查询记录为：%d" % res_dj_ycf)
+            # 首封
+            elif res_dj_ycf_count == 1:
+                sql_dj_ycf = "select count(1) from dj_ycf where zt='1' and sfyx=1 and cflx='3' and id='" + res_id + "'"
+                res_dj_ycf = self.djObj.fetchone(sql_dj_ycf)
+                resList.append(res_dj_ycf)
+                logger.debug("dj_ycf表查询sql：%s" % sql_dj_ycf)
+                logger.debug("dj_ycf表查询记录为：%d" % res_dj_ycf)
+            else:
+                logger.error("dj_ycf表查询数据为空，请检查")
+                sys.exit(-1)
+
+            sql_dj_djben = "select count(1) from dj_djben where zt='1' and sfyx=1 and sfycf=1 and id ='" + res_djbid + "'"
+            res_dj_djben = self.djObj.fetchone(sql_dj_djben)
+            resList.append(res_dj_djben)
+            logger.debug("dj_djben表查询sql：%s" % sql_dj_djben)
+            logger.debug("dj_djben表查询记录为：%d" % res_dj_djben)
+
+            sql_dj_ychxx = "select count(1) from dj_ychxx where zt='1' and sfyx=1 and id ='" + res_hid + "'"
+            res_dj_ychxx = self.djObj.fetchone(sql_dj_ychxx)
+            resList.append(res_dj_ychxx)
+            logger.debug("dj_ychxx表查询sql：%s" % sql_dj_ychxx)
+            logger.debug("dj_ychxx表查询记录为：%d" % res_dj_ychxx)
+
+            if not resList:
+                logger.error("查询结果为空，请检查！")
+                sys.exit(-1)
+            return resList
+
+        except Exception as e:
+            logger.error("登簿入库检查异常，请检查SQL语法，具体详见：%s" % e)
+            sys.exit(-1)
+
+    # 司法裁定登簿检查
+    def getSfcdRegisterRes(self,bdcdyh,data):
+        resList = []
+        try:
+            res_id, res_djbid, res_cqbid, res_hid = self.getYcfRealtionData(bdcdyh, data)
+            res_id = str(res_id)
+            res_djbid = str(res_djbid)
+            res_cqbid = str(res_cqbid)
+
+            # 判断查封数量，如果查封数据只有1条，查询到是首封；如果查封数据大于1条，则是轮候查封。
+            sql_dj_ycf_count = "select count(1) from dj_ycf where zt='1' and sfyx=1 and bdcdyh='" + bdcdyh + "'"
+            res_dj_ycf_count = self.djObj.fetchone(sql_dj_ycf_count)
+            logger.debug("dj_ycf表查询sql：%s" % sql_dj_ycf_count)
+            logger.debug("该单元共存在%d条现势查封。" % res_dj_ycf_count)
+            # 轮候查封
+            if res_dj_ycf_count > 1:
+                sql_dj_ycf = "select count(1) from dj_ycf where zt='1' and sfyx=1 and cflx='4' and id='" + res_id + "'"
+                res_dj_ycf = self.djObj.fetchone(sql_dj_ycf)
+                resList.append(res_dj_ycf)
+                logger.debug("dj_ycf表查询sql：%s" % sql_dj_ycf)
+                logger.debug("dj_ycf表查询记录为：%d" % res_dj_ycf)
+            # 首封
+            elif res_dj_ycf_count == 1:
+                sql_dj_ycf = "select count(1) from dj_ycf where zt='1' and sfyx=1 and cflx='3' and id='" + res_id + "'"
+                res_dj_ycf = self.djObj.fetchone(sql_dj_ycf)
+                resList.append(res_dj_ycf)
+                logger.debug("dj_ycf表查询sql：%s" % sql_dj_ycf)
+                logger.debug("dj_ycf表查询记录为：%d" % res_dj_ycf)
+            else:
+                logger.error("dj_ycf表查询数据为空，请检查")
+                sys.exit(-1)
+
+            sql_dj_djben = "select count(1) from dj_djben where zt='1' and sfyx=1 and sfycf=1 and id ='" + res_djbid + "'"
+            res_dj_djben = self.djObj.fetchone(sql_dj_djben)
+            resList.append(res_dj_djben)
+            logger.debug("dj_djben表查询sql：%s" % sql_dj_djben)
+            logger.debug("dj_djben表查询记录为：%d" % res_dj_djben)
+
+            sql_dj_ychxx = "select count(1) from dj_ychxx where zt='1' and sfyx=1 and id ='" + res_hid + "'"
+            res_dj_ychxx = self.djObj.fetchone(sql_dj_ychxx)
+            resList.append(res_dj_ychxx)
+            logger.debug("dj_ychxx表查询sql：%s" % sql_dj_ychxx)
+            logger.debug("dj_ychxx表查询记录为：%d" % res_dj_ychxx)
 
             if not resList:
                 logger.error("查询结果为空，请检查！")

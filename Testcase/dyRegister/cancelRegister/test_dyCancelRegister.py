@@ -27,7 +27,7 @@ class Test_dyCancelRegister():
         self.driver = login[0]
         dbInfo = login[1]
         # 获取办件数据
-        bdcdyh = dataInit(dbInfo).getHouseDyChangeRegisterData()
+        bdcdyh = dataInit().getHouseDyChangeRegisterData()
         print("办件受理数据为：%s" % bdcdyh)
 
         # 办件中心
@@ -55,7 +55,7 @@ class Test_dyCancelRegister():
 
         # 数据库验证
         try:
-            resDataCheck = dataResCheck(dbInfo).dyCancelDataCheck(bdcdyh, self.lcInfo)
+            resDataCheck = dataResCheck().dyCancelDataCheck(bdcdyh, self.lcInfo)
             print("数据库检查结果是：", resDataCheck)
             assert resDataCheck
         except AssertionError:

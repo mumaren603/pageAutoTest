@@ -1,13 +1,9 @@
-'''
-国有建设用地使用权及房屋所有权 -- 首次登记 -- 建筑物区分业主共有部分（02103）
-'''
 import pytest,os
 from init.dataInit import dataInit
 from pageObject.taskCenter import taskCenter
 from pageObject.queryFunc import queryFunc
 from pageObject.sjdPage import sjdPage
 from pageObject.sqrqkPage import sqrqkPage
-from init.userInfoInit import generateAddr,generateCertNum,generateQLRName,generateTelnum
 from pageObject.sqbPage import sqbPage
 from pageObject.bdcjbxxPage import bdcjbxxPage
 from pageObject.blyjPage import blyjPage
@@ -15,11 +11,11 @@ from pageObject.submitPage import submitPage
 from pageObject.logout import logout
 from dataCheck.dataResCheck import dataResCheck
 from utils.getTestdata import getTestcaseData,getTestdataPath
-from Common.logFunc import loggerConf
+from Common.LogFunc import loggerConf
 
 logger = loggerConf().getLogger()
 
-@pytest.mark.smoke
+@pytest.mark.test
 @pytest.mark.all
 class Test_jzwqfyzgybfFirstRegister():
     def setup(self):
@@ -35,8 +31,8 @@ class Test_jzwqfyzgybfFirstRegister():
         self.driver = login[0]
         dbInfo = login[1]
         # 获取办件数据
-        bdcdyh = dataInit(dbInfo).getJzwqfyzgybfFirstRegisterData()
-        logger.debug("#####国有建设用地使用权及房屋所有权--首次登记--建筑物区分业主共有部分")
+        bdcdyh = dataInit().getJzwqfyzgybfRegisterData()
+        logger.debug("<--------国有建设用地使用权及房屋所有权--首次登记--建筑物区分业主共有部分start-------->")
         logger.debug("<--------界面操作start-------->")
 
         #办件中心
@@ -68,11 +64,12 @@ class Test_jzwqfyzgybfFirstRegister():
         # 数据库验证
         try:
             logger.debug("<--------归档数据检查start-------->")
-            resDataCheck = dataResCheck(dbInfo).jzwqfyzgybfRegisterDataCheck(bdcdyh,self.data)
+            resDataCheck = dataResCheck().jzwqfyzgybfRegisterDataCheck(bdcdyh,self.data)
             assert resDataCheck
             logger.debug("<--------归档数据检查end-------->")
         except AssertionError:
             raise
+        logger.debug("<--------国有建设用地使用权及房屋所有权--首次登记--建筑物区分业主共有部分end-------->")
 
     def teardown(self):
         logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n")

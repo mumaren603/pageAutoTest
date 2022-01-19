@@ -7,6 +7,7 @@ initdata:
   #小类
   params:
     ywxl:
-    sffz: 1
     sfpl: 1
+    sffz: 1
+    cqType: 1
     sfztfz: 1 #整体发证

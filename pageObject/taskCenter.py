@@ -1,5 +1,5 @@
-from Common.CommonFunc import WebTools
-from Common.logFunc import loggerConf
+from Common.CommFunc import WebTools
+from Common.LogFunc import loggerConf
 import time
 
 logger = loggerConf().getLogger()
@@ -93,8 +93,8 @@ class taskCenter():
                         WebTools(self.driver).mouse_doubleClick('xpath', "//div[@ywlxid=167090000072]/div[1]")
                         time.sleep(2)
                     # 首次登记（批量）
-                    elif ywlxID == 167010000260:
-                        WebTools(self.driver).mouse_doubleClick('xpath', "//div[@ywlxid=167010000260]/div[1]")
+                    elif ywlxID == '91436F614E6F43409B5A8FE2F0290F8F':
+                        WebTools(self.driver).mouse_doubleClick('xpath', "//div[@ywlxid='91436F614E6F43409B5A8FE2F0290F8F']/div[1]")
                         time.sleep(2)
                     # 项目内多幢
                     elif ywlxID == '608286609F5C429CB32BA42C56F7C7F7':
@@ -159,8 +159,8 @@ class taskCenter():
                         WebTools(self.driver).mouse_doubleClick('xpath', "//div[@ywlxid='497903B0B8404E60B70C27DB2C7674F7']/div[1]")
                         time.sleep(2)
                     # 批量抵押（房屋）
-                    elif ywlxID == '119C2FCCC994404A95EB225E9A5EB926':
-                        WebTools(self.driver).mouse_doubleClick('xpath', "//div[@ywlxid='119C2FCCC994404A95EB225E9A5EB926']/div[1]")
+                    elif ywlxID == '3394FD609E5F4963AC02AAA07619D535':
+                        WebTools(self.driver).mouse_doubleClick('xpath', "//div[@ywlxid='3394FD609E5F4963AC02AAA07619D535']/div[1]")
                         time.sleep(2)
                 elif djlx == '转移登记':
                     WebTools(self.driver).mouse_click('xpath', "//ul[contains(@xid,'subUl2')]/li[2]/a")
@@ -194,50 +194,56 @@ class taskCenter():
                         time.sleep(2)
             elif qllx == '查封登记':
                 WebTools(self.driver).mouse_click('link_text', "查封登记")
-                # 查封登记（房和地）
-                if ywlxID == '87F9D867EFD04220805987CC776A7A9F' or ywlxID == '6DFC6A6D5D214896AB5216424A8E02BE' :
-                    WebTools(self.driver).mouse_doubleClick('xpath', "//div[@ywlxid='6DFC6A6D5D214896AB5216424A8E02BE']/div[1]")
-                    time.sleep(2)
-                # 续查封登记（房和地）
-                elif ywlxID == 'AD8169CA47E844F6B240D36799F2AA06' or ywlxID == '4F8E285959114451A95C5CFC31FD9E0F':
-                    WebTools(self.driver).mouse_doubleClick('xpath',"//div[@ywlxid='4F8E285959114451A95C5CFC31FD9E0F']/div[1]")
-                    time.sleep(2)
-                # 解封登记（房和地）
-                elif ywlxID == 'FB265E54DBE24577B2FA4F4C4980AB15' or ywlxID == '08B3B1B8F1FD47188C115939E2814AFF':
-                    WebTools(self.driver).mouse_doubleClick('xpath',"//div[@ywlxid='FB265E54DBE24577B2FA4F4C4980AB15']/div[1]")
-                    time.sleep(2)
-                # 批量查封(房屋)
-                elif ywlxID == '80E93B91E9974F98AAE75C6AD28629B1':
-                    WebTools(self.driver).mouse_doubleClick('xpath', "//div[@ywlxid='80E93B91E9974F98AAE75C6AD28629B1']/div[1]")
-                    time.sleep(2)
-                # 批量查封(净地)
-                elif ywlxID == 'E039C307B0C041C981506694E3CABD28':
-                    WebTools(self.driver).mouse_doubleClick('xpath', "//div[@ywlxid='E039C307B0C041C981506694E3CABD28']/div[1]")
-                    time.sleep(2)
-                # 批量续查封(房屋)
-                elif ywlxID == '24A5B1DEA6124BCEA1C38626996BFF97':
-                    WebTools(self.driver).mouse_doubleClick('xpath', "//div[@ywlxid='24A5B1DEA6124BCEA1C38626996BFF97']/div[1]")
-                    time.sleep(2)
-                # 批量续查封(净地)
-                elif ywlxID == '36F20BC9FC524657A1D79B776A1C0CF5':
-                    WebTools(self.driver).mouse_doubleClick('xpath', "//div[@ywlxid='36F20BC9FC524657A1D79B776A1C0CF5']/div[1]")
-                    time.sleep(2)
-                # 批量解封(房屋)
-                elif ywlxID == '4D22B4174EFD42BCA3C01FE58D9F1477':
-                    WebTools(self.driver).mouse_doubleClick('xpath', "//div[@ywlxid='4D22B4174EFD42BCA3C01FE58D9F1477']/div[1]")
-                    time.sleep(2)
-                # 批量解封(净地)
-                elif ywlxID == '22CF4018956C44338B4A2B51EB1CB111':
-                    WebTools(self.driver).mouse_doubleClick('xpath', "//div[@ywlxid='22CF4018956C44338B4A2B51EB1CB111']/div[1]")
-                    time.sleep(2)
-                # 预查封（房屋）
-                elif ywlxID == 'A7325035C9E24F7784B50AC1E965FFD7':
-                    WebTools(self.driver).mouse_doubleClick('xpath', "//div[@ywlxid='A7325035C9E24F7784B50AC1E965FFD7']/div[1]")
-                    time.sleep(2)
-                # 司法裁定（房和地）
-                elif ywlxID == '4858445B1488454F970428A2436F54D5' or ywlxID == '8FEAF5CC34DF49C88B7E3139F8C0B18A' :
-                    WebTools(self.driver).mouse_doubleClick('xpath', "//div[@ywlxid='4858445B1488454F970428A2436F54D5']/div[1]")
-                    time.sleep(2)
+                if djlx == '查封':
+                    # 批量查封
+                    if ywlxID == '80E93B91E9974F98AAE75C6AD28629B1':
+                        WebTools(self.driver).mouse_doubleClick('xpath', "//div[@ywlxid='80E93B91E9974F98AAE75C6AD28629B1']/div[1]")
+                        time.sleep(2)
+                    # 批量续查封
+                    elif ywlxID == '24A5B1DEA6124BCEA1C38626996BFF97':
+                        WebTools(self.driver).mouse_doubleClick('xpath', "//div[@ywlxid='24A5B1DEA6124BCEA1C38626996BFF97']/div[1]")
+                        time.sleep(2)
+                    # 土地小证查封
+                    elif ywlxID == '9549D08993DB44138AC1A433A346C3BC':
+                        WebTools(self.driver).mouse_doubleClick('xpath',"//div[@ywlxid='9549D08993DB44138AC1A433A346C3BC']/div[1]")
+                        time.sleep(2)
+                    # 土地小证续查封
+                    elif ywlxID == '819B16A603D4467D882268FF9CE83C02':
+                        WebTools(self.driver).mouse_doubleClick('xpath',"//div[@ywlxid='819B16A603D4467D882268FF9CE83C02']/div[1]")
+                        time.sleep(2)
+                elif djlx == '预查封':
+                    WebTools(self.driver).mouse_click('xpath', "//ul[contains(@xid,'subUl3')]/li[2]/a")
+                    # 预查封（房屋）/批量预售合同查封
+                    if ywlxID == 'A7325035C9E24F7784B50AC1E965FFD7' or ywlxID == '7C472DAB0C1D46E1B782689C057B552E':
+                        WebTools(self.driver).mouse_doubleClick('xpath', "//div[@ywlxid='A7325035C9E24F7784B50AC1E965FFD7']/div[1]")
+                        time.sleep(2)
+                    # 批量续预查封
+                    if ywlxID == '6559D6E5FB7044D3999FBF2EC76A176B':
+                        WebTools(self.driver).mouse_doubleClick('xpath', "//div[@ywlxid='6559D6E5FB7044D3999FBF2EC76A176B']/div[1]")
+                        time.sleep(2)
+                elif djlx == '解封':
+                    WebTools(self.driver).mouse_click('xpath', "//ul[contains(@xid,'subUl3')]/li[5]/a")
+                    # 解封登记（房和地）
+                    if ywlxID == 'FB265E54DBE24577B2FA4F4C4980AB15' or ywlxID == '08B3B1B8F1FD47188C115939E2814AFF':
+                        WebTools(self.driver).mouse_doubleClick('xpath',"//div[@ywlxid='FB265E54DBE24577B2FA4F4C4980AB15']/div[1]")
+                        time.sleep(2)
+                    # 批量解封(房屋)
+                    elif ywlxID == '4D22B4174EFD42BCA3C01FE58D9F1477':
+                        WebTools(self.driver).mouse_doubleClick('xpath', "//div[@ywlxid='4D22B4174EFD42BCA3C01FE58D9F1477']/div[1]")
+                        time.sleep(2)
+                    # 批量解封(净地)
+                    elif ywlxID == '22CF4018956C44338B4A2B51EB1CB111':
+                        WebTools(self.driver).mouse_doubleClick('xpath', "//div[@ywlxid='22CF4018956C44338B4A2B51EB1CB111']/div[1]")
+                        time.sleep(2)
+                elif djlx == '司法裁定':
+                    WebTools(self.driver).mouse_click('xpath', "//ul[contains(@xid,'subUl3')]/li[4]/a")
+                    # 批量司法裁定（房和地）
+                    if ywlxID == '9AB6783AEDAB4D6CBFF8C7F19D411BE7' or ywlxID == 'EF4D6596ED6347DDA33471FCFA7E973A' :
+                        WebTools(self.driver).mouse_doubleClick('xpath', "//div[@ywlxid='9AB6783AEDAB4D6CBFF8C7F19D411BE7']/div[1]")
+                        time.sleep(2)
+                elif djlx == '在建工程查封':
+                    WebTools(self.driver).mouse_click('xpath', "//ul[contains(@xid,'subUl3')]/li[3]/a")
+                    pass
             elif qllx == '其他登记':
                 WebTools(self.driver).mouse_click('link_text', "其他登记")
                 # 冻结登记（房和地）

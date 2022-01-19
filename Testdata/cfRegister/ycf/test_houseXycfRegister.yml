@@ -1,0 +1,11 @@
+initdata:
+  #流程
+  lcInfo:
+    qllx: 查封登记
+    djlx: 预查封
+    ywlxID: 56142C1E732E41638244DF51E26CA2C5 #预查封（房屋）
+  #小类
+  params:
+    ywxl:
+    sffz:
+    cqType:

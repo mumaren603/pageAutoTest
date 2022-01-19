@@ -12,7 +12,7 @@ from pageObject.logout import logout
 from dataCheck.dataResCheck import dataResCheck
 from utils.getTestdata import getTestcaseData,getTestdataPath
 from pageObject.submitPage import submitPage
-from Common.logFunc import loggerConf
+from Common.LogFunc import loggerConf
 
 logger = loggerConf().getLogger()
 
@@ -24,7 +24,7 @@ class Test_spfFirstRegister():
         current_file_path = os.path.abspath(__file__).replace('\\','/')
         self.data = getTestcaseData(getTestdataPath(current_file_path))
 
-    def test_spfFristRegister(self,login,cmdopt):
+    def test_spfFirstRegister(self,login,cmdopt):
         '''
         :流程 国有建设用地使用权及房屋所有权--首次登记--房屋首次登记
         :param login: 装饰器，登录操作封装，返回信息：(1) webdriver对象（2）数据库配置信息 例如：(<selenium.webdriver.chrome.webdriver.WebDriver (session="f8c32afd6fd5c944984d9aeaadfa9341")>,
@@ -34,7 +34,7 @@ class Test_spfFirstRegister():
         self.driver = login[0]
         dbInfo = login[1]
         # 获取办件数据
-        bdcdyh = dataInit(dbInfo).getSpfFirstRegisterData()
+        bdcdyh = dataInit().getHouseCqNotRegisterData()
         logger.debug("<--------国有建设用地使用权及房屋所有权--首次登记--房屋首次登记start-------->")
         logger.debug("<--------界面操作start-------->")
 
@@ -67,7 +67,7 @@ class Test_spfFirstRegister():
         # 数据库验证
         try:
             logger.debug("<--------归档数据检查start-------->")
-            resDataCheck = dataResCheck(dbInfo).houseRegisterDataCheck(bdcdyh,self.data)
+            resDataCheck = dataResCheck().houseRegisterDataCheck(bdcdyh,self.data)
             assert resDataCheck
             logger.debug("<--------归档数据检查end-------->")
         except AssertionError:
@@ -82,4 +82,4 @@ class Test_spfFirstRegister():
         self.driver.quit()
 
 if __name__ == '__main__':
-    pytest.main(['-v', 'test_spfFristRegister'])
+    pytest.main(['-v', 'test_spfFirstRegister'])

@@ -13,11 +13,11 @@ from pageObject.logout import logout
 from dataCheck.dataResCheck import dataResCheck
 from utils.getTestdata import getTestcaseData,getTestdataPath
 from pageObject.submitPage import submitPage
-from Common.logFunc import loggerConf
+from Common.LogFunc import loggerConf
 
 logger = loggerConf().getLogger()
 
-@pytest.mark.test
+@pytest.mark.xfail("暂不执行，后面用项目类多赚转移替代")
 @pytest.mark.all
 class Test_fhTransferRegister():
     def setup(self):
@@ -33,7 +33,7 @@ class Test_fhTransferRegister():
         self.driver = login[0]
         dbInfo = login[1]
         # 获取办件数据
-        res = dataInit(dbInfo).getFhTransferRegisterData()
+        res = dataInit().getFhTransferRegisterData()
         bdcdyh=res[0]
         fsssxxCount = res[1]
 
@@ -69,7 +69,7 @@ class Test_fhTransferRegister():
         # 数据库校验
         # try:
         #     logger.debug("<--------归档数据检查start-------->")
-        #     resDataCheck = dataResCheck(dbInfo).houseRegisterDataCheck(bdcdyh, self.data)
+        #     resDataCheck = dataResCheck().houseRegisterDataCheck(bdcdyh, self.data)
         #     assert resDataCheck
         #     logger.debug("<--------归档数据检查end------->")
         # except AssertionError:

@@ -13,7 +13,7 @@ from utils.getTestdata import getTestcaseData,getTestdataPath
 from pageObject.submitPage import submitPage
 from pageObject.logout import logout
 from dataCheck.dataResCheck import dataResCheck
-from Common.logFunc import loggerConf
+from Common.LogFunc import loggerConf
 
 logger = loggerConf().getLogger()
 
@@ -32,7 +32,7 @@ class Test_spfYgDyFirstRegister():
         self.driver = login[0]
         dbInfo = login[1]
         # 获取办件数据
-        bdcdyh = dataInit(dbInfo).getSpfYgDyRegisterData()
+        bdcdyh = dataInit().getSpfYgDyRegisterData()
         logger.debug("<--------预告登记--首次登记--商品房（经适房）抵押start-------->")
         logger.debug("<--------界面操作start-------->")
 
@@ -69,7 +69,7 @@ class Test_spfYgDyFirstRegister():
         # 数据库校验
         try:
             logger.debug("<--------归档数据检查start-------->")
-            resDataCheck = dataResCheck(dbInfo).spfYdyRegisterDataCheck(bdcdyh, self.data)
+            resDataCheck = dataResCheck().spfYdyRegisterDataCheck(bdcdyh, self.data)
             assert resDataCheck
             logger.debug("<--------归档数据检查end-------->")
         except AssertionError:

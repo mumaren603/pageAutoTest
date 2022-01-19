@@ -38,7 +38,7 @@ class Test_zjfdcDyFirstRegister():
         self.driver = login[0]
         dbInfo = login[1]
         # 获取办件数据
-        bdcdyh = dataInit(dbInfo).getZjfdcFirstDyRegisterData()
+        bdcdyh = dataInit().getZjfdcFirstDyRegisterData()
         print("办件受理数据为：%s" % bdcdyh)
 
         # 办件中心
@@ -68,7 +68,7 @@ class Test_zjfdcDyFirstRegister():
         # qlrmc = self.qlrParams.get("qlrmc")
         # if qlrmc:
         #     try:
-        #         resDataCheck = dataResCheck(dbInfo).dyRegisterDataCheck(bdcdyh, qlrmc)
+        #         resDataCheck = dataResCheck().dyRegisterDataCheck(bdcdyh, qlrmc)
         #         print("数据库检查结果是：", resDataCheck)
         #         assert resDataCheck
         #     except AssertionError:

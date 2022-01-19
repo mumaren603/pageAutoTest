@@ -1,5 +1,5 @@
 import time
-from Common.CommonFunc import WebTools
+from Common.CommFunc import WebTools
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
@@ -79,7 +79,6 @@ class submitPage():
         # 登簿提交
         WebTools(self.driver).mouse_click('xpath','//span[@functionname="commitBtnClick"]')
         #任务流转==>制证(非注销流程)
-        # if params.get('sffz') == 1:
         WebTools(self.driver).check_element_is_exists('xpath',"//a[@xid='okBtn']")
         WebTools(self.driver).mouse_click('xpath', "//a[@xid='okBtn']")
         WebTools(self.driver).check_element_is_exists('xpath','//span[@xid="myTask"]')

@@ -2,7 +2,7 @@ initdata:
   #流程
   lcInfo:
     qllx: 查封登记
-    djlx:
+    djlx: 解封
     ywlxID: 08B3B1B8F1FD47188C115939E2814AFF    # 净地解封登记
   #小类
   params:

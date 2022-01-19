@@ -7,8 +7,7 @@ initdata:
   #小类
   params:
     ywxl:
-    fwlb:
     sffz: 1
-    cqType:
+    cqType: 1
 
 

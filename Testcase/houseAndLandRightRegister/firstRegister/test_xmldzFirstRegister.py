@@ -15,7 +15,7 @@ from pageObject.submitPage import submitPage
 from pageObject.logout import logout
 from dataCheck.dataResCheck import dataResCheck
 from utils.getTestdata import getTestcaseData,getTestdataPath
-from Common.logFunc import loggerConf
+from Common.LogFunc import loggerConf
 
 logger = loggerConf().getLogger()
 
@@ -36,8 +36,8 @@ class Test_xmldzFirstRegister():
         self.driver = login[0]
         dbInfo = login[1]
         # 获取办件数据
-        bdcdyh = dataInit(dbInfo).getXmldzFirstRegisterData()
-        bdcdyh2 = dataInit(dbInfo).getXmldzFirstRegisterData2(bdcdyh)
+        bdcdyh = dataInit().getXmldzFirstRegisterData()
+        bdcdyh2 = dataInit().getXmldzFirstRegisterData2(bdcdyh)
 
         logger.debug("<--------国有建设用地使用权及房屋所有权--首次登记--项目类多幢（按整体发证）start-------->")
         logger.debug("<--------界面操作start-------->")
@@ -71,7 +71,7 @@ class Test_xmldzFirstRegister():
         # 数据库验证
         try:
             logger.debug("<--------归档数据检查start-------->")
-            resDataCheck = dataResCheck(dbInfo).xmldzRegisterDataCheck(bdcdyh,self.data)
+            resDataCheck = dataResCheck().xmldzRegisterDataCheck(bdcdyh,self.data)
             assert resDataCheck
             logger.debug("<--------归档数据检查end-------->")
         except AssertionError:

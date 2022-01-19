@@ -10,7 +10,7 @@ from pageObject.logout import logout
 from dataCheck.dataResCheck import dataResCheck
 from utils.getTestdata import getTestcaseData,getTestdataPath
 from pageObject.submitPage import submitPage
-from Common.logFunc import loggerConf
+from Common.LogFunc import loggerConf
 
 logger = loggerConf().getLogger()
 
@@ -31,7 +31,7 @@ class Test_landPljfRegister():
         self.driver = login[0]
         dbInfo = login[1]
         # 获取办件数据
-        bdcdyh = dataInit(dbInfo).getLandXcfRegisterData()
+        bdcdyh = dataInit().getLandXcfRegisterData()
 
         # 办件中心
         taskCenter(self.driver).common()
@@ -55,7 +55,7 @@ class Test_landPljfRegister():
         # 数据库校验
         logger.debug("<--------归档数据检查-------->")
         try:
-            resDataCheck = dataResCheck(dbInfo).jfRegisterDataCheck(bdcdyh,self.data)
+            resDataCheck = dataResCheck().jfRegisterDataCheck(bdcdyh,self.data)
             assert resDataCheck
         except AssertionError:
             raise

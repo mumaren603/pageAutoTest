@@ -12,11 +12,11 @@ from pageObject.submitPage import submitPage
 from pageObject.logout import logout
 from dataCheck.dataResCheck import dataResCheck
 from utils.getTestdata import getTestcaseData,getTestdataPath
-from Common.logFunc import loggerConf
+from Common.LogFunc import loggerConf
 
 logger = loggerConf().getLogger()
 
-@pytest.mark.xfail("#18146")
+@pytest.mark.test
 class Test_landCdghTransferRegister():
     def setup(self):
         current_file_path = os.path.abspath(__file__).replace('\\','/')
@@ -29,7 +29,7 @@ class Test_landCdghTransferRegister():
         self.driver = login[0]
         dbInfo = login[1]
         # 获取办件数据
-        bdcdyh = dataInit(dbInfo).getLandCdghTransferRegisterData()
+        bdcdyh = dataInit().getLandCdghRegisterData()
         logger.debug("<--------国有建设用地使用权--转移登记--裁定过户start-------->")
         logger.debug("<--------界面操作start-------->")
 
@@ -61,7 +61,7 @@ class Test_landCdghTransferRegister():
 
         try:
             logger.debug("<--------归档数据检查start-------->")
-            resDataCheck = dataResCheck(dbInfo).landRegisterDataCheck(bdcdyh, self.data)
+            resDataCheck = dataResCheck().landRegisterDataCheck(bdcdyh, self.data)
             assert resDataCheck
             logger.debug("<--------归档数据检查end-------->")
         except AssertionError:

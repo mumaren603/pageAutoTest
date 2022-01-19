@@ -2,12 +2,10 @@ initdata:
   #流程
   lcInfo:
     qllx: 查封登记
-    djlx:
-    ywlxID: E039C307B0C041C981506694E3CABD28    # 批量查封（净地）
+    djlx: 查封
+    ywlxID:  80E93B91E9974F98AAE75C6AD28629B1 # 批量查封（净地）
   #小类
   params:
-    ywxl:
-    sffz:
     cqType: 0
     sfpl: 1
 

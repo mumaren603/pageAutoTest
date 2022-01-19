@@ -25,4 +25,3 @@ def getConfValue(request,cmdopt):
     return request.config.base_data
 
 
-
