@@ -25,6 +25,7 @@ class verificator():
             if queryjsydsyqSQLRes > 1:
                 logger.error("该单元在dj_jsydsyq存在多条现势数据，请检查！")
                 return
+            #args 参数区别江苏版本和内蒙版本，内蒙版本存在一地多证 即dj_jsydsyq表一条数据，dj_tdxx表多条数据
             if args:
                 if args[0] == 1:
                     if queryTdxxSQLRes >1:
