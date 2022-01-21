@@ -3,9 +3,8 @@ initdata:
   lcInfo:
     qllx: 查封登记
     djlx: 解封
-    ywlxID: 4D22B4174EFD42BCA3C01FE58D9F1477    # 批量解封（净地）
+    ywlxID: 14B63357509C48C794A471AD88C0531E    # 小证解封
   #小类
   params:
-    cqType: 0
     sfpl: 1
 

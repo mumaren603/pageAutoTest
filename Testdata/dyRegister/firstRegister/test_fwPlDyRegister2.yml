@@ -6,8 +6,8 @@ initdata:
     ywlxID: 3394FD609E5F4963AC02AAA07619D535  #批量抵押（房屋）
   #小类
   params:
-    ywxl:
     sfpl: 1
+    sfztfz: 0
     sffz: 1
     cqType: 1
 

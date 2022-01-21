@@ -1,0 +1,9 @@
+initdata:
+  #流程
+  lcInfo:
+    qllx: 查封登记
+    djlx: 预查封
+    ywlxID: 6559D6E5FB7044D3999FBF2EC76A176B  #批量续预查封
+  #小类
+  params:
+    sfpl: 1

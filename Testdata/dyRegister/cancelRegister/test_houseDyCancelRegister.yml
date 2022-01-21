@@ -3,11 +3,8 @@ initdata:
   lcInfo:
     qllx: 抵押权
     djlx: 注销登记
-    ywlxID: 167090000101  #不动产抵押注销
+    ywlxID: BAA801115B3740868F1C8824102CABC7  #不动产抵押注销
   #小类
   params:
-    ywxl:
-    fwlb:
-    sffz:
-    cqType:
+    cqType: 1
 

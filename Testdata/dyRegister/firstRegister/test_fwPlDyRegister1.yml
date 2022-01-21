@@ -1,0 +1,14 @@
+initdata:
+  #流程
+  lcInfo:
+    qllx: 抵押权
+    djlx: 首次登记
+    ywlxID: 3394FD609E5F4963AC02AAA07619D535  #批量抵押（房屋）
+  #小类
+  params:
+    sfpl: 1
+    sfztfz: 1
+    sffz: 1
+    cqType: 1
+
+

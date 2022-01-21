@@ -3,10 +3,9 @@ initdata:
   lcInfo:
     qllx: 查封登记
     djlx: 解封
-    ywlxID: FB265E54DBE24577B2FA4F4C4980AB15    # 房屋解封登记
+    ywlxID: 4D22B4174EFD42BCA3C01FE58D9F1477    # 批量解封（房地）
   #小类
   params:
-    ywxl:
-    sffz:
+    sfpl: 1
     cqType: 1
 

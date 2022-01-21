@@ -1,0 +1,10 @@
+initdata:
+  #流程
+  lcInfo:
+    qllx: 查封登记
+    djlx: 查封
+    ywlxID: 819B16A603D4467D882268FF9CE83C02    # 土地小证续查封
+  #小类
+  params:
+    sfpl: 1
+
