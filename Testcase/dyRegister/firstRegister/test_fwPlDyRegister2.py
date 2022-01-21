@@ -19,22 +19,21 @@ logger = loggerConf().getLogger()
 
 @pytest.mark.test
 @pytest.mark.all
-class Test_houseCancelRegister():
+class Test_fwPlDyRegister2():
     def setup(self):
         '''初始化用户数据获取'''
         current_file_path = os.path.abspath(__file__).replace('\\','/')
         self.data = getTestcaseData(getTestdataPath(current_file_path))
 
-    def test_houseCancelRegister(self,login,cmdopt):
+    def test_fwPlDyRegister2(self,login,cmdopt):
         '''
-        :流程 国有建设用地使用权及房屋所有权--注销登记--注销登记
+        :流程 抵押权--首次登记--批量抵押（房屋）（整体发证）
         '''
         self.driver = login[0]
         dbInfo = login[1]
         # 获取办件数据
         bdcdyh = dataInit().getHouseCqRegisterData()
-        print('bdcdyh',bdcdyh)
-        logger.debug("<--------国有建设用地使用权及房屋所有权--注销登记--注销登记start-------->")
+        logger.debug("<--------抵押权--首次登记--批量抵押（整体发证）start-------->")
         logger.debug("<--------界面操作start-------->")
 
         # 办件中心
@@ -53,25 +52,23 @@ class Test_houseCancelRegister():
         bdcjbxxPage(self.driver).bdcjbxxHandle(self.data)
         # 收费领证表
         # sflzbPage(self.driver).sflzbHandle()
-        # 询问笔录
-        # htxxPage(self.driver).xwjlHandle()
         # 办理意见表
         blyjPage(self.driver).blyjHandle()
         # 受理
         submitPage(self.driver).slHandle()
         # 登簿
         submitPage(self.driver).dbHandle(bdcdyh, self.data)
-        logger.debug("<--------界面操作end------->")
+        logger.debug("<--------界面操作end-------->")
 
         # 数据库校验
         try:
             logger.debug("<--------归档数据检查start-------->")
-            resDataCheck = dataResCheck().houseCancelRegisterDataCheck(bdcdyh, self.data)
+            resDataCheck = dataResCheck().dyRegisterDataCheck(bdcdyh,self.data)
             assert resDataCheck
             logger.debug("<--------归档数据检查end-------->")
         except AssertionError:
             raise
-        logger.debug("<--------国有建设用地使用权及房屋所有权--注销登记--注销登记end-------->")
+        logger.debug("<--------抵押权--首次登记--批量抵押（整体发证）end-------->")
 
     def teardown(self):
         logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n")
@@ -81,4 +78,4 @@ class Test_houseCancelRegister():
         self.driver.quit()
 
 if __name__ == '__main__':
-    pytest.main(['-v', 'test_houseCancelRegister'])
+    pytest.main(['-v', 'test_fwPlDyRegister2'])
