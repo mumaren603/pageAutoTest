@@ -20,7 +20,13 @@ class verificator():
             # 批量业务
             if sfpl == 1:
                 # 整体发证
-                if sfztfz == 1:
+                ywlxList = [
+                    '608286609F5C429CB32BA42C56F7C7F7',  #项目类多幢首次
+                    '7772C3A4830C41C186336BD2E789E027',  # 项目类多幢转移
+                    '8B6FD2DF1F1C4750A80F64B591943A54',  # 项目类多幢变更
+                ]
+                # 项目类多幢 整体发证需要通过bz2查询
+                if sfztfz == 1 and ywlxID in ywlxList:
                     sql_yw_sqxxzb_bz2 = "select bz2 from yw_sqxxzb where ajzt='2' and to_char(cjsj,'yyyy-mm-dd') = to_char(sysdate,'yyyy-mm-dd') and ywlx ='" + ywlxID + "' and bdcdyh='" + bdcdyh + "'"
                     res_yw_sqxxzb_bz2 = self.djObj.fetchone(sql_yw_sqxxzb_bz2)
                     if not res_yw_sqxxzb_bz2:
@@ -28,7 +34,7 @@ class verificator():
                         sys.exit(-1)
                     logger.debug("yw_sqxxzb表查询主业务号为：%s" % res_yw_sqxxzb_bz2)
                     return res_yw_sqxxzb_bz2
-                # 按幢发证
+                # 按幢发证 或 其他批量业务
                 sql_yw_sqxxzb_ywh = "select ywh from yw_sqxxzb where ajzt='2' and to_char(cjsj,'yyyy-mm-dd') = to_char(sysdate,'yyyy-mm-dd') and ywlx ='" + ywlxID + "' and bdcdyh='" + bdcdyh + "'"
                 res_yw_sqxxzb_ywh = self.djObj.fetchone(sql_yw_sqxxzb_ywh)
                 if not res_yw_sqxxzb_ywh:
@@ -48,6 +54,7 @@ class verificator():
             logger.error("数据查询异常,具体详见：%s" % e)
             sys.exit(-1)
 
+    '''>>>>>>>>>>>>产权类<<<<<<<<<<<<'''
     # 获取产权关联数据（id,djbid,zsbid）
     def getCqRealtionData(self,bdcdyh,data):
         ywlxID = data.get('initdata').get('lcInfo', None).get('ywlxID', None)
@@ -110,6 +117,7 @@ class verificator():
             logger.error("数据查询异常,具体详见：%s" % e)
             sys.exit(-1)
 
+    '''>>>>>>>>>>>>抵押类<<<<<<<<<<<<'''
     # 获取抵押关联数据（id,djbid,zsbid）
     def getDyRealtionData(self, bdcdyh, data):
         ywh = self.getYwh(bdcdyh, data)
@@ -117,12 +125,26 @@ class verificator():
         try:
             sql_dj_dy_data = "select id,djbid,zsbid,cqbid from dj_dy where ywh='" + ywh + "'"
             res_dj_dy_data = self.djObj.fetchone2(sql_dj_dy_data)
-            logger.debug("dj_jsydsyq表id,djbid,zsbid,cqbid分别为：%s，%s，%s,%s" % res_dj_dy_data)
+            logger.debug("dj_dy表id,djbid,zsbid,cqbid分别为：%s，%s，%s，%s" % res_dj_dy_data)
             return res_dj_dy_data
         except Exception as e:
             logger.error("数据查询异常,具体详见：%s" % e)
             sys.exit(-1)
 
+    # 获取抵押注销关联数据（id,djbid,zsbid）
+    def getDyCancelRealtionData(self, bdcdyh, data):
+        ywh = self.getYwh(bdcdyh, data)
+
+        try:
+            sql_dj_dy_data = "select id,djbid,zsbid,cqbid from dj_dy where zxdyywh='" + ywh + "'"
+            res_dj_dy_data = self.djObj.fetchone2(sql_dj_dy_data)
+            logger.debug("dj_dy表id,djbid,zsbid,cqbid分别为：%s，%s，%s，%s" % res_dj_dy_data)
+            return res_dj_dy_data
+        except Exception as e:
+            logger.error("数据查询异常,具体详见：%s" % e)
+            sys.exit(-1)
+
+    '''>>>>>>>>>>>>查封类<<<<<<<<<<<<'''
     # 获取查封关联数据（id,djbid,zsbid）
     def getCfRealtionData(self,bdcdyh,data):
         ywh = self.getYwh(bdcdyh,data)
@@ -141,7 +163,7 @@ class verificator():
         try:
             sql_dj_ycf_data = "select id,djbid,cqbid,hid from dj_ycf where ywh='" + ywh + "'"
             res_dj_ycf_data = self.djObj.fetchone2(sql_dj_ycf_data)
-            logger.debug("dj_ycf表id,djbid,cqbid分别为：%s，%s，%s，%s" % res_dj_ycf_data)
+            logger.debug("dj_ycf表id,djbid,cqbid,hid分别为：%s，%s，%s，%s" % res_dj_ycf_data)
             return res_dj_ycf_data
         except Exception as e:
             logger.error("数据查询异常,具体详见：%s" % e)
@@ -159,7 +181,20 @@ class verificator():
             logger.error("数据查询异常,具体详见：%s" % e)
             sys.exit(-1)
 
+    # 获取解封关联数据（id,djbid,zsbid）
+    def getJfRealtionData(self,bdcdyh,data):
+        ywh = self.getYwh(bdcdyh,data)
+        try:
+            sql_dj_cf_data = "select id,djbid,cqbid from dj_cf where jfywh='" + ywh + "'"
+            res_dj_cf_data = self.djObj.fetchone2(sql_dj_cf_data)
+            logger.debug("dj_cf表id,djbid,cqbid分别为：%s，%s，%s" % res_dj_cf_data)
+            return res_dj_cf_data
+        except Exception as e:
+            logger.error("数据查询异常,具体详见：%s" % e)
+            sys.exit(-1)
 
+    '''*********************登簿*************************'''
+    '''>>>>>>>>>>>>产权类<<<<<<<<<<<<'''
     # 净地产权登簿检查
     def getLandCqRegisterRes(self,bdcdyh,data):
         sfcd = data.get('initdata').get('params', None).get('sfcd', None)
@@ -492,10 +527,12 @@ class verificator():
             logger.error("未查询到YWH，请检查SQL语法是否正确。")
             sys.exit(-1)
 
+    '''>>>>>>>>>>>>抵押类<<<<<<<<<<<<'''
     # 抵押登簿检查
     def getDyRegisterRes(self,bdcdyh,data):
         cqType = data.get('initdata').get('params', None).get('cqType', None)
         sfztfz = data.get('initdata').get('params', None).get('sfztfz', None)
+        sfpl = data.get('initdata').get('params', None).get('sfpl', None)
 
         resList = []
         try:
@@ -505,17 +542,51 @@ class verificator():
             res_zsbid = str(res_zsbid)
             res_cqbid = str(res_cqbid)
 
-            sql_dj_dy = "select count(1) from dj_dy where zt='1' and sfyx=1 and id='" + res_id + "'"
-            res_dj_dy = self.djObj.fetchone(sql_dj_dy)
-            resList.append(res_dj_dy)
-            logger.debug("dj_dy表查询sql：%s" % sql_dj_dy)
-            logger.debug("dj_dy表查询记录为：%d" % res_dj_dy)
-
             sql_dj_djben = "select count(1) from dj_djben where zt='1' and sfyx=1 and sfdy=1 and sfysczql=1 and id ='" + res_djbid + "'"
             res_dj_djben = self.djObj.fetchone(sql_dj_djben)
             resList.append(res_dj_djben)
             logger.debug("dj_djben表查询sql：%s" % sql_dj_djben)
             logger.debug("dj_djben表查询记录为：%d" % res_dj_djben)
+
+            if sfpl == 1:
+                # 整体发证
+                if sfztfz == 1:
+                    sql_dj_dy = "select count(1) from dj_dy where zt='1' and sfyx=1 and sfztfz=1 and id='" + res_id + "'"
+                    res_dj_dy = self.djObj.fetchone(sql_dj_dy)
+                    resList.append(res_dj_dy)
+                    logger.debug("dj_dy表查询sql：%s" % sql_dj_dy)
+                    logger.debug("dj_dy表查询记录为：%d" % res_dj_dy)
+
+                    sql_dj_dy_djben_zm = "select count(1) from dj_dy_djben_zm where sfyx=1 and sfdy=1 and sfztfz=1 and qlbid='" + res_id + "'"
+                    res_dj_dy_djben_zm = self.djObj.fetchone(sql_dj_dy_djben_zm)
+                    resList.append(res_dj_dy_djben_zm)
+                    logger.debug("dj_dy_djben_zm表查询sql：%s" % sql_dj_dy_djben_zm)
+                    logger.debug("dj_dy_djben_zm表查询记录为：%d" % res_dj_dy_djben_zm)
+                # 按单元发证
+                else:
+                    sql_dj_dy = "select count(1) from dj_dy where zt='1' and sfyx=1 and sfztfz=0 and id='" + res_id + "'"
+                    res_dj_dy = self.djObj.fetchone(sql_dj_dy)
+                    resList.append(res_dj_dy)
+                    logger.debug("dj_dy表查询sql：%s" % sql_dj_dy)
+                    logger.debug("dj_dy表查询记录为：%d" % res_dj_dy)
+
+                    sql_dj_dy_djben_zm = "select count(1) from dj_dy_djben_zm where sfyx=1 and sfdy=1 and sfztfz=0 and qlbid='" + res_id + "'"
+                    res_dj_dy_djben_zm = self.djObj.fetchone(sql_dj_dy_djben_zm)
+                    resList.append(res_dj_dy_djben_zm)
+                    logger.debug("dj_dy_djben_zm表查询sql：%s" % sql_dj_dy_djben_zm)
+                    logger.debug("dj_dy_djben_zm表查询记录为：%d" % res_dj_dy_djben_zm)
+            else:
+                sql_dj_dy = "select count(1) from dj_dy where zt='1' and sfyx=1 and id='" + res_id + "'"
+                res_dj_dy = self.djObj.fetchone(sql_dj_dy)
+                resList.append(res_dj_dy)
+                logger.debug("dj_dy表查询sql：%s" % sql_dj_dy)
+                logger.debug("dj_dy表查询记录为：%d" % res_dj_dy)
+
+                sql_dj_dy_djben_zm = "select count(1) from dj_dy_djben_zm where sfyx=1 and sfdy=1 and qlbid='" + res_id + "'"
+                res_dj_dy_djben_zm = self.djObj.fetchone(sql_dj_dy_djben_zm)
+                resList.append(res_dj_dy_djben_zm)
+                logger.debug("dj_dy_djben_zm表查询sql：%s" % sql_dj_dy_djben_zm)
+                logger.debug("dj_dy_djben_zm表查询记录为：%d" % res_dj_dy_djben_zm)
 
             # 房地流程需检查产权宽表，净地不涉及
             if cqType == 1:
@@ -524,12 +595,6 @@ class verificator():
                 resList.append(res_dj_fdcq2_djben_zs)
                 logger.debug("dj_fdcq2_djben_zs表查询sql：%s" % sql_dj_fdcq2_djben_zs)
                 logger.debug("dj_fdcq2_djben_zs表查询记录为：%d" % res_dj_fdcq2_djben_zs)
-
-            sql_dj_dy_djben_zm = "select count(1) from dj_dy_djben_zm where sfyx=1 and sfdy=1 and qlbid='" + res_id + "'"
-            res_dj_dy_djben_zm = self.djObj.fetchone(sql_dj_dy_djben_zm)
-            resList.append(res_dj_dy_djben_zm)
-            logger.debug("dj_dy_djben_zm表查询sql：%s" % sql_dj_dy_djben_zm)
-            logger.debug("dj_dy_djben_zm表查询记录为：%d" % res_dj_dy_djben_zm)
 
             sql_dj_qlrgl = "select count(1) from  dj_qlrgl where zt='1' and sfyx=1 and qlbid='" + res_id + "'"
             res_dj_qlrgl = self.djObj.fetchone(sql_dj_qlrgl)
@@ -552,6 +617,118 @@ class verificator():
             logger.error("登簿入库检查异常，请检查SQL语法，具体详见：%s" % e)
             sys.exit(-1)
 
+    # 抵押注销登簿检查
+    def getDyCancelRegisterRes(self,bdcdyh,data):
+        cqType = data.get('initdata').get('params', None).get('cqType', None)
+        sfztfz = data.get('initdata').get('params', None).get('sfztfz', None)
+        sfpl = data.get('initdata').get('params', None).get('sfpl', None)
+
+        resList = []
+        try:
+            res_id, res_djbid, res_zsbid,res_cqbid = self.getDyCancelRealtionData(bdcdyh, data)
+            res_id = str(res_id)
+            res_djbid = str(res_djbid)
+            res_zsbid = str(res_zsbid)
+            res_cqbid = str(res_cqbid)
+
+            # 判断抵押数量
+            sql_dj_dy_count = "select count(1) from dj_dy where zt='1' and sfyx=1 and bdcdyh='" + bdcdyh + "'"
+            res_dj_dy_count = self.djObj.fetchone(sql_dj_dy_count)
+            logger.debug("dj_dy表查询sql：%s" % sql_dj_dy_count)
+            logger.debug("该单元共存在%d条现势抵押。" % res_dj_dy_count)
+
+            if sfpl == 1:
+                # 整体发证
+                if sfztfz == 1:
+                    sql_dj_dy = "select count(1) from dj_dy where zt='1' and sfyx=1 and sfztfz=1 and id='" + res_id + "'"
+                    res_dj_dy = self.djObj.fetchone(sql_dj_dy)
+                    resList.append(res_dj_dy)
+                    logger.debug("dj_dy表查询sql：%s" % sql_dj_dy)
+                    logger.debug("dj_dy表查询记录为：%d" % res_dj_dy)
+
+                    sql_dj_dy_djben_zm = "select count(1) from dj_dy_djben_zm where sfyx=1 and sfdy=1 and sfztfz=1 and qlbid='" + res_id + "'"
+                    res_dj_dy_djben_zm = self.djObj.fetchone(sql_dj_dy_djben_zm)
+                    resList.append(res_dj_dy_djben_zm)
+                    logger.debug("dj_dy_djben_zm表查询sql：%s" % sql_dj_dy_djben_zm)
+                    logger.debug("dj_dy_djben_zm表查询记录为：%d" % res_dj_dy_djben_zm)
+                # 按单元发证
+                else:
+                    sql_dj_dy = "select count(1) from dj_dy where zt='1' and sfyx=1 and sfztfz=0 and id='" + res_id + "'"
+                    res_dj_dy = self.djObj.fetchone(sql_dj_dy)
+                    resList.append(res_dj_dy)
+                    logger.debug("dj_dy表查询sql：%s" % sql_dj_dy)
+                    logger.debug("dj_dy表查询记录为：%d" % res_dj_dy)
+
+                    sql_dj_dy_djben_zm = "select count(1) from dj_dy_djben_zm where sfyx=1 and sfdy=1 and sfztfz=0 and qlbid='" + res_id + "'"
+                    res_dj_dy_djben_zm = self.djObj.fetchone(sql_dj_dy_djben_zm)
+                    resList.append(res_dj_dy_djben_zm)
+                    logger.debug("dj_dy_djben_zm表查询sql：%s" % sql_dj_dy_djben_zm)
+                    logger.debug("dj_dy_djben_zm表查询记录为：%d" % res_dj_dy_djben_zm)
+            else:
+                sql_dj_dy = "select count(1) from dj_dy where zt='2' and sfyx=1 and id='" + res_id + "'"
+                res_dj_dy = self.djObj.fetchone(sql_dj_dy)
+                resList.append(res_dj_dy)
+                logger.debug("dj_dy表查询sql：%s" % sql_dj_dy)
+                logger.debug("dj_dy表查询记录为：%d" % res_dj_dy)
+
+                # sql_dj_dy_djben_zm = "select count(1) from dj_dy_djben_zm where qlbid='" + res_id + "'"
+                # res_dj_dy_djben_zm = self.djObj.fetchone(sql_dj_dy_djben_zm)
+                # resList.append(res_dj_dy_djben_zm)
+                # logger.debug("dj_dy_djben_zm表查询sql：%s" % sql_dj_dy_djben_zm)
+                # logger.debug("dj_dy_djben_zm表查询记录为：%d" % res_dj_dy_djben_zm)
+
+            if res_dj_dy_count >=1:
+                sql_dj_djben = "select count(1) from dj_djben where zt='1' and sfyx=1 and sfdy=1 and sfysczql=1 and id ='" + res_djbid + "'"
+                res_dj_djben = self.djObj.fetchone(sql_dj_djben)
+                resList.append(res_dj_djben)
+                logger.debug("dj_djben表查询sql：%s" % sql_dj_djben)
+                logger.debug("dj_djben表查询记录为：%d" % res_dj_djben)
+
+                # 房地流程需检查产权宽表，净地不涉及
+                if cqType == 1:
+                    sql_dj_fdcq2_djben_zs = "select count(1) from dj_fdcq2_djben_zs where sfyx=1 and sfdy=1 and qlbid='" + res_cqbid + "'"
+                    res_dj_fdcq2_djben_zs = self.djObj.fetchone(sql_dj_fdcq2_djben_zs)
+                    resList.append(res_dj_fdcq2_djben_zs)
+                    logger.debug("dj_fdcq2_djben_zs表查询sql：%s" % sql_dj_fdcq2_djben_zs)
+                    logger.debug("dj_fdcq2_djben_zs表查询记录为：%d" % res_dj_fdcq2_djben_zs)
+            else:
+                sql_dj_djben = "select count(1) from dj_djben where zt='1' and sfyx=1 and sfdy=0 and sfysczql=1 and id ='" + res_djbid + "'"
+                res_dj_djben = self.djObj.fetchone(sql_dj_djben)
+                resList.append(res_dj_djben)
+                logger.debug("dj_djben表查询sql：%s" % sql_dj_djben)
+                logger.debug("dj_djben表查询记录为：%d" % res_dj_djben)
+
+                # 房地流程需检查产权宽表，净地不涉及
+                if cqType == 1:
+                    sql_dj_fdcq2_djben_zs = "select count(1) from dj_fdcq2_djben_zs where sfyx=1 and sfdy=0 and qlbid='" + res_cqbid + "'"
+                    res_dj_fdcq2_djben_zs = self.djObj.fetchone(sql_dj_fdcq2_djben_zs)
+                    resList.append(res_dj_fdcq2_djben_zs)
+                    logger.debug("dj_fdcq2_djben_zs表查询sql：%s" % sql_dj_fdcq2_djben_zs)
+                    logger.debug("dj_fdcq2_djben_zs表查询记录为：%d" % res_dj_fdcq2_djben_zs)
+
+
+            sql_dj_qlrgl = "select count(1) from  dj_qlrgl where zt='2' and sfyx=1 and qlbid='" + res_id + "'"
+            res_dj_qlrgl = self.djObj.fetchone(sql_dj_qlrgl)
+            resList.append(res_dj_qlrgl)
+            logger.debug("dj_qlrgl表查询sql：%s" % sql_dj_qlrgl)
+            logger.debug("dj_qlrgl表查询记录为：%d" % res_dj_qlrgl)
+
+            sql_dj_zm = "select count(1) from dj_zm where zt='2' and sfyx=1 and id='" + res_zsbid + "'"
+            res_dj_zm = self.djObj.fetchone(sql_dj_zm)
+            resList.append(res_dj_zm)
+            logger.debug("dj_zm表查询sql：%s" % sql_dj_zm)
+            logger.debug("dj_zs表查询记录为：%d" % res_dj_zm)
+
+            if not resList:
+                logger.error("查询结果为空，请检查！")
+                sys.exit(-1)
+            return resList
+
+        except Exception as e:
+            logger.error("登簿入库检查异常，请检查SQL语法，具体详见：%s" % e)
+            sys.exit(-1)
+
+    '''>>>>>>>>>>>>查封类<<<<<<<<<<<<'''
     # 查封登簿检查
     def getCfRegisterRes(self,bdcdyh,data):
         cqType = data.get('initdata').get('params', None).get('cqType', None)
@@ -635,7 +812,8 @@ class verificator():
             res_id, res_djbid, res_cqbid,res_hid = self.getYcfRealtionData(bdcdyh, data)
             res_id = str(res_id)
             res_djbid = str(res_djbid)
-            res_cqbid = str(res_cqbid)
+            if res_cqbid:
+                res_cqbid = str(res_cqbid)
             if res_hid:
                 res_hid = str(res_hid)
 
@@ -668,11 +846,13 @@ class verificator():
             logger.debug("dj_djben表查询sql：%s" % sql_dj_djben)
             logger.debug("dj_djben表查询记录为：%d" % res_dj_djben)
 
-            sql_dj_ychxx = "select count(1) from dj_ychxx where zt='1' and sfyx=1 and id ='" + res_hid + "'"
-            res_dj_ychxx = self.djObj.fetchone(sql_dj_ychxx)
-            resList.append(res_dj_ychxx)
-            logger.debug("dj_ychxx表查询sql：%s" % sql_dj_ychxx)
-            logger.debug("dj_ychxx表查询记录为：%d" % res_dj_ychxx)
+            # 目前发现续预查封，dj_ychxx表没数据也可以办理
+            if res_hid:
+                sql_dj_ychxx = "select count(1) from dj_ychxx where zt='1' and sfyx=1 and id ='" + res_hid + "'"
+                res_dj_ychxx = self.djObj.fetchone(sql_dj_ychxx)
+                resList.append(res_dj_ychxx)
+                logger.debug("dj_ychxx表查询sql：%s" % sql_dj_ychxx)
+                logger.debug("dj_ychxx表查询记录为：%d" % res_dj_ychxx)
 
             if not resList:
                 logger.error("查询结果为空，请检查！")
@@ -685,52 +865,222 @@ class verificator():
 
     # 司法裁定登簿检查
     def getSfcdRegisterRes(self,bdcdyh,data):
+        cqType = data.get('initdata').get('params', None).get('cqType', None)
+
         resList = []
         try:
-            res_id, res_djbid, res_cqbid, res_hid = self.getYcfRealtionData(bdcdyh, data)
+            res_id, res_djbid, res_cqbid = self.getSfcdRealtionData(bdcdyh, data)
             res_id = str(res_id)
             res_djbid = str(res_djbid)
             res_cqbid = str(res_cqbid)
 
-            # 判断查封数量，如果查封数据只有1条，查询到是首封；如果查封数据大于1条，则是轮候查封。
-            sql_dj_ycf_count = "select count(1) from dj_ycf where zt='1' and sfyx=1 and bdcdyh='" + bdcdyh + "'"
-            res_dj_ycf_count = self.djObj.fetchone(sql_dj_ycf_count)
-            logger.debug("dj_ycf表查询sql：%s" % sql_dj_ycf_count)
-            logger.debug("该单元共存在%d条现势查封。" % res_dj_ycf_count)
-            # 轮候查封
-            if res_dj_ycf_count > 1:
-                sql_dj_ycf = "select count(1) from dj_ycf where zt='1' and sfyx=1 and cflx='4' and id='" + res_id + "'"
-                res_dj_ycf = self.djObj.fetchone(sql_dj_ycf)
-                resList.append(res_dj_ycf)
-                logger.debug("dj_ycf表查询sql：%s" % sql_dj_ycf)
-                logger.debug("dj_ycf表查询记录为：%d" % res_dj_ycf)
-            # 首封
-            elif res_dj_ycf_count == 1:
-                sql_dj_ycf = "select count(1) from dj_ycf where zt='1' and sfyx=1 and cflx='3' and id='" + res_id + "'"
-                res_dj_ycf = self.djObj.fetchone(sql_dj_ycf)
-                resList.append(res_dj_ycf)
-                logger.debug("dj_ycf表查询sql：%s" % sql_dj_ycf)
-                logger.debug("dj_ycf表查询记录为：%d" % res_dj_ycf)
-            else:
-                logger.error("dj_ycf表查询数据为空，请检查")
-                sys.exit(-1)
+            sql_dj_qtxz = "select count(1) from dj_qtxz where zt='1' and sfyx=1 and id='" + res_id + "'"
+            res_dj_qtxz = self.djObj.fetchone(sql_dj_qtxz)
+            resList.append(res_dj_qtxz)
+            logger.debug("dj_qtxz表查询sql：%s" % sql_dj_qtxz)
+            logger.debug("dj_qtxz表查询记录为：%d" % res_dj_qtxz)
 
-            sql_dj_djben = "select count(1) from dj_djben where zt='1' and sfyx=1 and sfycf=1 and id ='" + res_djbid + "'"
+            #无抵押
+            sql_dj_djben = "select count(1) from dj_djben where zt='1' and sfyx=1 and sfcf=0 and and sfsfcd=1 and id='" + res_djbid + "'"
             res_dj_djben = self.djObj.fetchone(sql_dj_djben)
             resList.append(res_dj_djben)
             logger.debug("dj_djben表查询sql：%s" % sql_dj_djben)
             logger.debug("dj_djben表查询记录为：%d" % res_dj_djben)
 
-            sql_dj_ychxx = "select count(1) from dj_ychxx where zt='1' and sfyx=1 and id ='" + res_hid + "'"
-            res_dj_ychxx = self.djObj.fetchone(sql_dj_ychxx)
-            resList.append(res_dj_ychxx)
-            logger.debug("dj_ychxx表查询sql：%s" % sql_dj_ychxx)
-            logger.debug("dj_ychxx表查询记录为：%d" % res_dj_ychxx)
+            #有抵押(抵押不解)
+            sql_dj_djben = "select count(1) from dj_djben where zt='1' and sfyx=1 and sfcf=0 and sfdy=0 and sfsfcd=1 and id='" + res_djbid + "'"
+            res_dj_djben = self.djObj.fetchone(sql_dj_djben)
+            resList.append(res_dj_djben)
+            logger.debug("dj_djben表查询sql：%s" % sql_dj_djben)
+            logger.debug("dj_djben表查询记录为：%d" % res_dj_djben)
+
+            # 后期加上抵押判断
+            sql_dj_djben = "select count(1) from dj_djben where zt='1' and sfyx=1 and sfcf=0  and sfsfcd=1 and id='" + res_djbid + "'"
+            res_dj_djben = self.djObj.fetchone(sql_dj_djben)
+            resList.append(res_dj_djben)
+            logger.debug("dj_djben表查询sql：%s" % sql_dj_djben)
+            logger.debug("dj_djben表查询记录为：%d" % res_dj_djben)
 
             if not resList:
                 logger.error("查询结果为空，请检查！")
                 sys.exit(-1)
             return resList
+
+        except Exception as e:
+            logger.error("登簿入库检查异常，请检查SQL语法，具体详见：%s" % e)
+            sys.exit(-1)
+
+    # 小证查封登簿检查
+    def getXzcfRegisterRes(self,bdcdyh,data):
+        ywh = self.getYwh(bdcdyh,data)
+        resList = []
+        try:
+            sql_dj_cf_zszbid = "select zszbid from dj_cf where ywh='" + ywh + "'"
+            res_dj_cf_zszbid = str(self.djObj.fetchone(sql_dj_cf_zszbid))
+            logger.debug("dj_cf表查询zszbid为：%s" % res_dj_cf_zszbid)
+
+            # 判断查封数量，如果查封数据只有1条，查询到是首封；如果查封数据大于1条，则是轮候查封。
+            sql_dj_cf_count = "select count(1) from dj_cf where zt='1' and sfyx=1 and zszbid is not null and bdcdyh='" + bdcdyh + "'"
+            res_dj_cf_count = self.djObj.fetchone(sql_dj_cf_count)
+            logger.debug("dj_cf表查询sql：%s" % sql_dj_cf_count)
+            logger.debug("该单元共存在%d条现势查封。" % res_dj_cf_count)
+            # 轮候查封
+            if res_dj_cf_count > 1:
+                sql_dj_cf = "select count(1) from dj_cf where zt='1' and sfyx=1 and cflx='2' and ywh='" + ywh + "'"
+                res_dj_cf = self.djObj.fetchone(sql_dj_cf)
+                resList.append(res_dj_cf)
+                logger.debug("dj_cf表查询sql：%s" % sql_dj_cf)
+                logger.debug("dj_cf表查询记录为：%d" % res_dj_cf)
+            # 首封
+            elif res_dj_cf_count == 1:
+                sql_dj_cf = "select count(1) from dj_cf where zt='1' and sfyx=1 and cflx='1' and ywh='" + ywh + "'"
+                res_dj_cf = self.djObj.fetchone(sql_dj_cf)
+                resList.append(res_dj_cf)
+                logger.debug("dj_cf表查询sql：%s" % sql_dj_cf)
+                logger.debug("dj_cf表查询记录为：%d" % res_dj_cf)
+            else:
+                logger.error("dj_cf表查询数据为空，请检查")
+                sys.exit(-1)
+
+            sql_dj_zszb = "select count(1) from dj_zszb where zt='1' and sfyx=1 and sfcf=1 and id='" + res_dj_cf_zszbid + "'"
+            res_dj_zszb = self.djObj.fetchone(sql_dj_zszb)
+            resList.append(res_dj_zszb)
+            logger.debug("dj_djben表查询sql：%s" % sql_dj_zszb)
+            logger.debug("dj_djben表查询记录为：%d" % res_dj_zszb)
+
+            if not resList:
+                logger.error("查询结果为空，请检查！")
+                sys.exit(-1)
+            return resList
+        except Exception as e:
+            logger.error("登簿入库检查异常，请检查SQL语法，具体详见：%s" % e)
+            sys.exit(-1)
+
+    # 房、地解封登簿检查
+    def getJfRegisterRes(self,bdcdyh,data):
+        cqType = data.get('initdata').get('params', None).get('cqType', None)
+        resList = []
+        try:
+            res_id, res_djbid, res_cqbid = self.getJfRealtionData(bdcdyh, data)
+            res_id = str(res_id)
+            res_djbid = str(res_djbid)
+            res_cqbid = str(res_cqbid)
+
+            # 判断查封数量
+            sql_dj_cf_count = "select count(1) from dj_cf where zt='1' and sfyx=1 and bdcdyh='" + bdcdyh + "'"
+            res_dj_cf_count = self.djObj.fetchone(sql_dj_cf_count)
+            logger.debug("dj_cf表查询sql：%s" % sql_dj_cf_count)
+            logger.debug("该单元共存在%d条现势查封。" % res_dj_cf_count)
+
+            # 判断抵押数量
+            sql_dj_dy_count = "select count(1) from dj_dy where zt='1' and sfyx=1 and bdcdyh='" + bdcdyh + "'"
+            res_dj_dy_count = self.djObj.fetchone(sql_dj_dy_count)
+            logger.debug("dj_dy表查询sql：%s" % sql_dj_dy_count)
+            logger.debug("该单元共存在%d条现势抵押。" % res_dj_dy_count)
+
+            sql_dj_cf = "select count(1) from dj_cf where zt='2' and sfyx=1 and id='" + res_id + "'"
+            res_dj_cf = self.djObj.fetchone(sql_dj_cf)
+            resList.append(res_dj_cf)
+            logger.debug("dj_cf表查询sql：%s" % sql_dj_cf)
+            logger.debug("该单元查询到解封历史数据%d条" % res_dj_cf)
+
+            # 解封后单元上还有其他查封
+            if res_dj_cf_count >= 1:
+                sql_dj_djben = "select count(1) from dj_djben where zt='1' and sfyx=1 and sfcf=1 and id='" + res_djbid + "'"
+                res_dj_djben = self.djObj.fetchone(sql_dj_djben)
+                resList.append(res_dj_djben)
+                logger.debug("dj_djben表查询sql：%s" % sql_dj_djben)
+                logger.debug("dj_djben表查询记录为：%d" % res_dj_djben)
+
+                # 有抵押
+                if res_dj_dy_count:
+                    sql_dj_dy_djben_zm = "select count(1) from dj_dy_djben_zm where sfyx=1 and sfcf=1 and sfdy=1 and qlbid in (select id from dj_dy where zt='1' and sfyx=1 and cqbid='" + res_cqbid + "')"
+                    res_dj_dy_djben_zm = self.djObj.fetchone(sql_dj_dy_djben_zm)
+                    resList.append(res_dj_dy_djben_zm)
+                    logger.debug("dj_dy_djben_zm表查询sql：%s" % sql_dj_dy_djben_zm)
+                    logger.debug("dj_dy_djben_zm表查询记录为：%d" % res_dj_dy_djben_zm)
+
+                if cqType == 1:
+                    sql_dj_fdcq2_djben_zs = "select count(1) from dj_fdcq2_djben_zs where sfyx=1 and sfcf=1 and qlbid='" + res_cqbid + "'"
+                    res_dj_fdcq2_djben_zs = self.djObj.fetchone(sql_dj_fdcq2_djben_zs)
+                    resList.append(res_dj_fdcq2_djben_zs)
+                    logger.debug("dj_fdcq2_djben_zs表查询sql：%s" % sql_dj_fdcq2_djben_zs)
+                    logger.debug("dj_fdcq2_djben_zs表查询记录为：%d" % res_dj_fdcq2_djben_zs)
+            # 解封后单元上无其他查封
+            else:
+                sql_dj_djben = "select count(1) from dj_djben where zt='1' and sfyx=1 and sfcf=0 and id='" + res_djbid + "'"
+                res_dj_djben = self.djObj.fetchone(sql_dj_djben)
+                resList.append(res_dj_djben)
+                logger.debug("dj_djben表查询sql：%s" % sql_dj_djben)
+                logger.debug("dj_djben表查询记录为：%d" % res_dj_djben)
+
+                # 有抵押，抵押宽表sfcf需置为0
+                if res_dj_dy_count:
+                    sql_dj_dy_djben_zm = "select count(1) from dj_dy_djben_zm where sfyx=1 and sfcf=0 and qlbid in (select id from dj_dy where zt='1' and sfyx=1 and cqbid='" + res_cqbid + "')"
+                    res_dj_dy_djben_zm = self.djObj.fetchone(sql_dj_dy_djben_zm)
+                    resList.append(res_dj_dy_djben_zm)
+                    logger.debug("dj_dy_djben_zm表查询sql：%s" % sql_dj_dy_djben_zm)
+                    logger.debug("dj_dy_djben_zm表查询记录为：%d" % res_dj_dy_djben_zm)
+
+                if cqType == 1:
+                    sql_dj_fdcq2_djben_zs = "select count(1) from dj_fdcq2_djben_zs where sfyx=1 and sfcf=0 and qlbid='" + res_cqbid + "'"
+                    res_dj_fdcq2_djben_zs = self.djObj.fetchone(sql_dj_fdcq2_djben_zs)
+                    resList.append(res_dj_fdcq2_djben_zs)
+                    logger.debug("dj_fdcq2_djben_zs表查询sql：%s" % sql_dj_fdcq2_djben_zs)
+                    logger.debug("dj_fdcq2_djben_zs表查询记录为：%d" % res_dj_fdcq2_djben_zs)
+
+            if not resList:
+                logger.error("查询结果为空，请检查！")
+                sys.exit(-1)
+            return resList
+
+        except Exception as e:
+            logger.error("登簿入库检查异常，请检查SQL语法，具体详见：%s" % e)
+            sys.exit(-1)
+
+    # 小证解封登簿检查
+    def getXzjfRegisterRes(self,bdcdyh,data):
+        ywh = self.getYwh(bdcdyh, data)
+        resList = []
+
+        try:
+            sql_dj_cf_zszbid = "select zszbid from dj_cf where jfywh='" + ywh + "'"
+            res_dj_cf_zszbid = str(self.djObj.fetchone(sql_dj_cf_zszbid))
+            logger.debug("dj_cf表查询zszbid为：%s" % res_dj_cf_zszbid)
+
+            # 判断查封数量。
+            sql_dj_cf_count = "select count(1) from dj_cf where zt='1' and sfyx=1 and zszbid is not null and bdcdyh='" + bdcdyh + "'"
+            res_dj_cf_count = self.djObj.fetchone(sql_dj_cf_count)
+            logger.debug("dj_cf表查询sql：%s" % sql_dj_cf_count)
+            logger.debug("该单元共存在%d条现势查封。" % res_dj_cf_count)
+
+            sql_dj_cf = "select count(1) from dj_cf where zt='2' and sfyx=1 and zszbid is not null and jfywh='" + ywh + "'"
+            res_dj_cf = self.djObj.fetchone(sql_dj_cf)
+            resList.append(res_dj_cf)
+            logger.debug("dj_cf表查询sql：%s" % sql_dj_cf)
+            logger.debug("dj_cf表查询解封记录为：%d" % res_dj_cf)
+
+            if res_dj_cf_count >= 1:
+                sql_dj_zszb = "select count(1) from dj_zszb where zt='1' and sfyx=1 and sfcf=1 and id='" + res_dj_cf_zszbid + "'"
+                res_dj_zszb = self.djObj.fetchone(sql_dj_zszb)
+                resList.append(res_dj_zszb)
+                logger.debug("dj_djben表查询sql：%s" % sql_dj_zszb)
+                logger.debug("dj_djben表查询记录为：%d" % res_dj_zszb)
+            else:
+                sql_dj_zszb = "select count(1) from dj_zszb where zt='1' and sfyx=1 and sfcf=0 and id='" + res_dj_cf_zszbid + "'"
+                res_dj_zszb = self.djObj.fetchone(sql_dj_zszb)
+                resList.append(res_dj_zszb)
+                logger.debug("dj_djben表查询sql：%s" % sql_dj_zszb)
+                logger.debug("dj_djben表查询记录为：%d" % res_dj_zszb)
+
+            if not resList:
+                logger.error("查询结果为空，请检查！")
+                sys.exit(-1)
+            return resList
+        except Exception as e:
+            logger.error("登簿入库检查异常，请检查SQL语法，具体详见：%s" % e)
+            sys.exit(-1)
+
 
         except Exception as e:
             logger.error("登簿入库检查异常，请检查SQL语法，具体详见：%s" % e)
