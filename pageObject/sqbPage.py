@@ -95,81 +95,46 @@ class sqbPage():
                     WebTools(self.driver).mouse_click('xpath', "//span[@xid='createQL']")
                     # 生成附记
                     WebTools(self.driver).mouse_click('xpath', "//span[@xid='createFJ']")
-
         elif qllx =='抵押权':
             #预置数据（当前时间）
             currentDate = time.strftime('%Y-%m-%d', time.localtime(time.time()))
             #预置数据（抵押结束时间）
             fetureDate = time.strftime('%Y-%m-%d', time.localtime(time.time() + 86400 * 365 * 10))
+
             #抵押方式
             WebTools(self.driver).choose_droplist_value('DYFS', 'xpath', "//select[@name='DYFS']/option[2]")
-
-            # 不动产抵押转移/预抵押转现
-            if ywlxID == 167090000095 or ywlxID == 167010000303:
-                # 土地抵押面积
-                WebTools(self.driver).input_clear('xpath',"//input[@xid='tddywmj']")
-                WebTools(self.driver).input_content('xpath',"//input[@xid='tddywmj']",'10.01')
-                WebTools(self.driver).input_content('xpath', "//input[@xid='dysx']", '1')
-            # 在建房地产
-            elif ywlxID == '497903B0B8404E60B70C27DB2C7674F7':
-                # 抵押合同签订日期
-                WebTools(self.driver).input_content('xpath', "//input[@xid='DYHTQDRQ']", currentDate)
-                # 最高债权确定事实和份额
-                WebTools(self.driver).input_content('xpath', "//input[@xid='ZGZQQDSSJSE']", '50000000')
-                # 债务履行起始时间
-                WebTools(self.driver).input_content('xpath', "//input[@xid='ZWLXQSSJ']", currentDate)
-                # 债务履行结束时间
-                WebTools(self.driver).input_content('xpath', "//input[@xid='ZWLXJSSJ']", fetureDate)
-                # 是否存在禁止或限制转让不动产的约定
-                WebTools(self.driver).mouse_click('xpath',"//input[@name='SFXZZR' and @value='0']")
-
-                # 领证地址
-                self.driver.execute_script('document.documentElement.scrollTop=300')
-                time.sleep(1)
-                WebTools(self.driver).choose_droplist_value('lzdz', 'xpath', '//select[@name="lzdz"]/option[2]')
-            # 批量抵押首次（房屋）
-            elif ywlxID == '119C2FCCC994404A95EB225E9A5EB926':
-                # 抵押合同签订日期
-                WebTools(self.driver).input_content('xpath', "//input[@xid='DYHTQDRQ']", currentDate)
-                # 债务履行起始时间
-                WebTools(self.driver).input_content('xpath', "//input[@xid='ZWLXQSSJ']", currentDate)
-                # 债务履行结束时间
-                WebTools(self.driver).input_content('xpath', "//input[@xid='ZWLXJSSJ']", fetureDate)
-                # 是否存在禁止或限制转让不动产的约定
-                WebTools(self.driver).mouse_click('xpath',"//input[@name='SFXZZR' and @value='0']")
-            # 批量抵押变更（房屋）
-            elif ywlxID == 'B99F96081EE34064A11CD70B389CA019':
-                # 抵押合同签订日期
-                WebTools(self.driver).input_content('xpath', "//input[@xid='DYHTQDRQ']", currentDate)
-                # 债务履行起始时间
-                WebTools(self.driver).input_content('xpath', "//input[@xid='ZWLXQSSJ']", currentDate)
-                # 债务履行结束时间
-                WebTools(self.driver).input_content('xpath', "//input[@xid='ZWLXJSSJ']", fetureDate)
-                # 是否存在禁止或限制转让不动产的约定
-                WebTools(self.driver).mouse_click('xpath',"//input[@name='SFXZZR' and @value='0']")
+            # 抵押不动产类型
+            if cqType == 0:
+                WebTools(self.driver).choose_droplist_value('DYBDCLX', 'xpath', "//select[@name='DYBDCLX']/option[2]")
+            elif cqType == 1:
+                WebTools(self.driver).choose_droplist_value('DYBDCLX', 'xpath', "//select[@name='DYBDCLX']/option[3]")
             else:
-                # 将页面滚动条拖到底部
-                self.driver.execute_script("document.documentElement.scrollTop=0")
-                # 抵押不动产类型
-                if cqType == 0:
-                    WebTools(self.driver).choose_droplist_value('DYBDCLX', 'xpath', "//select[@name='DYBDCLX']/option[2]")
-                elif cqType == 1:
-                    WebTools(self.driver).choose_droplist_value('DYBDCLX', 'xpath', "//select[@name='DYBDCLX']/option[3]")
-                else:
-                    logger.error("产权类型【cqType】未传值，请检查yml文件")
-                    sys.exit(-1)
-                #不动产价值
-                WebTools(self.driver).input_clear('xpath',"//input[@xid='dywjz']")
-                WebTools(self.driver).input_content('xpath',"//input[@xid='dywjz']",'100')
-                #抵押合同签订日期
-                WebTools(self.driver).input_content('xpath', "//input[@xid='DYHTQDRQ']", currentDate)
-                #被担保主债权数额
-                WebTools(self.driver).input_clear('xpath',"//input[@xid='bdbzqse']")
-                WebTools(self.driver).input_content('xpath',"//input[@xid='bdbzqse']",'80')
-                #债务履行起始时间
-                WebTools(self.driver).input_content('xpath', "//input[@xid='zwlxqssj']", currentDate)
-                #债务履行结束时间
-                WebTools(self.driver).input_content('xpath', "//input[@xid='zwlxjssj']", fetureDate)
+                logger.error("产权类型【cqType】未传值，请检查yml文件")
+                sys.exit(-1)
+            # 抵押合同签订日期
+            WebTools(self.driver).input_content('xpath', "//input[@xid='DYHTQDRQ']", currentDate)
+            # 债务履行起始时间
+            WebTools(self.driver).input_content('xpath', "//input[@xid='ZWLXQSSJ' or @xid='zwlxqssj']", currentDate)
+            # 债务履行结束时间
+            WebTools(self.driver).input_content('xpath', "//input[@xid='ZWLXJSSJ' or @xid='zwlxjssj']", fetureDate)
+            if sfpl == 1:
+                # 担保范围
+                WebTools(self.driver).input_clear('xpath', "//input[@xid='dbfw' or @xid='DBFW']")
+                WebTools(self.driver).input_content('xpath', "//input[@xid='dbfw' or @xid='DBFW']", '房屋产权')
+                # 是否存在禁止或限制转让不动产的约定
+                WebTools(self.driver).mouse_click('xpath',"//input[@name='SFXZZR' and @value='0']")
+                # 整体发证
+                if sfztfz == 1:
+                    WebTools(self.driver).mouse_click('xpath', "//input[@name='SFZTFZ' and @value='1']")
+                    # 总抵押金额
+                    WebTools(self.driver).input_content('xpath', "//input[@xid='bdbzqse' or @xid='BDBZQSE']", '2000')
+                # 按单元发证
+                elif sfztfz == 0:
+                    WebTools(self.driver).mouse_click('xpath', "//input[@name='SFZTFZ' and @value='0']")
+            else:
+                # 不动产价值
+                WebTools(self.driver).input_clear('xpath', "//input[@xid='dywjz']")
+                WebTools(self.driver).input_content('xpath', "//input[@xid='dywjz']", '100')
                 # 将页面滚动条拖到指定元素（登记原因）
                 WebTools(self.driver).srollBarToElement("//textarea[@xid='djyy']")
                 # 是否存在禁止或限制转让不动产的约定
@@ -177,48 +142,113 @@ class sqbPage():
                 # 最高债权确定事实和数额
                 WebTools(self.driver).input_clear('xpath', "//textarea[@xid='ZGZQQDSSJSE']")
                 WebTools(self.driver).input_content('xpath', "//textarea[@xid='ZGZQQDSSJSE']", '50')
-
+                # 担保范围
+                WebTools(self.driver).input_clear('xpath', "//textarea[@xid='dbfw']")
+                WebTools(self.driver).input_content('xpath', "//textarea[@xid='dbfw']", '房屋产权')
                 # 将页面滚动条拖到指定元素（附记）
                 WebTools(self.driver).srollBarToElement("//textarea[@xid='fj']")
-                # self.driver.execute_script("document.documentElement.scrollTop=3000")
-
                 # 其他
                 WebTools(self.driver).mouse_click('xpath', "//span[@xid='createQT']")
                 # 附记
                 WebTools(self.driver).mouse_click('xpath', "//span[@xid='createFJ']")
                 time.sleep(1)
+
+
+            # 批量抵押首次（房屋）
+            # elif ywlxID == '119C2FCCC994404A95EB225E9A5EB926':
+            #     # 抵押合同签订日期
+            #     WebTools(self.driver).input_content('xpath', "//input[@xid='DYHTQDRQ']", currentDate)
+            #     # 债务履行起始时间
+            #     WebTools(self.driver).input_content('xpath', "//input[@xid='ZWLXQSSJ']", currentDate)
+            #     # 债务履行结束时间
+            #     WebTools(self.driver).input_content('xpath', "//input[@xid='ZWLXJSSJ']", fetureDate)
+            #     # 是否存在禁止或限制转让不动产的约定
+            #     WebTools(self.driver).mouse_click('xpath',"//input[@name='SFXZZR' and @value='0']")
+            # 批量抵押变更（房屋）
+            # elif ywlxID == 'B99F96081EE34064A11CD70B389CA019':
+            #     # 抵押合同签订日期
+            #     WebTools(self.driver).input_content('xpath', "//input[@xid='DYHTQDRQ']", currentDate)
+            #     # 债务履行起始时间
+            #     WebTools(self.driver).input_content('xpath', "//input[@xid='ZWLXQSSJ']", currentDate)
+            #     # 债务履行结束时间
+            #     WebTools(self.driver).input_content('xpath', "//input[@xid='ZWLXJSSJ']", fetureDate)
+            #     # 是否存在禁止或限制转让不动产的约定
+            #     WebTools(self.driver).mouse_click('xpath',"//input[@name='SFXZZR' and @value='0']")
+            # else:
+            #     # 将页面滚动条拖到顶部
+            #     self.driver.execute_script("document.documentElement.scrollTop=0")
+            #     # 抵押不动产类型
+            #     if cqType == 0:
+            #         WebTools(self.driver).choose_droplist_value('DYBDCLX', 'xpath', "//select[@name='DYBDCLX']/option[2]")
+            #     elif cqType == 1:
+            #         WebTools(self.driver).choose_droplist_value('DYBDCLX', 'xpath', "//select[@name='DYBDCLX']/option[3]")
+            #     else:
+            #         logger.error("产权类型【cqType】未传值，请检查yml文件")
+            #         sys.exit(-1)
+
+            # 公共部分
+            # 不动产价值
+            # WebTools(self.driver).input_clear('xpath', "//input[@xid='dywjz']")
+            # WebTools(self.driver).input_content('xpath', "//input[@xid='dywjz']", '100')
+            # # 抵押合同签订日期
+            # WebTools(self.driver).input_content('xpath', "//input[@xid='DYHTQDRQ']", currentDate)
+            # # 被担保主债权数额
+            # WebTools(self.driver).input_clear('xpath', "//input[@xid='bdbzqse']")
+            # WebTools(self.driver).input_content('xpath', "//input[@xid='bdbzqse']", '80')
+            # # 债务履行起始时间
+            # WebTools(self.driver).input_content('xpath', "//input[@xid='zwlxqssj']", currentDate)
+            # # 债务履行结束时间
+            # WebTools(self.driver).input_content('xpath', "//input[@xid='zwlxjssj']", fetureDate)
+            #
+            # # 将页面滚动条拖到指定元素（登记原因）
+            # WebTools(self.driver).srollBarToElement("//textarea[@xid='djyy']")
+            # # 是否存在禁止或限制转让不动产的约定
+            # WebTools(self.driver).mouse_click('xpath', "//input[@name='SFXZZR' and @value='0']")
+            # # 最高债权确定事实和数额
+            # WebTools(self.driver).input_clear('xpath', "//textarea[@xid='ZGZQQDSSJSE']")
+            # WebTools(self.driver).input_content('xpath', "//textarea[@xid='ZGZQQDSSJSE']", '50')
+            # # 担保范围
+            # WebTools(self.driver).input_clear('xpath', "//textarea[@xid='dbfw']")
+            # WebTools(self.driver).input_content('xpath', "//textarea[@xid='dbfw']", '房屋产权')
+            #
+            # if not sfpl:
+            #     # 将页面滚动条拖到指定元素（附记）
+            #     WebTools(self.driver).srollBarToElement("//textarea[@xid='fj']")
+            #     # 其他
+            #     WebTools(self.driver).mouse_click('xpath', "//span[@xid='createQT']")
+            #     # 附记
+            #     WebTools(self.driver).mouse_click('xpath', "//span[@xid='createFJ']")
+            #     time.sleep(1)
         elif qllx == '查封登记':
             # 预置数据（当前时间(年月日)）
             currentDate = time.strftime('%Y-%m-%d')
             # 预置数据（当前时间（年月日时分秒））
             currentTime = time.strftime('%Y%m%d-%H%M%S')
 
-            # 查封登记
-            #净地查封，房屋查封，房屋批量查封，净地批量查封，预查封，预售合同查封，土地小证查封
+            # 首封类业务
             ywlxList = [
-                        '87F9D867EFD04220805987CC776A7A9F',
-                        '6DFC6A6D5D214896AB5216424A8E02BE',
-                        '80E93B91E9974F98AAE75C6AD28629B1',
-                        'E039C307B0C041C981506694E3CABD28',
-                        'A7325035C9E24F7784B50AC1E965FFD7',
-                        '902295BD1EA84706BBD97422237D49FA',
-                        '9549D08993DB44138AC1A433A346C3BC',
+                        '80E93B91E9974F98AAE75C6AD28629B1', # 批量查封（净地和房地）
+                        'A7325035C9E24F7784B50AC1E965FFD7', # 预查封
+                        '7C472DAB0C1D46E1B782689C057B552E', # 批量预售合同查封
+                        '9549D08993DB44138AC1A433A346C3BC', # 土地小证查封
                         ]
+            # 续查封类业务
+            ywlxList2 = [
+                        '24A5B1DEA6124BCEA1C38626996BFF97',  # 批量续查封登记(净地和房地)
+                        '6559D6E5FB7044D3999FBF2EC76A176B',  # 批量续预查封
+                        '819B16A603D4467D882268FF9CE83C02',  # 土地小证续查封
+                        ]
+            # 首封
             if ywlxID in ywlxList:
                 # 查封机关
-                # WebTools(self.driver).input_content('xpath',"//input[@xid='cfjg']",'北京市中级人民法院')
                 WebTools(self.driver).input_content('xpath',"//th[contains(text(),'查封机关')]/../td[1]/input[1]",'北京市中级人民法院')
                 # 查封文件名称
-                # WebTools(self.driver).input_content('xpath',"//input[@xid='cfjg']",'北京市中级人民法院')
                 WebTools(self.driver).input_content('xpath', "//th[contains(text(),'查封文件名称')]/../td[1]/input[1]",'xx查封文件')
                 # 查封文号
-                # WebTools(self.driver).input_content('xpath',"//input[@xid='cfwh']",currentTime)
                 WebTools(self.driver).input_content('xpath', "//th[contains(text(),'查封文号')]/../td[1]/input[1]", currentTime)
                 # 申请执行人
-                # WebTools(self.driver).input_content('xpath',"//input[@xid='CFQSRQ']",currentDate)
                 WebTools(self.driver).input_content('xpath', "//th[contains(text(),'申请执行人')]/../td[1]/input[1]",'张三')
                 # 查封起始日期
-                # WebTools(self.driver).input_content('xpath',"//input[@xid='CFQSRQ']",currentDate)
                 WebTools(self.driver).input_content('xpath', "//th[contains(text(),'查封起始日期')]/../td[1]/input[1]", currentDate)
                 # 查封期限
                 WebTools(self.driver).mouse_click('xpath', "//input[@xid='btnAdd2']")
@@ -226,13 +256,11 @@ class sqbPage():
                 WebTools(self.driver).input_clear('xpath', "//th[contains(text(),'来文日期')]/../td[2]/input[1]")
                 WebTools(self.driver).input_content('xpath', "//th[contains(text(),'来文日期')]/../td[2]/input[1]", currentDate)
                 # 查封范围
-                # WebTools(self.driver).input_content('xpath', "//input[@xid='cffw']", "该产权所有，包括附着物（测试）。")
                 WebTools(self.driver).input_content('xpath',"//th[contains(text(),'查封范围')]/../td[1]/input[1]","该产权所有，包括附着物（测试）。")
                 # 查封冻结原因
-                # WebTools(self.driver).input_content('xpath', "//textarea[@xid='cfdjyy']", "存在和银行的财务纠纷(银行向法院申请查封)")
-                WebTools(self.driver).input_content('xpath', "//th[contains(text(),'查封冻结原因')]/..//textarea[1]", "存在和银行的财务纠纷(银行向法院申请查封)")
+                WebTools(self.driver).input_content('xpath', "//th[contains(text(),'查封冻结原因')]/..//textarea[1]", "债务纠纷，依法查封。")
             # 司法裁定（净地和房屋）
-            if ywlxID=='8FEAF5CC34DF49C88B7E3139F8C0B18A' or ywlxID == '4858445B1488454F970428A2436F54D5':
+            elif ywlxID=='8FEAF5CC34DF49C88B7E3139F8C0B18A' or ywlxID == '4858445B1488454F970428A2436F54D5':
                 # 申请执行人
                 WebTools(self.driver).input_content('xpath', "//th[contains(text(),'申请执行人')]/../td[1]/input[1]",'张三')
                 # 裁决机关
@@ -246,27 +274,17 @@ class sqbPage():
                 WebTools(self.driver).input_content('xpath', "//th[contains(text(),'来文日期')]/../td[2]/input[1]", currentDate)
                 # 裁决原因
                 WebTools(self.driver).input_content('xpath', "//th[contains(text(),'裁决原因')]/..//textarea[1]", "存在和银行的财务纠纷(银行向法院申请查封)")
-            # 查封登记（续查封）（净地和房屋）,续预查封
-            elif ywlxID == 'AD8169CA47E844F6B240D36799F2AA06' or ywlxID == '4F8E285959114451A95C5CFC31FD9E0F' or ywlxID == '56142C1E732E41638244DF51E26CA2C5':
-                # 查封文件名称
-                # WebTools(self.driver).input_content('xpath', "//th[contains(text(),'查封文件名称')]/../td[1]/input[1]",'xx查封文件')
+            # 续查封
+            elif ywlxID in ywlxList2:
                 # 申请执行人
                 WebTools(self.driver).input_clear('xpath', "//th[contains(text(),'申请执行人')]/../td[1]/input[1]")
                 WebTools(self.driver).input_content('xpath', "//th[contains(text(),'申请执行人')]/../td[1]/input[1]", '张三')
-                # 查封期限
-                WebTools(self.driver).mouse_click('xpath', "//input[@xid='btnAdd2']")
-                # 查封冻结原因
-                WebTools(self.driver).input_content('xpath', "//textarea[@xid='cfdjyy']", "查封到期债务未偿还清执行续查封")
-            # 批量查封登记（续查封）（净地和房屋）
-            elif ywlxID == '36F20BC9FC524657A1D79B776A1C0CF5' or ywlxID == '24A5B1DEA6124BCEA1C38626996BFF97':
                 # 查封起始日期
                 WebTools(self.driver).input_content('xpath', "//th[contains(text(),'查封起始日期')]/../td[1]/input[1]", currentDate)
                 # 查封期限
                 WebTools(self.driver).mouse_click('xpath', "//input[@xid='btnAdd2']")
-                # 来文日期
-                WebTools(self.driver).input_content('xpath', "//th[contains(text(),'来文日期')]/../td[2]/input[1]", currentDate)
                 # 查封冻结原因
-                WebTools(self.driver).input_content('xpath', "//th[contains(text(),'查封冻结原因')]/..//textarea[1]", "查封到期债务未偿还清执行续查封")
+                WebTools(self.driver).input_content('xpath', "//textarea[@xid='cfdjyy' or @xid='CFDJYY'] ", "查封到期依法执行续查封。")
             # 解封登记(房屋解封、净地解封、房屋批量解封、净地批量解封)
             if ywlxID=='FB265E54DBE24577B2FA4F4C4980AB15' or ywlxID == '08B3B1B8F1FD47188C115939E2814AFF' or ywlxID == '4D22B4174EFD42BCA3C01FE58D9F1477' or ywlxID == '22CF4018956C44338B4A2B51EB1CB111' :
                 # 将页面滚动条拖到底部

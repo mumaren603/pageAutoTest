@@ -141,19 +141,17 @@ class sqrqkPage():
                     # # 证件号码
                     # WebTools(self.driver).input_content('xpath', "//input[@xid='SQRZJH']", qlrzjhm)
                 else:
-                    self.driver.execute_script("document.documentElement.scrollTop=250")
-                    WebTools(self.driver).check_element_is_exists('xpath',
-                                                                  "//div[contains(text(),'抵押权人列表')]/../div[2]/span[3]")
-                    WebTools(self.driver).mouse_click('xpath',
-                                                      '//table[@xid="underTable"]//span[contains(text(),"新增")]')
+                    # 将页面滚动条拖到指定元素（抵押权人列表）
+                    WebTools(self.driver).srollBarToElement("//*[contains(text(),'抵押权人列表')]")
+                    WebTools(self.driver).check_element_is_exists('xpath', "//div[contains(text(),'抵押权人列表')]/../div[2]/span[3]")
+                    WebTools(self.driver).mouse_click('xpath','//table[@xid="underTable"]//span[contains(text(),"新增")]')
                     time.sleep(1)
                     # 姓名
                     WebTools(self.driver).input_content('xpath', "//input[@xid='SQRMC']", dyQlrmc)
                     # 是否通知
                     WebTools(self.driver).mouse_click('name', 'SFTZR')
                     # 证件类型
-                    WebTools(self.driver).choose_droplist_value('SQRZJZL', 'xpath',
-                                                                "//select[@name='SQRZJZL']/option[4]")
+                    WebTools(self.driver).choose_droplist_value('SQRZJZL', 'xpath',"//select[@name='SQRZJZL']/option[4]")
                     # 证件号码
                     WebTools(self.driver).input_content('xpath', "//input[@xid='SQRZJH']", qlrzjhm)
                     # 电话

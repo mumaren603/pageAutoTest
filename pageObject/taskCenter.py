@@ -189,8 +189,8 @@ class taskCenter():
                 else:
                     WebTools(self.driver).mouse_click('xpath', "//ul[contains(@xid,'subUl2')]/li[4]/a")
                     # 不动产抵押注销
-                    if ywlxID == 167090000101:
-                        WebTools(self.driver).mouse_doubleClick('xpath', "//div[@ywlxid=167090000101]/div[1]")
+                    if ywlxID == 'BAA801115B3740868F1C8824102CABC7':
+                        WebTools(self.driver).mouse_doubleClick('xpath', "//div[@ywlxid='BAA801115B3740868F1C8824102CABC7']/div[1]")
                         time.sleep(2)
             elif qllx == '查封登记':
                 WebTools(self.driver).mouse_click('link_text', "查封登记")
@@ -223,17 +223,21 @@ class taskCenter():
                         time.sleep(2)
                 elif djlx == '解封':
                     WebTools(self.driver).mouse_click('xpath', "//ul[contains(@xid,'subUl3')]/li[5]/a")
-                    # 解封登记（房和地）
-                    if ywlxID == 'FB265E54DBE24577B2FA4F4C4980AB15' or ywlxID == '08B3B1B8F1FD47188C115939E2814AFF':
-                        WebTools(self.driver).mouse_doubleClick('xpath',"//div[@ywlxid='FB265E54DBE24577B2FA4F4C4980AB15']/div[1]")
+                    # 批量解封(净地和房地)
+                    if ywlxID == '4D22B4174EFD42BCA3C01FE58D9F1477':
+                        WebTools(self.driver).mouse_doubleClick('xpath',"//div[@ywlxid='4D22B4174EFD42BCA3C01FE58D9F1477']/div[1]")
                         time.sleep(2)
-                    # 批量解封(房屋)
-                    elif ywlxID == '4D22B4174EFD42BCA3C01FE58D9F1477':
+                    # 批量预解封(房屋)
+                    elif ywlxID == '86C66F51F4AB420BBA75221E3B0A7C82':
                         WebTools(self.driver).mouse_doubleClick('xpath', "//div[@ywlxid='4D22B4174EFD42BCA3C01FE58D9F1477']/div[1]")
                         time.sleep(2)
-                    # 批量解封(净地)
-                    elif ywlxID == '22CF4018956C44338B4A2B51EB1CB111':
-                        WebTools(self.driver).mouse_doubleClick('xpath', "//div[@ywlxid='22CF4018956C44338B4A2B51EB1CB111']/div[1]")
+                    # 土地小证解封
+                    elif ywlxID == '14B63357509C48C794A471AD88C0531E':
+                        WebTools(self.driver).mouse_doubleClick('xpath', "//div[@ywlxid='14B63357509C48C794A471AD88C0531E']/div[1]")
+                        time.sleep(2)
+                    # 在建工程解封
+                    elif ywlxID == 'B489BA1B6E48483EBF1375D877DDE4F4':
+                        WebTools(self.driver).mouse_doubleClick('xpath', "//div[@ywlxid='B489BA1B6E48483EBF1375D877DDE4F4']/div[1]")
                         time.sleep(2)
                 elif djlx == '司法裁定':
                     WebTools(self.driver).mouse_click('xpath', "//ul[contains(@xid,'subUl3')]/li[4]/a")
