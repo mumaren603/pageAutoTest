@@ -1,5 +1,6 @@
 import pytest,os
 from init.dataInit import dataInit
+from pageObject.bdcjbxxPage import bdcjbxxPage
 from pageObject.taskCenter import taskCenter
 from pageObject.queryFunc import queryFunc
 from pageObject.sjdPage import sjdPage
@@ -14,25 +15,23 @@ from Common.LogFunc import loggerConf
 logger = loggerConf().getLogger()
 
 @pytest.mark.test
-@pytest.mark.all
-class Test_landJfRegister():
+class Test_xzxcfRegister():
     def setup(self):
         '''初始化用户数据获取'''
         current_file_path = os.path.abspath(__file__).replace('\\', '/')
         self.data = getTestcaseData(getTestdataPath(current_file_path))
 
-    def test_landJfRegister(self,login,cmdopt):
+    def test_xzxcfRegister(self,login,cmdopt):
         '''
-        :流程 查封登记--解封登记（净地）
+        :流程 查封登记--查封--土地小证续查封
         :return:
         '''
         self.driver = login[0]
         dbInfo = login[1]
         # 获取办件数据
-        bdcdyh = dataInit().getLandJfRegisterData()
-        logger.debug("<--------查封登记--解封--解封登记（净地）start-------->")
+        bdcdyh = dataInit().getXzxcfRegisterData()
+        logger.debug("<--------查封登记--查封--土地小证续查封start-------->")
         logger.debug("<--------界面操作start-------->")
-
 
         # 办件中心
         taskCenter(self.driver).common()
@@ -44,6 +43,8 @@ class Test_landJfRegister():
         sjdPage(self.driver).sjdHandle(self.data)
         # 申请表
         sqbPage(self.driver).sqbHandle(self.data)
+        # 不动产基本信息
+        bdcjbxxPage(self.driver).bdcjbxxHandle(self.data)
         # 办理意见表
         blyjPage(self.driver).blyjHandle()
         # 受理
@@ -55,13 +56,12 @@ class Test_landJfRegister():
         # 数据库校验
         try:
             logger.debug("<--------归档数据检查start-------->")
-            resDataCheck = dataResCheck().landJfRegisterDataCheck(bdcdyh,self.data)
+            resDataCheck = dataResCheck().xzcfRegisterDataCheck(bdcdyh,self.data)
             assert resDataCheck
             logger.debug("<--------归档数据检查end-------->")
         except AssertionError:
             raise
-        logger.debug("<--------查封登记--解封--解封登记（净地）end-------->")
-
+        logger.debug("<--------查封登记--查封--土地小证续查封end-------->")
 
     def teardown(self):
         logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n")
@@ -71,7 +71,7 @@ class Test_landJfRegister():
         self.driver.quit()
 
 if __name__ == '__main__':
-    pytest.main(['-v', 'test_landJfRegister'])
+    pytest.main(['-v', 'test_xzxcfRegister'])
 
 
 
