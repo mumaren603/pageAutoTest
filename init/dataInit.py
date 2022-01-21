@@ -425,44 +425,44 @@ class dataInit():
             logger.error("未查询到有效数据，请检查sql语句正确性或数据库是否存在符合条件数据。")
             sys.exit(-1)
 
-    '''抵押登记'''
-    # 土地首次抵押查询数据
-    def getLandFirstDyRegisterData(self):
-        logger.debug("<--------查询入参数据start-------->")
-        querySQL = "select a.bdcdyh from (select djbid,bdcdyh from dj_jsydsyq where qllx = '3' and zt = '1' and sfyx = 1 and bdcdyh not like '%9999%') a inner join (select id,bdcdyh from dj_djben where sfdy = 0 and sfcf = 0 and sfzzdj = 0 and sfysczql = 1 and zt = '1' and sfyx = 1) b on a.djbid = b.id and rownum < 50 order by dbms_random.value()"
-        queryRes = self.djObj.fetchone(querySQL)
-        logger.debug("查询sql为：%s" % querySQL)
-        logger.debug("查询办件数据-->%s" % queryRes)
-        if queryRes:
-            # 在办件检查
-            verifyRes = verificator().processVerify(queryRes)
-            if verifyRes :
-                logger.debug("待登记办件数据-->%s" % queryRes)
-                logger.debug("<--------查询入参数据end-------->")
-                return queryRes
-            return dataInit().getLandFirstDyData()
-        else:
-            logger.error("未查询到有效数据，请检查sql语句正确性或数据库是否存在符合条件数据。")
-            sys.exit(-1)
-
-    # 不动产首次抵押查询数据
-    def getHouseFirstDyRegisterData(self):
-        logger.debug("<--------查询入参数据start-------->")
-        querySQL = "select a.bdcdyh from (select djbid,bdcdyh from dj_fdcq2 a where a.zt='1' and a.sfyx=1 and a.bdcdyh not like '%9999%' and a.fwxz='0' and a.tdsyqmj>'0') a inner join (select id from dj_djben b where b.sfdy=0 and b.sfcf=0 and b.sfyy=0 and b.sfyg=0 and b.sfysczql=1 and b.zt='1' and b.sfyx=1) b on a.djbid=b.id and rownum <50 order by dbms_random.value()"
-        queryRes = self.djObj.fetchone(querySQL)
-        logger.debug("查询sql为：%s" % querySQL)
-        logger.debug("查询办件数据-->%s" % queryRes)
-        if queryRes:
-            # 在办件检查
-            verifyRes = verificator().processVerify(queryRes)
-            if verifyRes :
-                logger.debug("待登记办件数据-->%s" % queryRes)
-                logger.debug("<--------查询入参数据end-------->")
-                return queryRes
-            return dataInit().getHouseFirstDyRegisterData()
-        else:
-            logger.error("未查询到有效数据，请检查sql语句正确性或数据库是否存在符合条件数据。")
-            sys.exit(-1)
+    # '''抵押登记'''
+    # # 土地首次抵押查询数据
+    # def getLandDyNotRegisterData(self):
+    #     logger.debug("<--------查询入参数据start-------->")
+    #     querySQL = "select a.bdcdyh from (select djbid,bdcdyh from dj_jsydsyq where qllx = '3' and zt = '1' and sfyx = 1 and bdcdyh not like '%9999%') a inner join (select id,bdcdyh from dj_djben where sfdy = 0 and sfcf = 0 and sfzzdj = 0 and sfysczql = 1 and zt = '1' and sfyx = 1) b on a.djbid = b.id and rownum < 50 order by dbms_random.value()"
+    #     queryRes = self.djObj.fetchone(querySQL)
+    #     logger.debug("查询sql为：%s" % querySQL)
+    #     logger.debug("查询办件数据-->%s" % queryRes)
+    #     if queryRes:
+    #         # 在办件检查
+    #         verifyRes = verificator().processVerify(queryRes)
+    #         if verifyRes :
+    #             logger.debug("待登记办件数据-->%s" % queryRes)
+    #             logger.debug("<--------查询入参数据end-------->")
+    #             return queryRes
+    #         return dataInit().getLandFirstDyData()
+    #     else:
+    #         logger.error("未查询到有效数据，请检查sql语句正确性或数据库是否存在符合条件数据。")
+    #         sys.exit(-1)
+    #
+    # # 不动产首次抵押查询数据
+    # def getHouseDyNotRegisterData(self):
+    #     logger.debug("<--------查询入参数据start-------->")
+    #     querySQL = "select a.bdcdyh from (select djbid,bdcdyh from dj_fdcq2 a where a.zt='1' and a.sfyx=1 and a.bdcdyh not like '%9999%' and a.fwxz='0' and a.tdsyqmj>'0') a inner join (select id from dj_djben b where b.sfdy=0 and b.sfcf=0 and b.sfyy=0 and b.sfyg=0 and b.sfysczql=1 and b.zt='1' and b.sfyx=1) b on a.djbid=b.id and rownum <50 order by dbms_random.value()"
+    #     queryRes = self.djObj.fetchone(querySQL)
+    #     logger.debug("查询sql为：%s" % querySQL)
+    #     logger.debug("查询办件数据-->%s" % queryRes)
+    #     if queryRes:
+    #         # 在办件检查
+    #         verifyRes = verificator().processVerify(queryRes)
+    #         if verifyRes :
+    #             logger.debug("待登记办件数据-->%s" % queryRes)
+    #             logger.debug("<--------查询入参数据end-------->")
+    #             return queryRes
+    #         return dataInit().getHouseDyNotRegisterData()
+    #     else:
+    #         logger.error("未查询到有效数据，请检查sql语句正确性或数据库是否存在符合条件数据。")
+    #         sys.exit(-1)
 
     # 在建房地产抵押首次查询数据
     def getZjfdcFirstDyRegisterData(self):
@@ -512,10 +512,24 @@ class dataInit():
 
             return queryRes
 
-    # 不动产抵押转移查询数据
-    def getHouseDyChangeRegisterData(self):
+    # 做过抵押（房屋）
+    def getHouseDyRegisterData(self):
         logger.debug("<--------查询入参数据start-------->")
-        querySQL = "select a.bdcdyh from (select bdcdyh,djbid from dj_dy a where a.bdcdyh like '%F%' and a.zt = '1' and a.sfyx = 1 and a.fcdymj>'0' group by bdcdyh,djbid having count(bdcdyh) = 1) a inner join (select id from dj_djben b where b.sfdy=1 and b.sfcf=0  and b.sfyy=0 and b.sfysczql=1 and b.zt=1 and b.sfyx=1) b on a.djbid=b.id and rownum <50 order by dbms_random.value()"
+        querySQL = "select distinct a.bdcdyh " \
+                   "from dj_dy a,dj_djben b,dj_dy_djben_zm c " \
+                   "where a.djbid = b.id " \
+                   "and a.id =c.qlbid " \
+                   "and a.zt='1' " \
+                   "and a.sfyx=1 " \
+                   "and a.dybdclx='2' " \
+                   "and b.zt='1' " \
+                   "and b.sfyx=1 " \
+                   "and b.sfdy=1 " \
+                   "and b.sfcf=0 " \
+                   "and c.sfyx=1 " \
+                   "and c.bdclx='0、1' " \
+                   "and rownum <50 " \
+                   "order by dbms_random.value()"
         queryRes = self.djObj.fetchone(querySQL)
         logger.debug("查询sql为：%s" % querySQL)
         logger.debug("查询办件数据-->%s" % queryRes)
@@ -526,7 +540,7 @@ class dataInit():
                 logger.debug("待登记办件数据-->%s" % queryRes)
                 logger.debug("<--------查询入参数据end-------->")
                 return queryRes
-            return dataInit().getHouseDyChangeRegisterData()
+            return dataInit().getHouseDyRegisterData()
         else:
             logger.error("未查询到有效数据，请检查sql语句正确性或数据库是否存在符合条件数据。")
             sys.exit(-1)
@@ -871,6 +885,35 @@ class dataInit():
             logger.error("未查询到有效数据，请检查sql语句正确性或数据库是否存在符合条件数据。")
             sys.exit(-1)
 
+    # 批量续预查封登记（房屋 ）
+    def getHousePlxycfRegisterData(self):
+        logger.debug("<--------查询入参数据start-------->")
+        querySQL = "select a.bdcdyh " \
+                   "from dj_ycf a,dj_djben b " \
+                   "where a.djbid = b.id " \
+                   "and a.zt='1' " \
+                   "and a.sfyx=1 " \
+                   "and b.zt='1' " \
+                   "and b.sfyx=1 " \
+                   "and a.cfwh is not null " \
+                   "and a.cfwj is not null " \
+                   "and rownum < 50 " \
+                   "order by dbms_random.value()"
+        queryRes = self.djObj.fetchone(querySQL)
+        logger.debug("查询sql语句-->%s" % querySQL)
+        logger.debug("查询办件数据-->%s" % queryRes)
+        if queryRes:
+            # 在办件检查
+            verifyRes = verificator().processVerify(queryRes)
+            if verifyRes:
+                logger.debug("待登记办件数据-->%s" % queryRes)
+                logger.debug("<--------查询入参数据end-------->")
+                return queryRes
+            return dataInit().getHousePlxycfRegisterData()
+        else:
+            logger.error("未查询到有效数据，请检查sql语句正确性或数据库是否存在符合条件数据。")
+            sys.exit(-1)
+
     # 司法裁定（房屋）
     def getHouseSfcdRegisterData(self):
         logger.debug("<--------查询入参数据start-------->")
@@ -898,6 +941,66 @@ class dataInit():
                 logger.debug("<--------查询入参数据end-------->")
                 return queryRes
             return dataInit().getHouseSfcdRegisterData()
+        else:
+            logger.error("未查询到有效数据，请检查sql语句正确性或数据库是否存在符合条件数据。")
+            sys.exit(-1)
+
+    # 小证查封登记
+    def getXzcfRegisterData(self):
+        logger.debug("<--------查询入参数据start-------->")
+        querySQL = "select distinct a.bdcdyh " \
+                   "from dj_zszb a " \
+                   "where zt='1' " \
+                   "and sfyx=1 " \
+                   "and sfcf=0 " \
+                   "and sfgj=0 " \
+                   "and not exists  " \
+                   "(select 1 from dj_jsydsyq b where zt='1' and sfyx=1 and a.ywh = b.ywh)" \
+                   " and rownum < 50 " \
+                   "order by dbms_random.value()"
+        queryRes = self.djObj.fetchone(querySQL)
+        logger.debug("查询sql为：%s" % querySQL)
+        logger.debug("查询办件数据-->%s" % queryRes)
+        if queryRes:
+            # 在办件检查
+            verifyRes = verificator().processVerify(queryRes)
+            if verifyRes:
+                logger.debug("待登记办件数据-->%s" % queryRes)
+                logger.debug("<--------查询入参数据end-------->")
+                return queryRes
+            return dataInit().getXzcfRegisterData()
+        else:
+            logger.error("未查询到有效数据，请检查sql语句正确性或数据库是否存在符合条件数据。")
+            sys.exit(-1)
+
+    # 小证续查封登记
+    def getXzxcfRegisterData(self):
+        logger.debug("<--------查询入参数据start-------->")
+        querySQL = "select distinct a.bdcdyh " \
+                   "from dj_cf a,dj_zszb b " \
+                   "where a.zszbid = b.id " \
+                   "and a.bdcdyh= b.bdcdyh  " \
+                   "and a.zt='1' " \
+                   "and a.sfyx=1 " \
+                   "and a.zszbid is not null " \
+                   "and a.cfjg is not null "\
+                   "and a.cfwh is not null " \
+                   "and b.zt='1' " \
+                   "and b.sfyx=1 " \
+                   "and b.sfcf = 1 " \
+                   "and rownum < 50 " \
+                   "order by dbms_random.value()"
+        queryRes = self.djObj.fetchone(querySQL)
+        logger.debug("查询sql为：%s" % querySQL)
+        logger.debug("查询办件数据-->%s" % queryRes)
+        if queryRes:
+            # 在办件检查
+            verifyRes = verificator().processVerify(queryRes)
+            if verifyRes:
+                logger.debug("待登记办件数据-->%s" % queryRes)
+                logger.debug("<--------查询入参数据end-------->")
+                return queryRes
+            return dataInit().getXzxcfRegisterData()
         else:
             logger.error("未查询到有效数据，请检查sql语句正确性或数据库是否存在符合条件数据。")
             sys.exit(-1)
@@ -978,41 +1081,6 @@ class dataInit():
             logger.error("未查询到有效数据，请检查sql语句正确性或数据库是否存在符合条件数据。")
             sys.exit(-1)
 
-    # 小证查封登记
-    def getLandXzcfRegisterData(self):
-        logger.debug("<--------查询入参数据start-------->")
-        querySQL = "select distinct a.bdcdyh " \
-                   "from dj_zszb a " \
-                   "where zt='1' " \
-                   "and sfyx=1 " \
-                   "and sfcf=0 " \
-                   "and sfycf =0 " \
-                   "and sfgj=0 " \
-                   "and not exists  " \
-                   "(select 1 from dj_jsydsyq b where zt='1' and sfyx=1 and a.ywh = b.ywh)" \
-                   " and rownum < 50 " \
-                   "order by dbms_random.value()"
-        queryRes = self.djObj.fetchone(querySQL)
-        logger.debug("查询sql为：%s" % querySQL)
-        logger.debug("查询办件数据-->%s" % queryRes)
-        if queryRes:
-            # 检查该数据是否存在待办件
-            querySqxxSQL = "select count(1) from yw_sqxx where ajzt='1' and sfyx=1 and bdcdyh='" + queryRes + "'"
-            querySqxxzbSQL = "select count(1) from yw_sqxx t where t.SFYX = '1' and t.ajzt in ('1', '3', '6') and t.id in (select z.sqbid from yw_sqxxzb z where z.sfyx = '1' and bdcdyh = '" + queryRes + "')"
-            querySqxxSQLRes = self.djObj.fetchone(querySqxxSQL)
-            querySqxxzbSQLRes = self.djObj.fetchone(querySqxxzbSQL)
-            if querySqxxSQLRes or querySqxxzbSQLRes:
-                logger.warning("该数据已在办理中，重新获取数据！")
-                return dataInit().getLandCfRegisterData()
-            else:
-                logger.debug("待登记办件数据-->%s" % queryRes)
-                logger.debug("<--------查询入参数据end-------->")
-                return queryRes
-        else:
-            logger.error("未查询到有效数据，请检查sql语句正确性或数据库是否存在符合条件数据。")
-            sys.exit(-1)
-
-
     # 解封登记（房屋）
     def getHouseJfRegisterData(self):
         logger.debug("<--------查询入参数据start-------->")
@@ -1033,100 +1101,20 @@ class dataInit():
         logger.debug("查询sql为：%s" % querySQL)
         logger.debug("查询办件数据-->%s" % queryRes)
         if queryRes:
-            # 检查该数据是否存在多条产权
-            queryFdcq2SQL = "select count(1) from dj_fdcq2 where zt='1' and sfyx=1 and bdcdyh='" + queryRes + "'"
-            queryHxxSQL = "select count(1) from dj_hxx where zt='1' and sfyx=1 and bdcdyh='" + queryRes + "'"
-            queryFdcq2SQLRes = self.djObj.fetchone(queryFdcq2SQL)
-            queryHxxSQLRes = self.djObj.fetchone(queryHxxSQL)
-            if queryFdcq2SQLRes > 1 or queryHxxSQLRes > 1:
-                logger.warning("该单元存在多条现势数据，请检查！")
-                return dataInit().getHouseXcfRegisterData()
-            # 检查该数据是否存在待办件
-            querySqxxSQL = "select count(1) from yw_sqxx where ajzt='1' and sfyx=1 and bdcdyh='" + queryRes + "'"
-            querySqxxzbSQL = "select count(1) from yw_sqxx t where t.SFYX = '1' and t.ajzt in ('1', '3', '6') and t.id in (select z.sqbid from yw_sqxxzb z where z.sfyx = '1' and bdcdyh = '" + queryRes + "')"
-            querySqxxSQLRes = self.djObj.fetchone(querySqxxSQL)
-            querySqxxzbSQLRes = self.djObj.fetchone(querySqxxzbSQL)
-            if querySqxxSQLRes or querySqxxzbSQLRes:
-                logger.warning("该数据已在办理中，重新获取数据！")
-                return dataInit().getHouseXcfRegisterData()
-            else:
+            # 多条产权校验
+            verifyRes1 = verificator().tooManyCqResultVerify(1,queryRes)
+            # 多条登记本校验
+            verifyRes2 = verificator().tooManyDjbenResultVerify(queryRes)
+            # 在办件检查
+            verifyRes3 = verificator().processVerify(queryRes)
+            if verifyRes1 and verifyRes2 and verifyRes3:
                 logger.debug("待登记办件数据-->%s" % queryRes)
                 logger.debug("<--------查询入参数据end-------->")
                 return queryRes
+            return dataInit().getHouseJfRegisterData()
         else:
             logger.error("未查询到有效数据，请检查sql语句正确性或数据库是否存在符合条件数据。")
             sys.exit(-1)
-
-    # 批量续查封登记（房屋 ）/解封登记（房屋）（单独写，查询条件没有bdcdyh）
-    # def getHousePlxcfRegisterData(self):
-    #     logger.debug(">>>查询入参数据start<<<")
-    #     querySQL = "select distinct c.cfwh from (select bdcdyh,djbid,id from dj_fdcq2  where zt='1' and sfyx=1) a inner join (select id from dj_djben b where sfdy=0 and sfcf=1 and sfyg=0 and zt='1'and sfyx=1) b on a.djbid=b.id inner join (select cfwh,cqbid from dj_cf where cfwh>'0' and cflxmc = '查封' and zt='1' and sfyx=1 and zszbid is null) c on a.id = c.cqbid where a.bdcdyh > '0'and rownum <50 order by dbms_random.value()"
-    #     queryRes = self.djObj.fetchone(querySQL)
-    #     logger.debug("查询办件数据-->%s" % queryRes)
-    #     # 检查该数据是否存在待办件
-    #     querySqxxSQL = "select count(1) from yw_sqxx where ajzt='1' and sfyx=1 and bdcdyh='" + queryRes + "'"
-    #     querySqxxzbSQL = "select count(1) from yw_sqxx t where t.SFYX = '1' and t.ajzt in ('1', '3', '6') and t.id in (select z.sqbid from yw_sqxxzb z where z.sfyx = '1' and bdcdyh = '" + queryRes + "')"
-    #     querySqxxSQLRes = self.djObj.fetchone(querySqxxSQL)
-    #     querySqxxzbSQLRes = self.djObj.fetchone(querySqxxzbSQL)
-    #     if querySqxxSQLRes or querySqxxzbSQLRes:
-    #         logger.error("该数据已在办理中，重新获取数据！")
-    #         return dataInit().getHouseXcfRegisterData()
-    #     else:
-    #         logger.debug("待登记办件数据-->%s" % queryRes)
-    #         logger.debug(">>>查询入参数据end<<<")
-    #
-    #
-    #         return queryRes
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    # 续预查封登记（房屋 ）
-    def getHouseXycfRegisterData(self):
-        logger.debug("<--------查询入参数据start-------->")
-        querySQL = "select a.bdcdyh " \
-                   "from dj_ycf a,dj_djben b " \
-                   "where a.djbid = b.id " \
-                   "and a.zt='1' " \
-                   "and a.sfyx=1 " \
-                   "and b.zt='1' " \
-                   "and b.sfyx=1 " \
-                   "and a.cflx=3 " \
-                   "and a.cfwh is not null " \
-                   "and a.cfwj is not null " \
-                   "and rownum < 50 " \
-                   "order by dbms_random.value()"
-        queryRes = self.djObj.fetchone(querySQL)
-        logger.debug("查询sql语句-->%s" % querySQL)
-        logger.debug("查询办件数据-->%s" % queryRes)
-        if queryRes:
-            # 检查该数据是否存在待办件
-            querySqxxSQL = "select count(1) from yw_sqxx where ajzt='1' and sfyx=1 and bdcdyh='" + queryRes + "'"
-            querySqxxzbSQL = "select count(1) from yw_sqxx t where t.SFYX = '1' and t.ajzt in ('1', '3', '6') and t.id in (select z.sqbid from yw_sqxxzb z where z.sfyx = '1' and bdcdyh = '" + queryRes + "')"
-            querySqxxSQLRes = self.djObj.fetchone(querySqxxSQL)
-            querySqxxzbSQLRes = self.djObj.fetchone(querySqxxzbSQL)
-            if querySqxxSQLRes or querySqxxzbSQLRes:
-                logger.warning("该数据已在办理中，重新获取数据！")
-                return dataInit().getHouseYcfRegisterData()
-            else:
-                logger.debug("待登记办件数据-->%s" % queryRes)
-                logger.debug("<--------查询入参数据end-------->")
-                return queryRes
-        else:
-            logger.error("未查询到有效数据，请检查sql语句正确性或数据库是否存在符合条件数据。")
-            sys.exit(-1)
-
-
 
     '''其他登记'''
     # 冻结登记（房屋 ）
