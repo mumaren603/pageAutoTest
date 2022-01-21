@@ -19,22 +19,21 @@ logger = loggerConf().getLogger()
 
 @pytest.mark.test
 @pytest.mark.all
-class Test_fwPlDyRegister():
+class Test_fwPlDyRegister1():
     def setup(self):
         '''初始化用户数据获取'''
         current_file_path = os.path.abspath(__file__).replace('\\','/')
         self.data = getTestcaseData(getTestdataPath(current_file_path))
 
-    def test_fwPlDyRegister(self,login,cmdopt):
+    def test_fwPlDyRegister1(self,login,cmdopt):
         '''
-        :流程 抵押权--首次登记--批量抵押（房屋）（03104）
+        :流程 抵押权--首次登记--批量抵押（房屋）（整体发证）
         '''
         self.driver = login[0]
         dbInfo = login[1]
         # 获取办件数据
-        bdcdyh = dataInit().getHouseFirstDyRegisterData()
-        # bdcdyh = dataInit().getHousePlDyRegisterData()
-        logger.debug("<--------抵押权--首次登记--批量抵押（发多本证）start-------->")
+        bdcdyh = dataInit().getHouseCqRegisterData()
+        logger.debug("<--------抵押权--首次登记--批量抵押（整体发证）start-------->")
         logger.debug("<--------界面操作start-------->")
 
         # 办件中心
@@ -55,8 +54,6 @@ class Test_fwPlDyRegister():
         # sflzbPage(self.driver).sflzbHandle()
         # 办理意见表
         blyjPage(self.driver).blyjHandle()
-        # 询问笔录
-        htxxPage(self.driver).xwjlHandle()
         # 受理
         submitPage(self.driver).slHandle()
         # 登簿
@@ -71,16 +68,14 @@ class Test_fwPlDyRegister():
             logger.debug("<--------归档数据检查end-------->")
         except AssertionError:
             raise
-        logger.debug("<--------抵押权--首次登记--不动产抵押end-------->")
-
+        logger.debug("<--------抵押权--首次登记--批量抵押（整体发证）end-------->")
 
     def teardown(self):
         logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n")
-
-        # # 退出系统
-        # logout(self.driver).logout()
-        # # 退出浏览器
-        # self.driver.quit()
+        # 退出系统
+        logout(self.driver).logout()
+        # 退出浏览器
+        self.driver.quit()
 
 if __name__ == '__main__':
-    pytest.main(['-v', 'test_fwPlDyRegister'])
+    pytest.main(['-v', 'test_fwPlDyRegister1'])
