@@ -32,7 +32,6 @@ class Test_landDyFirstRegister():
         self.driver = login[0]
         dbInfo = login[1]
         # 获取办件数据
-        # bdcdyh = dataInit().getLandFirstDyRegisterData()
         bdcdyh = dataInit().getLandCqRegisterData()
         logger.debug("<--------抵押权--首次登记--土地抵押start-------->")
         logger.debug("<--------界面操作start-------->")
@@ -62,7 +61,7 @@ class Test_landDyFirstRegister():
         # 受理
         submitPage(self.driver).slHandle()
         # 复审
-        submitPage(self.driver).shHandle(bdcdyh)
+        # submitPage(self.driver).shHandle(bdcdyh)
         # 登簿
         submitPage(self.driver).dbHandle(bdcdyh, self.data)
         logger.debug("<--------界面操作end-------->")
