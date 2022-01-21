@@ -15,22 +15,22 @@ logger = loggerConf().getLogger()
 
 @pytest.mark.test
 @pytest.mark.all
-class Test_houseXycfRegister():
+class Test_housePlxycfRegister():
     def setup(self):
         '''初始化用户数据获取'''
         current_file_path = os.path.abspath(__file__).replace('\\', '/')
         self.data = getTestcaseData(getTestdataPath(current_file_path))
 
-    def test_houseXycfRegister(self,login,cmdopt):
+    def test_housePlxycfRegister(self,login,cmdopt):
         '''
-        :流程 查封登记--续预查封
+        :流程 查封登记--预查封--批量续预查封
         :return:
         '''
         self.driver = login[0]
         dbInfo = login[1]
         # 获取办件数据
-        bdcdyh = dataInit().getHouseXycfRegisterData()
-        logger.debug("<--------查封登记-->续预查封start-------->")
+        bdcdyh = dataInit().getHousePlxycfRegisterData()
+        logger.debug("<--------查封登记-->预查封-->批量续预查封start-------->")
         logger.debug("<--------界面操作start-------->")
 
         # 办件中心
@@ -61,17 +61,17 @@ class Test_houseXycfRegister():
             logger.debug("<--------归档数据检查end-------->")
         except AssertionError:
             raise
-        logger.debug("<--------查封登记-->续预查封end-------->")
+        logger.debug("<--------查封登记-->预查封-->批量续预查封end-------->")
 
     def teardown(self):
         logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n")
-        退出系统
+        # 退出系统
         logout(self.driver).logout()
         # 退出浏览器
         self.driver.quit()
 
 if __name__ == '__main__':
-    pytest.main(['-v', 'test_houseXycfRegister'])
+    pytest.main(['-v', 'test_housePlxycfRegister'])
 
 
 
