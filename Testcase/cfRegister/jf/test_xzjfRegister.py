@@ -3,8 +3,8 @@ from init.dataInit import dataInit
 from pageObject.taskCenter import taskCenter
 from pageObject.queryFunc import queryFunc
 from pageObject.sjdPage import sjdPage
-from pageObject.sqrqkPage import sqrqkPage
 from pageObject.sqbPage import sqbPage
+from pageObject.bdcjbxxPage import bdcjbxxPage
 from pageObject.blyjPage import blyjPage
 from pageObject.logout import logout
 from dataCheck.dataResCheck import dataResCheck
@@ -16,22 +16,22 @@ logger = loggerConf().getLogger()
 
 @pytest.mark.test
 @pytest.mark.all
-class Test_houseSfcdRegister():
+class Test_xzjfRegister():
     def setup(self):
         '''初始化用户数据获取'''
         current_file_path = os.path.abspath(__file__).replace('\\', '/')
         self.data = getTestcaseData(getTestdataPath(current_file_path))
 
-    def test_houseSfcdRegister(self,login,cmdopt):
+    def test_landPljfRegister(self,login,cmdopt):
         '''
-        :流程 查封登记--司法裁定(房屋)（业务小类-->司法裁定）
+        :流程 查封登记--解封--小证解封
         :return:
         '''
         self.driver = login[0]
         dbInfo = login[1]
         # 获取办件数据
-        bdcdyh = dataInit().getHouseSfcdRegisterData()
-        logger.debug("<--------查封登记-->司法裁定（房屋）start-------->")
+        bdcdyh = dataInit().getXzxcfRegisterData()
+        logger.debug("<--------查封登记--解封--小证解封start-------->")
         logger.debug("<--------界面操作start-------->")
 
         # 办件中心
@@ -42,10 +42,10 @@ class Test_houseSfcdRegister():
         queryFunc(self.driver).query(bdcdyh, self.data)
         # 收件单
         sjdPage(self.driver).sjdHandle(self.data)
-        # 申请人情况
-        sqrqkPage(self.driver).sqrqkHandle(self.data)
         # 申请表
         sqbPage(self.driver).sqbHandle(self.data)
+        # 不动产基本信息
+        bdcjbxxPage(self.driver).bdcjbxxHandle(self.data)
         # 办理意见表
         blyjPage(self.driver).blyjHandle()
         # 受理
@@ -57,12 +57,12 @@ class Test_houseSfcdRegister():
         # 数据库校验
         try:
             logger.debug("<--------归档数据检查start-------->")
-            resDataCheck = dataResCheck().houseSfcdRegisterDataCheck(bdcdyh,self.data)
-            assert resDataCheck
+            resDataCheck = dataResCheck().xzJfRegisterDataCheck(bdcdyh,self.data)
             logger.debug("<--------归档数据检查end-------->")
+            assert resDataCheck
         except AssertionError:
             raise
-        logger.debug("<--------查封登记-->司法裁定（房屋）end-------->")
+        logger.debug("<--------查封登记--解封--小证解封end-------->")
 
     def teardown(self):
         logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n")
@@ -72,7 +72,7 @@ class Test_houseSfcdRegister():
         self.driver.quit()
 
 if __name__ == '__main__':
-    pytest.main(['-v', 'test_houseSfcdRegister'])
+    pytest.main(['-v', 'test_landPljfRegister'])
 
 
 

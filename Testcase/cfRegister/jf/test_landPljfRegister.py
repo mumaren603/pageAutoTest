@@ -27,11 +27,12 @@ class Test_landPljfRegister():
         :流程 查封登记--批量解封登记（净地）
         :return:
         '''
-        logger.debug("<--------查封登记-->批量解封登记（净地）-------->")
         self.driver = login[0]
         dbInfo = login[1]
         # 获取办件数据
         bdcdyh = dataInit().getLandXcfRegisterData()
+        logger.debug("<--------查封登记--解封--批量解封（净地）start-------->")
+        logger.debug("<--------界面操作start-------->")
 
         # 办件中心
         taskCenter(self.driver).common()
@@ -51,16 +52,20 @@ class Test_landPljfRegister():
         submitPage(self.driver).slHandle()
         # 登簿
         submitPage(self.driver).dbHandle(bdcdyh, self.data)
+        logger.debug("<--------界面操作end-------->")
 
         # 数据库校验
-        logger.debug("<--------归档数据检查-------->")
         try:
+            logger.debug("<--------归档数据检查start-------->")
             resDataCheck = dataResCheck().jfRegisterDataCheck(bdcdyh,self.data)
+            logger.debug("<--------归档数据检查end-------->")
             assert resDataCheck
         except AssertionError:
             raise
+        logger.debug("<--------查封登记--解封--批量解封（净地）end-------->")
 
     def teardown(self):
+        logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n")
         # 退出系统
         logout(self.driver).logout()
         # 退出浏览器
