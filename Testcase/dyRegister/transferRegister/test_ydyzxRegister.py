@@ -18,7 +18,6 @@ from Common.LogFunc import loggerConf
 logger = loggerConf().getLogger()
 
 @pytest.mark.test
-@pytest.mark.all
 class Test_ydyzxRegister():
     def setup(self):
         '''初始化用户数据获取'''
@@ -34,6 +33,7 @@ class Test_ydyzxRegister():
         # 获取办件数据
         bdcdyh = dataInit().getYdyzxRegisterData()
         logger.debug("<--------抵押权--转移登记--预告抵押转现start-------->")
+        logger.debug("<--------界面操作start-------->")
 
         # 办件中心
         taskCenter(self.driver).common()
@@ -51,27 +51,27 @@ class Test_ydyzxRegister():
         bdcjbxxPage(self.driver).bdcjbxxHandle(self.data)
         # 收费领证表
         # sflzbPage(self.driver).sflzbHandle()
-        # 房地产抵押合同
-        # htxxPage(self.driver).dyhtHandle()
-        # 询问笔录
-        # htxxPage(self.driver).xwjlHandle()
         # 办理意见表
         blyjPage(self.driver).blyjHandle()
         # 受理 审核
         submitPage(self.driver).slHandle()
         # 登簿
         submitPage(self.driver).dbHandle(bdcdyh, self.data)
-        logger.debug("<--------抵押权--转移登记--预告抵押转现end-------->")
+        logger.debug("<--------界面操作end-------->")
 
         # 数据库校验
-        logger.debug("<--------归档数据检查-------->")
         try:
+            logger.debug("<--------归档数据检查start-------->")
             resDataCheck = dataResCheck().dyRegisterDataCheck(bdcdyh, self.data)
             assert resDataCheck
+            logger.debug("<--------归档数据检查end-------->")
         except AssertionError:
             raise
+        logger.debug("<--------抵押权--转移登记--预告抵押转现end-------->")
+
 
     def teardown(self):
+        logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n")
         # 退出系统
         logout(self.driver).logout()
         # 退出浏览器
