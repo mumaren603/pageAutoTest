@@ -4,10 +4,11 @@
 :bdcdyh 不动产单元号，区分净地和房屋
 '''
 import time
-from Common.CommFunc import WebTools
+from Common.ToolsForOpertion import WebTools
 from Common.LogFunc import loggerConf
 
 logger = loggerConf().getLogger()
+import time
 
 class sjdPage():
     def __init__(self,driver):
@@ -35,15 +36,7 @@ class sjdPage():
         cqType = data.get('initdata').get('params', None).get('cqType', None)
         sffz = data.get('initdata').get('params', None).get('sffz', None)
 
-        WebTools(self.driver).mouse_click('link_text','收件单')
-        time.sleep(1)
         WebTools(self.driver).check_element_is_exists('xpath', "//*[@xid='sjdTable']//input[@xid='YWH']")
-
-        # # 根据是否批量判断刚进入流程是单个流程还是批量流程
-        # if sfpl == 1:
-        #     WebTools(self.driver).check_element_is_exists('xpath',"//input[@xid='YWH']")
-        # else:
-        #     WebTools(self.driver).check_element_is_exists('xpath',"//input[@xid='YWH']")
 
         # 业务小类选择
         if qllx == '国有建设用地使用权':

@@ -1,5 +1,5 @@
 import time
-from Common.CommFunc import WebTools
+from Common.ToolsForOpertion import WebTools
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By

@@ -1,5 +1,5 @@
 import time
-from Common.CommFunc import WebTools
+from Common.ToolsForOpertion import WebTools
 from init.userInfoInit import generateAddr,generateCertNum,generateDYQLRName,generateTelnum,generateQLRName
 
 class sqrqkPage():
@@ -199,24 +199,8 @@ class sqrqkPage():
                 WebTools(self.driver).input_content('xpath', "//input[@xid='SQRDHHM']", qlrdhhm)
                 # 在建房地产
             else:
-                self.driver.execute_script("document.documentElement.scrollTop=250")
-                WebTools(self.driver).check_element_is_exists('xpath',"//div[contains(text(),'抵押权人列表')]/../div[2]/span[3]")
-                WebTools(self.driver).mouse_click('xpath', '//table[@xid="underTable"]//span[contains(text(),"新增")]')
-                time.sleep(1)
-                # 姓名
-                WebTools(self.driver).input_content('xpath', "//input[@xid='SQRMC']", dyQlrmc)
-                # 是否通知
-                WebTools(self.driver).mouse_click('name', 'SFTZR')
-                # 证件类型
-                WebTools(self.driver).choose_droplist_value('SQRZJZL', 'xpath', "//select[@name='SQRZJZL']/option[4]")
-                # 证件号码
-                WebTools(self.driver).input_content('xpath', "//input[@xid='SQRZJH']", qlrzjhm)
-                # 电话
-                WebTools(self.driver).input_content('xpath', "//input[@xid='SQRDHHM']", qlrdhhm)
-                # 共有方式
-                WebTools(self.driver).choose_droplist_value('GYFS', 'xpath', "//select[@name='GYFS']/option[2]")
-                # 通讯地址
-                WebTools(self.driver).input_content('xpath', "//input[@xid='SQRTXDZ']", qlrtxdz)
+                pass
+
         elif qllx == '预告登记':
             if djlx == '首次登记':
                 # 预告和预抵义务人操作

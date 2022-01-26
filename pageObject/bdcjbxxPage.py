@@ -3,7 +3,7 @@
 :param driver  浏览器驱动
 '''
 import time
-from Common.CommFunc import WebTools
+from Common.ToolsForOpertion import WebTools
 from pageObject.queryFunc import queryFunc
 from Common.LogFunc import loggerConf
 import sys

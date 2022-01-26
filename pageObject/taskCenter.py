@@ -1,4 +1,4 @@
-from Common.CommFunc import WebTools
+from Common.ToolsForOpertion import WebTools
 from Common.LogFunc import loggerConf
 import time
 
@@ -191,6 +191,10 @@ class taskCenter():
                     # 不动产抵押注销
                     if ywlxID == 'BAA801115B3740868F1C8824102CABC7':
                         WebTools(self.driver).mouse_doubleClick('xpath', "//div[@ywlxid='BAA801115B3740868F1C8824102CABC7']/div[1]")
+                        time.sleep(2)
+                    # 土地抵押注销
+                    elif ywlxID == '68C62564D96242D5BED0619ED51A0CCC':
+                        WebTools(self.driver).mouse_doubleClick('xpath', "//div[@ywlxid='68C62564D96242D5BED0619ED51A0CCC']/div[1]")
                         time.sleep(2)
             elif qllx == '查封登记':
                 WebTools(self.driver).mouse_click('link_text', "查封登记")

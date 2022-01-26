@@ -2,7 +2,7 @@
 '''
 封装登出功能
 '''
-from Common.CommFunc import WebTools
+from Common.ToolsForOpertion import WebTools
 import time
 
 class logout():
