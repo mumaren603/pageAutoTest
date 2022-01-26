@@ -45,17 +45,13 @@ class Test_spfYgDyFirstRegister():
         # 收件单
         sjdPage(self.driver).sjdHandle(self.data)
         # 申请人情况
-        sqrqkPage(self.driver).sqrqkHandle(self.data,12)
+        sqrqkPage(self.driver).sqrqkHandle(self.data)
         # 申请表
         sqbPage(self.driver).sqbHandle(self.data)
         # 不动产基本信息
         bdcjbxxPage(self.driver).bdcjbxxHandle(self.data)
         # 收费领证表
         # sflzbPage(self.driver).sflzbHandle()
-        # 房地产抵押合同
-        # htxxPage(self.driver).dyhtHandle()
-        # 询问笔录
-        # htxxPage(self.driver).xwjlHandle()
         # 办理意见表
         blyjPage(self.driver).blyjHandle()
         # 受理
@@ -69,7 +65,7 @@ class Test_spfYgDyFirstRegister():
         # 数据库校验
         try:
             logger.debug("<--------归档数据检查start-------->")
-            resDataCheck = dataResCheck().spfYdyRegisterDataCheck(bdcdyh, self.data)
+            resDataCheck = dataResCheck().ygDyRegisterDataCheck(bdcdyh, self.data)
             assert resDataCheck
             logger.debug("<--------归档数据检查end-------->")
         except AssertionError:

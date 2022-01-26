@@ -52,10 +52,6 @@ class Test_spfYgFirstRegister():
         bdcjbxxPage(self.driver).bdcjbxxHandle(self.data)
         # 收费领证表
         # sflzbPage(self.driver).sflzbHandle()
-        # 房地产抵押合同
-        # htxxPage(self.driver).dyhtHandle()
-        # 询问笔录
-        # htxxPage(self.driver).xwjlHandle()
         # 办理意见表
         blyjPage(self.driver).blyjHandle()
         # 受理
@@ -69,7 +65,7 @@ class Test_spfYgFirstRegister():
         # 数据库校验
         try:
             logger.debug("<--------归档数据检查start-------->")
-            resDataCheck = dataResCheck().spfYgRegisterDataCheck(bdcdyh, self.data)
+            resDataCheck = dataResCheck().ygRegisterDataCheck(bdcdyh, self.data)
             assert resDataCheck
             logger.debug("<--------归档数据检查end-------->")
         except AssertionError:
