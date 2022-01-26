@@ -6,10 +6,9 @@ initdata:
     ywlxID: F92E0A9F7CC8429C862DE095D6A04AD4  #商品房（经适房）预抵押首次
   #小类
   params:
-    ywxl:
     sfpl: 0
     sffz: 1
-    cqType:
+    cqType: 1
     ygType: 1
 
 

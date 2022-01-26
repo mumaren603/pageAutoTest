@@ -9,7 +9,7 @@ initdata:
     ywxl: 预售商品房预告登记
     sfpl: 0
     sffz: 1
-    cqType:
+    cqType: 1
     ygType: 0
 
 
