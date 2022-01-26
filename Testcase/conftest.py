@@ -1,6 +1,6 @@
 import pytest
 from selenium import webdriver
-from Common.CommFunc import WebTools
+from Common.ToolsForOpertion import WebTools
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
