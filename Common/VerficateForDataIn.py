@@ -1,4 +1,7 @@
-'''公共校验'''
+'''
+    公共校验
+    针对流程入口数据检查
+'''
 from dbAction.dbHelper import DJ_DB, QJ_DB
 from Common.LogFunc import loggerConf
 
@@ -93,7 +96,7 @@ class verificator():
         :param queryData: 查询入参
         :return:
         '''
-        queryDjbenSQL = "select count(1) from dj_djben where zt='1' and sfyx=1 and sfysczql=1 and bdcdyh='" + queryData + "'"
+        queryDjbenSQL = "select count(1) from dj_djben where zt='1' and sfyx=1 and bdcdyh='" + queryData + "'"
         queryDjbenSQLRes = self.djObj.fetchone(queryDjbenSQL)
         if queryDjbenSQLRes != 1:
             logger.warning("查询单元存在多条现势登记本记录或不存在现势记录")
