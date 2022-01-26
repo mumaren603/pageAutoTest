@@ -1,9 +1,9 @@
 """
-数据初始化，即我们测试用例在运行过程中需要使用到数据预先准备好
+数据初始化，为测试流程，功能准备数据
 """
 from Common.LogFunc import loggerConf
 from dbAction.dbHelper import DJ_DB, QJ_DB
-from Common.CommVerficate import verificator
+from Common.VerficateForDataIn import verificator
 import sys
 
 logger = loggerConf().getLogger()
@@ -491,10 +491,25 @@ class dataInit():
             logger.error("未查询到有效数据，请检查sql语句正确性或数据库是否存在符合条件数据。")
             sys.exit(-1)
 
-    # 土地抵押转移查询数据
-    def getLandDyChangeRegisterData(self):
+    # 做过抵押（净地）
+    def getLandDyRegisterData(self):
         logger.debug("<--------查询入参数据start-------->")
-        querySQL = "select a.bdcdyh from (select djbid,bdcdyh from djjgk.dj_jsydsyq where qllx = '3' and zt = '1' and sfyx = 1 and bdcdyh not like '%9999%') a inner join (select id,bdcdyh from djjgk.dj_djben where sfdy = 1 and sfcf = 0 and sfzzdj = 0 and sfysczql = 1 and zt = '1' and sfyx = 1) b on a.djbid = b.id inner join(select djbid from djjgk.dj_dy_djben_zm where sfyx=1 and sfdy=1 )c on a.djbid = c.djbid and rownum < 50 order by dbms_random.value()"
+        querySQL = "select distinct a.bdcdyh " \
+                   "from dj_dy a,dj_djben b,dj_dy_djben_zm c " \
+                   "where a.djbid = b.id " \
+                   "and a.id =c.qlbid " \
+                   "and a.zt='1' " \
+                   "and a.sfyx=1 " \
+                   "and a.dybdclx='1' " \
+                   "and a.bdcdyh like '%W%' " \
+                   "and b.zt='1' " \
+                   "and b.sfyx=1 " \
+                   "and b.sfdy=1 " \
+                   "and b.sfcf=0 " \
+                   "and c.sfyx=1 " \
+                   "and c.bdclx='0' " \
+                   "and rownum <50 " \
+                   "order by dbms_random.value()"
         queryRes = self.djObj.fetchone(querySQL)
         logger.debug("查询sql为：%s" % querySQL)
         logger.debug("查询办件数据-->%s" % queryRes)
@@ -505,12 +520,11 @@ class dataInit():
                 logger.debug("待登记办件数据-->%s" % queryRes)
                 logger.debug("<--------查询入参数据end-------->")
                 return queryRes
-            return dataInit().getLandDyChangeRegisterData()
+            return dataInit().getLandDyRegisterData()
         else:
             logger.error("未查询到有效数据，请检查sql语句正确性或数据库是否存在符合条件数据。")
             sys.exit(-1)
 
-            return queryRes
 
     # 做过抵押（房屋）
     def getHouseDyRegisterData(self):
@@ -522,6 +536,7 @@ class dataInit():
                    "and a.zt='1' " \
                    "and a.sfyx=1 " \
                    "and a.dybdclx='2' " \
+                   "and a.bdcdyh like '%F%' " \
                    "and b.zt='1' " \
                    "and b.sfyx=1 " \
                    "and b.sfdy=1 " \
@@ -576,19 +591,17 @@ class dataInit():
     # 商品房预告首次登记
     def getSpfYgRegisterData(self):
         logger.debug("<--------查询入参数据start-------->")
-        querySQL = "select a.bdcdyh from " \
-                   "(select bdcdyh,fwbh,lszfwbh " \
-                   "from dc_h_fwzk where zt = '1' and sfyx = '0') a " \
-                   "left join " \
-                   "(select fwbh from dc_h where zt = '1') b " \
-                   "on a.fwbh = b.fwbh " \
-                   "left join " \
-                   "(select fwbh,zddm from dc_z where zt = '1') c " \
-                   "on a.lszfwbh = c.fwbh " \
-                   "left join " \
-                   "(select zddm from dc_djdcbxx where zt = '1' and sfyx = '1') d " \
-                   "on c.zddm = d.zddm " \
-                   "where 1 = 1 " \
+        querySQL = "select distinct a.bdcdyh " \
+                   "from dc_h a,dc_h_fwzk b,dc_z c,dc_djdcbxx d " \
+                   "where a.fwbh = b.fwbh " \
+                   "and a.lszfwbh =c.fwbh " \
+                   "and c.zddm = d.zddm " \
+                   "and a.zt='1' " \
+                   "and a.sfyx=0 " \
+                   "and b.zt='1' " \
+                   "and b.sfyx=0 " \
+                   "and c.zt='1' " \
+                   "and d.zt='1' " \
                    "and a.bdcdyh > '0' " \
                    "and rownum < 50 " \
                    "order by dbms_random.value()"
@@ -639,7 +652,7 @@ class dataInit():
                 logger.debug("待登记办件数据-->%s" % queryRes)
                 logger.debug("<--------查询入参数据end-------->")
                 return queryRes
-            return dataInit().getSpfYgRegisterData()
+            return dataInit().getSpfYgDyRegisterData()
         else:
             logger.error("未查询到有效数据，请检查sql语句正确性或数据库是否存在符合条件数据。")
             sys.exit(-1)
