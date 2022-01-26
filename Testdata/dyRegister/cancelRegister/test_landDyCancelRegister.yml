@@ -1,0 +1,10 @@
+initdata:
+  #流程
+  lcInfo:
+    qllx: 抵押权
+    djlx: 注销登记
+    ywlxID: 68C62564D96242D5BED0619ED51A0CCC  #净地抵押注销
+  #小类
+  params:
+    cqType: 0
+
