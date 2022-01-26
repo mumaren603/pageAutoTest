@@ -1,3 +1,7 @@
+'''
+模拟鼠标单击、双击、键盘输入等操作
+'''
+
 import os
 import time,datetime
 import allure
@@ -259,20 +263,20 @@ class WebTools(object):
     def check_element_is_exists(self, type, value):
         try:
             if type == "xpath":
-                WebDriverWait(self.driver, 12).until(EC.visibility_of_element_located((By.XPATH,value)))
+                WebDriverWait(self.driver, 15).until(EC.visibility_of_element_located((By.XPATH,value)))
                 time.sleep(1)
             elif type == "id":
                 time.sleep(1)
-                WebDriverWait(self.driver, 12).until(EC.visibility_of_element_located((By.ID,value)))
+                WebDriverWait(self.driver, 15).until(EC.visibility_of_element_located((By.ID,value)))
             elif type == "class_name":
                 time.sleep(1)
-                WebDriverWait(self.driver, 12).until(EC.visibility_of_element_located((By.CLASS_NAME,value)))
+                WebDriverWait(self.driver, 15).until(EC.visibility_of_element_located((By.CLASS_NAME,value)))
             elif type == "name":
                 time.sleep(1)
-                WebDriverWait(self.driver, 12).until(EC.visibility_of_element_located((By.NAME,value)))
+                WebDriverWait(self.driver, 15).until(EC.visibility_of_element_located((By.NAME,value)))
             elif type == "link_text":
                 time.sleep(1)
-                WebDriverWait(self.driver, 12).until(EC.visibility_of_element_located((By.LINK_TEXT,value)))
+                WebDriverWait(self.driver, 15).until(EC.visibility_of_element_located((By.LINK_TEXT,value)))
         except NoSuchElementException as e1:
             logger.error("%s:%s查找页面元素不存在" %(type,value))
             self.save_screenshot('查找页面元素不存在')
