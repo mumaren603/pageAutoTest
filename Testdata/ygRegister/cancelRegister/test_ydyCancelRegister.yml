@@ -6,4 +6,4 @@ initdata:
     ywlxID: C956D29C47DE4699AD31A620F82961EC  #商品房预告注销登记
   #小类
   params:
-    ywxl:
+    cqType: 1
