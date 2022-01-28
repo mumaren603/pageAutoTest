@@ -108,7 +108,6 @@ class dataResCheck():
     #         self.db_qj_conn.closeConn()
     #
 
-
     # 裁定过户（房）
     def cdghHouseRegisterDataCheck(self,bdcdyh,data):
         ywlxID = data.get('initdata').get('lcInfo', None).get('ywlxID', None)
@@ -254,8 +253,28 @@ class dataResCheck():
         return True
 
     # 预告抵押
-    def ygDyRegisterDataCheck(self, bdcdyh, data):
-        res = registerCheck().getYgDyRegisterRes(bdcdyh,data)
+    def ydyRegisterDataCheck(self, bdcdyh, data):
+        res = registerCheck().getYdyRegisterRes(bdcdyh,data)
+        for i in res:
+            if not i:
+                logger.error("数据库数据归档错误。")
+                return False
+        logger.debug("数据库数据归档正确。")
+        return True
+
+    # 预告注销
+    def ygCancelRegisterDataCheck(self, bdcdyh, data):
+        res = registerCheck().getYgCancelRegisterRes(bdcdyh,data)
+        for i in res:
+            if not i:
+                logger.error("数据库数据归档错误。")
+                return False
+        logger.debug("数据库数据归档正确。")
+        return True
+
+    # 预抵押注销
+    def ydyCancelRegisterDataCheck(self, bdcdyh, data):
+        res = registerCheck().getYdyCancelRegisterRes(bdcdyh,data)
         for i in res:
             if not i:
                 logger.error("数据库数据归档错误。")
@@ -519,153 +538,7 @@ class dataResCheck():
         logger.debug("数据库数据归档正确。")
         return True
 
-    '''>>>>>>>>>>>>预告类<<<<<<<<<<<<'''
-    # 预告注销登记
-    def ygCancelRegisterDataCheck(self, bdcdyh, data):
-        ywlxID = data.get('initdata').get('lcInfo', None).get('ywlxID', None)
-        try:
-            sql_yw_sqxx_ywh = "select ywh from yw_sqxx t where ajzt='2' and to_char(cjsj,'yyyy-mm-dd') = to_char(sysdate,'yyyy-mm-dd') and ywlx ='" + ywlxID + "' and bdcdyh='" + bdcdyh + "'"
-            res_yw_sqxx_ywh = self.djObj.fetchone(sql_yw_sqxx_ywh)
-            logger.debug("yw_sqxx表查询sql：%s" % sql_yw_sqxx_ywh)
-            logger.debug("yw_sqxx表ywh：%s" % res_yw_sqxx_ywh)
-
-            sql_dj_yg_id = "select id from dj_yg where zt='2' and sfyx=1 and zxywh='" + res_yw_sqxx_ywh + "'"
-            res_dj_yg_id = str(self.djObj.fetchone(sql_dj_yg_id))
-            logger.debug("dj_yg表id：%s" % res_dj_yg_id)
-
-            sql_dj_yg_djbid = "select djbid from dj_yg where zt='2' and sfyx=1 and zxywh='" + res_yw_sqxx_ywh + "'"
-            res_dj_yg_djbid = str(self.djObj.fetchone(sql_dj_yg_djbid))
-            logger.debug("dj_yg表djbid：%s" % res_dj_yg_djbid)
-
-            sql_dj_yg_hid = "select hid from dj_yg where zt='2' and sfyx=1 and zxywh='" + res_yw_sqxx_ywh + "'"
-            res_dj_yg_hid = self.djObj.fetchone(sql_dj_yg_hid)
-            logger.debug("dj_yg表hid：%s" % res_dj_yg_hid)
-
-            sql_dj_yg = "select count(1) from dj_yg where zt='2' and sfyx=1 and zxywh='" + res_yw_sqxx_ywh + "'"
-            res_dj_yg = self.djObj.fetchone(sql_dj_yg)
-            logger.debug("dj_yg表查询sql：%s" % sql_dj_yg)
-            logger.debug("dj_yg表查询记录数：%d" % res_dj_yg)
-
-            sql_dj_djben = "select count(1) from dj_djben where zt='1' and sfyx=1 and sfyg = 0 and id =" + res_dj_yg_djbid + ""
-            res_dj_djben = self.djObj.fetchone(sql_dj_djben)
-            logger.debug("dj_djben表查询sql：%s" % sql_dj_djben)
-            logger.debug("dj_djben表查询记录数：%d" % res_dj_djben)
-
-            sql_dj_qlrgl = "select count(1) from dj_qlrgl where zt='2' and sfyx=1 and qlbid =" + res_dj_yg_id + ""
-            res_dj_qlrgl = self.djObj.fetchone(sql_dj_qlrgl)
-            logger.debug("dj_qlrgl表查询sql：%s" % sql_dj_qlrgl)
-            logger.debug("dj_qlrgl表查询记录数：%d" % res_dj_qlrgl)
-
-            if res_dj_yg_hid:
-                sql_dj_ychxx = "select count(1) from dj_ychxx where zt='2' and sfyx=1 and id =" + str(res_dj_yg_hid) + ""
-                res_dj_ychxx = self.djObj.fetchone(sql_dj_ychxx)
-                logger.debug("dj_ychxx表查询sql：%s" % sql_dj_ychxx)
-                logger.debug("dj_ychxx表查询记录数：%d" % res_dj_ychxx)
-
-            # 证明类型（2）-->预告证明
-            sql_dj_zm = "select count(1) from dj_zm where zt='2' and sfyx=1 and zmlx='2' and djbid =" + res_dj_yg_djbid + ""
-            res_dj_zm = self.djObj.fetchone(sql_dj_zm)
-            logger.debug("dj_zm表查询sql：%s" % sql_dj_zm)
-            logger.debug("dj_zm表查询记录数：%d" % res_dj_zm)
-
-            if res_dj_yg_hid:
-                if res_dj_yg  and res_dj_djben and res_dj_qlrgl and res_dj_ychxx and res_dj_zm :
-                    logger.debug("数据库数据归档正确。")
-                    return True
-                else:
-                    logger.error("数据库数据归档错误。")
-                    return False
-            else:
-                if res_dj_yg  and res_dj_djben and res_dj_qlrgl  and res_dj_zm :
-                    logger.debug("数据库数据归档正确。")
-                    return True
-                else:
-                    logger.error("数据库数据归档错误。")
-                    return False
-        except Exception as e:
-            logger.error("数据库数据归档错误,错误信息为：%s" % e)
-        finally:
-            # 关闭数据库连接
-            self.db_dj_conn.closeConn()
-            self.db_qj_conn.closeConn()
-
-    # 预抵押注销登记
-    def ydyCancelRegisterDataCheck(self, bdcdyh, data):
-        ywlxID = data.get('initdata').get('lcInfo', None).get('ywlxID', None)
-        try:
-            sql_yw_sqxx_ywh = "select ywh from yw_sqxx t where ajzt='2' and to_char(cjsj,'yyyy-mm-dd') = to_char(sysdate,'yyyy-mm-dd') and ywlx ='" + ywlxID + "' and bdcdyh='" + bdcdyh + "'"
-            res_yw_sqxx_ywh = self.djObj.fetchone(sql_yw_sqxx_ywh)
-            logger.debug("yw_sqxx表查询sql：%s" % sql_yw_sqxx_ywh)
-            logger.debug("yw_sqxx表ywh：%s" % res_yw_sqxx_ywh)
-
-            sql_dj_ydy_id = "select id from dj_ydy where zt='2' and sfyx=1 and zxdyywh='" + res_yw_sqxx_ywh + "'"
-            res_dj_ydy_id = str(self.djObj.fetchone(sql_dj_ydy_id))
-            logger.debug("dj_ydy表id：%s" % res_dj_ydy_id)
-
-            sql_dj_ydy_djbid = "select djbid from dj_ydy where zt='2' and sfyx=1 and zxdyywh='" + res_yw_sqxx_ywh + "'"
-            res_dj_ydy_djbid = str(self.djObj.fetchone(sql_dj_ydy_djbid))
-            logger.debug("dj_ydy表djbid：%s" % res_dj_ydy_djbid)
-
-            sql_dj_ydy = "select count(1) from dj_ydy where zt='2' and sfyx=1 and zxdyywh='" + res_yw_sqxx_ywh + "'"
-            res_dj_ydy = self.djObj.fetchone(sql_dj_ydy)
-            logger.debug("dj_ydy表查询sql：%s" % sql_dj_ydy)
-            logger.debug("dj_ydy表查询记录数：%d" % res_dj_ydy)
-
-            # 查询该单元上是否存在其他现势抵押信息
-            sql_dj_ydy_count = "select count(1) from dj_ydy where zt='1' and sfyx=1 and bdcdyh='" + bdcdyh + "'"
-            res_dj_ydy_count = self.djObj.fetchone(sql_dj_ydy_count)
-            logger.debug("dj_ydy表查询sql：%s" % sql_dj_ydy_count)
-            logger.debug("dj_ydy表查询抵押条数：%d" % res_dj_ydy_count)
-
-            # 该单元只有一条抵押信息，登簿后sfydy=0
-            sql_dj_djben = "select count(1) from dj_djben where zt='1' and sfyx=1 and sfydy=0 and id =" + res_dj_ydy_djbid + ""
-            res_dj_djben = self.djObj.fetchone(sql_dj_djben)
-            logger.debug("dj_djben表查询sql：%s" % sql_dj_djben)
-            logger.debug("dj_djben表查询记录数：%d" % res_dj_djben)
-
-            # 该单元有其他抵押信息，登簿后sfydy=1
-            sql_dj_djben2 = "select count(1) from dj_djben where zt='1' and sfyx=1 and sfydy=1 and id =" + res_dj_ydy_djbid + ""
-            res_dj_djben2 = self.djObj.fetchone(sql_dj_djben2)
-            logger.debug("dj_djben表查询sql：%s" % sql_dj_djben2)
-            logger.debug("dj_djben表查询记录数：%d" % res_dj_djben2)
-
-            sql_dj_qlrgl = "select count(1) from dj_qlrgl where zt='2' and sfyx=1 and qlbid =" + res_dj_ydy_id + ""
-            res_dj_qlrgl = self.djObj.fetchone(sql_dj_qlrgl)
-            logger.debug("dj_qlrgl表查询sql：%s" % sql_dj_qlrgl)
-            logger.debug("dj_qlrgl表查询记录数：%d" % res_dj_qlrgl)
-
-            # 证明类型（3）-->预告抵押证明
-            sql_dj_zm = "select count(1) from dj_zm where zt='2' and sfyx=1 and zmlx='3' and djbid =" + res_dj_ydy_djbid + ""
-            res_dj_zm = self.djObj.fetchone(sql_dj_zm)
-            logger.debug("dj_zm表查询sql：%s" % sql_dj_zm)
-            logger.debug("dj_zm表查询记录数：%d" % res_dj_zm)
-
-
-            # 无其他预抵押信息
-            if not res_dj_ydy_count:
-                if res_dj_ydy  and res_dj_djben and res_dj_qlrgl and res_dj_zm :
-                    logger.debug("数据库数据归档正确。")
-                    return True
-                else:
-                    logger.error("数据库数据归档错误。")
-                    return False
-            else:
-                if res_dj_ydy and res_dj_djben2 and res_dj_qlrgl and res_dj_zm:
-                    logger.debug("数据库数据归档正确。")
-                    return True
-                else:
-                    logger.error("数据库数据归档错误。")
-                    return False
-        except Exception as e:
-            logger.error("数据库数据归档错误,错误信息为：%s" % e)
-        finally:
-            # 关闭数据库连接
-            self.db_dj_conn.closeConn()
-            self.db_qj_conn.closeConn()
-
-    #------------------------------------其他登记------------------------------------------#
-    #冻结登记
-    '''其他登记'''
+    '''>>>>>>>>>>>>其他类<<<<<<<<<<<<'''
     # 冻结登记
     def djRegisterDataCheck(self,bdcdyh,data):
         ywlxID = data.get('initdata').get('lcInfo', None).get('ywlxID', None)
@@ -725,7 +598,7 @@ class dataResCheck():
             self.db_dj_conn.closeConn()
             self.db_qj_conn.closeConn()
 
-    #解冻登记
+    # 解冻登记
     def jdRegisterDataCheck(self,bdcdyh,data):
         ywlxID = data.get('initdata').get('lcInfo', None).get('ywlxID', None)
         sfpl = data.get('initdata').get('params', None).get('sfpl', None)
