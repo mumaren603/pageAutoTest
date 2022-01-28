@@ -554,7 +554,7 @@ class registerCheck():
             res_id = str(res_id)
             res_djbid = str(res_djbid)
             res_zsbid = str(res_zsbid)
-            res_hid = str(res_hid)
+            res_hid = str(res_hid) if res_hid else None
 
             sql_dj_yg = "select count(1) from dj_yg where zt='1' and sfyx=1 and id='" + res_id + "'"
             res_dj_yg = self.djObj.fetchone(sql_dj_yg)
@@ -574,11 +574,12 @@ class registerCheck():
             logger.debug("dj_qlrgl表查询sql：%s" % sql_dj_qlrgl)
             logger.debug("dj_qlrgl表查询记录数：%d" % res_dj_qlrgl)
 
-            sql_dj_ychxx = "select count(1) from dj_ychxx where zt='1' and sfyx=1 and id =" + res_hid + ""
-            res_dj_ychxx = self.djObj.fetchone(sql_dj_ychxx)
-            resList.append(res_dj_ychxx)
-            logger.debug("dj_ychxx表查询sql：%s" % sql_dj_ychxx)
-            logger.debug("dj_ychxx表查询记录数：%d" % res_dj_ychxx)
+            if res_hid:
+                sql_dj_ychxx = "select count(1) from dj_ychxx where zt='1' and sfyx=1 and id =" + res_hid + ""
+                res_dj_ychxx = self.djObj.fetchone(sql_dj_ychxx)
+                resList.append(res_dj_ychxx)
+                logger.debug("dj_ychxx表查询sql：%s" % sql_dj_ychxx)
+                logger.debug("dj_ychxx表查询记录数：%d" % res_dj_ychxx)
 
             sql_dj_zm = "select count(1) from dj_zm where zt='1' and sfyx=1 and id =" + res_zsbid + ""
             res_dj_zm = self.djObj.fetchone(sql_dj_zm)
@@ -596,7 +597,7 @@ class registerCheck():
             sys.exit(-1)
 
     # 预告抵押登簿检查
-    def getYgDyRegisterRes(self,bdcdyh,data):
+    def getYdyRegisterRes(self,bdcdyh,data):
         cqType = data.get('initdata').get('params', None).get('cqType', None)
         sfpl = data.get('initdata').get('params', None).get('sfpl', None)
 
@@ -606,7 +607,7 @@ class registerCheck():
             res_id = str(res_id)
             res_djbid = str(res_djbid)
             res_zsbid = str(res_zsbid)
-            res_hid = str(res_hid)
+            res_hid = str(res_hid) if res_hid else None
 
             sql_dj_ydy = "select count(1) from dj_ydy where zt='1' and sfyx=1 and id='" + res_id + "'"
             res_dj_ydy = self.djObj.fetchone(sql_dj_ydy)
@@ -626,17 +627,138 @@ class registerCheck():
             logger.debug("dj_qlrgl表查询sql：%s" % sql_dj_qlrgl)
             logger.debug("dj_qlrgl表查询记录数：%d" % res_dj_qlrgl)
 
-            sql_dj_ychxx = "select count(1) from dj_ychxx where zt='1' and sfyx=1 and id =" + res_hid + ""
-            res_dj_ychxx = self.djObj.fetchone(sql_dj_ychxx)
-            resList.append(res_dj_ychxx)
-            logger.debug("dj_ychxx表查询sql：%s" % sql_dj_ychxx)
-            logger.debug("dj_ychxx表查询记录数：%d" % res_dj_ychxx)
+            if res_hid:
+                sql_dj_ychxx = "select count(1) from dj_ychxx where zt='1' and sfyx=1 and id =" + res_hid + ""
+                res_dj_ychxx = self.djObj.fetchone(sql_dj_ychxx)
+                resList.append(res_dj_ychxx)
+                logger.debug("dj_ychxx表查询sql：%s" % sql_dj_ychxx)
+                logger.debug("dj_ychxx表查询记录数：%d" % res_dj_ychxx)
 
             sql_dj_zm = "select count(1) from dj_zm where zt='1' and sfyx=1 and id =" + res_zsbid + ""
             res_dj_zm = self.djObj.fetchone(sql_dj_zm)
             resList.append(res_dj_zm)
             logger.debug("dj_zm表查询sql：%s" % sql_dj_zm)
             logger.debug("dj_zm表查询记录数：%d" % res_dj_zm)
+
+            if not resList:
+                logger.error("查询结果为空，请检查！")
+                sys.exit(-1)
+            return resList
+
+        except Exception as e:
+            logger.error("登簿入库检查异常，请检查SQL语法，具体详见：%s" % e)
+            sys.exit(-1)
+
+    # 预告注销登簿检查
+    def getYgCancelRegisterRes(self,bdcdyh,data):
+        cqType = data.get('initdata').get('params', None).get('cqType', None)
+        sfpl = data.get('initdata').get('params', None).get('sfpl', None)
+
+        resList = []
+        try:
+            res_id, res_djbid, res_zsbid,res_hid = rs.getYgRealtionData(bdcdyh, data)
+            res_id = str(res_id)
+            res_djbid = str(res_djbid)
+            res_zsbid = str(res_zsbid)
+            res_hid = str(res_hid) if res_hid else None
+
+            sql_dj_yg = "select count(1) from dj_yg where zt='2' and sfyx=1 and id='" + res_id + "'"
+            res_dj_yg = self.djObj.fetchone(sql_dj_yg)
+            resList.append(res_dj_yg)
+            logger.debug("dj_yg表查询sql：%s" % sql_dj_yg)
+            logger.debug("dj_yg表查询记录数：%d" % res_dj_yg)
+
+            sql_dj_djben = "select count(1) from dj_djben where zt='1' and sfyx=1 and sfyg=0 and id =" + res_djbid + ""
+            res_dj_djben = self.djObj.fetchone(sql_dj_djben)
+            resList.append(res_dj_djben)
+            logger.debug("dj_djben表查询sql：%s" % sql_dj_djben)
+            logger.debug("dj_djben表查询记录数：%d" % res_dj_djben)
+
+            sql_dj_qlrgl = "select count(1) from dj_qlrgl where zt='2' and sfyx=1 and qlbid =" + res_id + ""
+            res_dj_qlrgl = self.djObj.fetchone(sql_dj_qlrgl)
+            resList.append(res_dj_qlrgl)
+            logger.debug("dj_qlrgl表查询sql：%s" % sql_dj_qlrgl)
+            logger.debug("dj_qlrgl表查询记录数：%d" % res_dj_qlrgl)
+
+            if res_hid:
+                sql_dj_ychxx = "select count(1) from dj_ychxx where zt='2' and sfyx=1 and id =" + res_hid + ""
+                res_dj_ychxx = self.djObj.fetchone(sql_dj_ychxx)
+                resList.append(res_dj_ychxx)
+                logger.debug("dj_ychxx表查询sql：%s" % sql_dj_ychxx)
+                logger.debug("dj_ychxx表查询记录数：%d" % res_dj_ychxx)
+
+            # 证明类型（2）-->预告证明
+            sql_dj_zm = "select count(1) from dj_zm where zt='2' and sfyx=1 and id =" + res_zsbid + ""
+            res_dj_zm = self.djObj.fetchone(sql_dj_zm)
+            resList.append(res_dj_zm)
+            logger.debug("dj_zm表查询sql：%s" % sql_dj_zm)
+            logger.debug("dj_zm表查询记录数：%d" % res_dj_zm)
+
+            if not resList:
+                logger.error("查询结果为空，请检查！")
+                sys.exit(-1)
+            return resList
+
+        except Exception as e:
+            logger.error("登簿入库检查异常，请检查SQL语法，具体详见：%s" % e)
+            sys.exit(-1)
+
+    # 预告抵押注销登簿检查
+    def getYdyCancelRegisterRes(self,bdcdyh,data):
+        cqType = data.get('initdata').get('params', None).get('cqType', None)
+        sfpl = data.get('initdata').get('params', None).get('sfpl', None)
+
+        resList = []
+        try:
+            res_id, res_djbid, res_zsbid,res_hid = rs.getYdyRealtionData(bdcdyh, data)
+            res_id = str(res_id)
+            res_djbid = str(res_djbid)
+            res_zsbid = str(res_zsbid)
+            res_hid = str(res_hid) if res_hid else None
+
+            # 判断抵押数量
+            sql_dj_ydy_count = "select count(1) from dj_ydy where zt='1' and sfyx=1 and bdcdyh='" + bdcdyh + "'"
+            res_dj_ydy_count = self.djObj.fetchone(sql_dj_ydy_count)
+            logger.debug("dj_ydy表查询sql：%s" % sql_dj_ydy_count)
+            logger.debug("该单元共存在%d条现势抵押。" % res_dj_ydy_count)
+
+            sql_dj_ydy = "select count(1) from dj_ydy where zt='2' and sfyx=1 and id='" + res_id + "'"
+            res_dj_ydy = self.djObj.fetchone(sql_dj_ydy)
+            resList.append(res_dj_ydy)
+            logger.debug("dj_ydy表查询sql：%s" % sql_dj_ydy)
+            logger.debug("dj_ydy表查询记录为：%d" % res_dj_ydy)
+
+            if res_dj_ydy_count >= 1:
+                sql_dj_djben = "select count(1) from dj_djben where zt='1' and sfyx=1 and sfydy=1 and id ='" + res_djbid + "'"
+                res_dj_djben = self.djObj.fetchone(sql_dj_djben)
+                resList.append(res_dj_djben)
+                logger.debug("dj_djben表查询sql：%s" % sql_dj_djben)
+                logger.debug("dj_djben表查询记录为：%d" % res_dj_djben)
+            else:
+                sql_dj_djben = "select count(1) from dj_djben where zt='1' and sfyx=1 and sfydy=0 and id ='" + res_djbid + "'"
+                res_dj_djben = self.djObj.fetchone(sql_dj_djben)
+                resList.append(res_dj_djben)
+                logger.debug("dj_djben表查询sql：%s" % sql_dj_djben)
+                logger.debug("dj_djben表查询记录为：%d" % res_dj_djben)
+
+            sql_dj_qlrgl = "select count(1) from  dj_qlrgl where zt='2' and sfyx=1 and qlbid='" + res_id + "'"
+            res_dj_qlrgl = self.djObj.fetchone(sql_dj_qlrgl)
+            resList.append(res_dj_qlrgl)
+            logger.debug("dj_qlrgl表查询sql：%s" % sql_dj_qlrgl)
+            logger.debug("dj_qlrgl表查询记录为：%d" % res_dj_qlrgl)
+
+            if res_hid:
+                sql_dj_ychxx = "select count(1) from dj_ychxx where zt='2' and sfyx=1 and id =" + res_hid + ""
+                res_dj_ychxx = self.djObj.fetchone(sql_dj_ychxx)
+                resList.append(res_dj_ychxx)
+                logger.debug("dj_ychxx表查询sql：%s" % sql_dj_ychxx)
+                logger.debug("dj_ychxx表查询记录数：%d" % res_dj_ychxx)
+
+            sql_dj_zm = "select count(1) from dj_zm where zt='2' and sfyx=1 and id='" + res_zsbid + "'"
+            res_dj_zm = self.djObj.fetchone(sql_dj_zm)
+            resList.append(res_dj_zm)
+            logger.debug("dj_zm表查询sql：%s" % sql_dj_zm)
+            logger.debug("dj_zs表查询记录为：%d" % res_dj_zm)
 
             if not resList:
                 logger.error("查询结果为空，请检查！")
