@@ -52,8 +52,6 @@ class Test_ydyCancelRegister():
         bdcjbxxPage(self.driver).bdcjbxxHandle(self.data)
         # 收费领证表
         # sflzbPage(self.driver).sflzbHandle()
-        # 询问笔录
-        # htxxPage(self.driver).xwjlHandle()
         # 办理意见表
         blyjPage(self.driver).blyjHandle()
         # 受理

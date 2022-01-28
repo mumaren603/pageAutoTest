@@ -65,7 +65,7 @@ class Test_spfYgDyFirstRegister():
         # 数据库校验
         try:
             logger.debug("<--------归档数据检查start-------->")
-            resDataCheck = dataResCheck().ygDyRegisterDataCheck(bdcdyh, self.data)
+            resDataCheck = dataResCheck().ydyRegisterDataCheck(bdcdyh, self.data)
             assert resDataCheck
             logger.debug("<--------归档数据检查end-------->")
         except AssertionError:

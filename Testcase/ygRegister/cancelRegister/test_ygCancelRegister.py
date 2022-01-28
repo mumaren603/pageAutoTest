@@ -18,7 +18,6 @@ from Common.LogFunc import loggerConf
 logger = loggerConf().getLogger()
 
 @pytest.mark.test
-@pytest.mark.all
 class Test_ygCancelRegister():
     def setup(self):
         '''初始化用户数据获取'''
@@ -52,8 +51,6 @@ class Test_ygCancelRegister():
         bdcjbxxPage(self.driver).bdcjbxxHandle(self.data)
         # 收费领证表
         # sflzbPage(self.driver).sflzbHandle()
-        # 询问笔录
-        # htxxPage(self.driver).xwjlHandle()
         # 办理意见表
         blyjPage(self.driver).blyjHandle()
         # 受理
