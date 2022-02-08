@@ -35,8 +35,8 @@ class submitPage():
         WebTools(self.driver).mouse_click('xpath',"//span[@xid='search']")
 
         # 校验该数据是否存在
-        WebTools(self.driver).check_element_is_exists('xpath',"//div[contains(text(),'复审')]/../..")
-        WebTools(self.driver).mouse_doubleClick('xpath',"//div[contains(text(),'复审')]/../..")
+        WebTools(self.driver).check_element_is_exists('xpath',"//div[contains(text(),'初审') or contains(text(),'复审')]/../..")
+        WebTools(self.driver).mouse_doubleClick('xpath',"//div[contains(text(),'初审') or contains(text(),'复审')]/../..")
 
         # 填写复审/审核意见
         WebTools(self.driver).check_element_is_exists('xpath',"//textarea[@xid='currentShyj']")
