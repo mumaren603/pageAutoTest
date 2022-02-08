@@ -1,0 +1,9 @@
+initdata:
+  #流程
+  lcInfo:
+    qllx: 预告登记
+    djlx: 注销登记
+    ywlxID: 48F888726F514BB5B19ED79663D5CCBE  #净地预告注销登记
+  #小类
+  params:
+    cqType: 0
