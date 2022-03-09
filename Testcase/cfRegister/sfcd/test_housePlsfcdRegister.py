@@ -16,22 +16,22 @@ logger = loggerConf().getLogger()
 
 @pytest.mark.test
 @pytest.mark.all
-class Test_houseSfcdRegister():
+class Test_housePlsfcdRegister():
     def setup(self):
         '''初始化用户数据获取'''
         current_file_path = os.path.abspath(__file__).replace('\\', '/')
         self.data = getTestcaseData(getTestdataPath(current_file_path))
 
-    def test_houseSfcdRegister(self,login,cmdopt):
+    def test_housePlsfcdRegister(self,login,cmdopt):
         '''
-        :流程 查封登记--司法裁定(房屋)（业务小类-->司法裁定）
+        :流程 查封登记--司法裁定批量（房地））-- 不注销抵押
         :return:
         '''
         self.driver = login[0]
         dbInfo = login[1]
         # 获取办件数据
-        bdcdyh = dataInit().getHouseSfcdRegisterData()
-        logger.debug("<--------查封登记-->司法裁定（房屋）start-------->")
+        bdcdyh = dataInit().getSfcdRegisterData(self.data)
+        logger.debug("<--------查封登记-->司法裁定批量（房地）start-------->")
         logger.debug("<--------界面操作start-------->")
 
         # 办件中心
@@ -50,6 +50,10 @@ class Test_houseSfcdRegister():
         blyjPage(self.driver).blyjHandle()
         # 受理
         submitPage(self.driver).slHandle()
+        # 初审
+        submitPage(self.driver).shHandle(bdcdyh)
+        # 复审
+        submitPage(self.driver).shHandle(bdcdyh)
         # 登簿
         submitPage(self.driver).dbHandle(bdcdyh, self.data)
         logger.debug("<--------界面操作end-------->")
@@ -57,12 +61,12 @@ class Test_houseSfcdRegister():
         # 数据库校验
         try:
             logger.debug("<--------归档数据检查start-------->")
-            resDataCheck = dataResCheck().houseSfcdRegisterDataCheck(bdcdyh,self.data)
+            resDataCheck = dataResCheck().sfcdRegisterDataCheck(bdcdyh,self.data)
             assert resDataCheck
             logger.debug("<--------归档数据检查end-------->")
         except AssertionError:
             raise
-        logger.debug("<--------查封登记-->司法裁定（房屋）end-------->")
+        logger.debug("<--------查封登记-->司法裁定批量（房地）end-------->")
 
     def teardown(self):
         logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n")
@@ -72,7 +76,7 @@ class Test_houseSfcdRegister():
         self.driver.quit()
 
 if __name__ == '__main__':
-    pytest.main(['-v', 'test_houseSfcdRegister'])
+    pytest.main(['-v', 'test_housePlsfcdRegister'])
 
 
 

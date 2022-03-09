@@ -20,7 +20,6 @@ from Common.LogFunc import loggerConf
 logger = loggerConf().getLogger()
 
 @pytest.mark.test
-@pytest.mark.all
 class Test_xmldzFirstRegister():
     def setup(self):
         '''初始化用户数据获取'''

@@ -30,18 +30,14 @@ class sjdPage():
         :return:
         '''
         qllx = data.get('initdata').get('lcInfo',None).get('qllx',None)
-        djlx = data.get('initdata').get('lcInfo', None).get('djlx', None)
         ywlxID = data.get('initdata').get('lcInfo', None).get('ywlxID', None)
         ywxl = data.get('initdata').get('params', None).get('ywxl', None)
-        cqType = data.get('initdata').get('params', None).get('cqType', None)
         sffz = data.get('initdata').get('params', None).get('sffz', None)
 
         WebTools(self.driver).check_element_is_exists('xpath', "//*[@xid='sjdTable']//input[@xid='YWH']")
 
         # 业务小类选择
-        if qllx == '国有建设用地使用权':
-            pass
-        elif qllx == '国有建设用地使用权及房屋所有权':
+        if qllx == '国有建设用地使用权及房屋所有权':
             # 房屋首次转移登记
             if ywxl:
                 if ywlxID == '807BD8C295404AA19F2275CB830E5F4C':
@@ -76,27 +72,7 @@ class sjdPage():
                         return
             else:
                 pass
-        # 房屋抵押
-        elif qllx == '抵押权':
-            pass
-        # 查封登记--业务小类
-        elif qllx == '查封登记':
-            if ywxl:
-                # 司法裁定（房和地）
-                if ywlxID == '4858445B1488454F970428A2436F54D5' or ywlxID == '8FEAF5CC34DF49C88B7E3139F8C0B18A' :
-                    if ywxl == '司法裁定':
-                        WebTools(self.driver).choose_droplist_value('ywxl', 'xpath', "//select[@name='ywxl']/option[2]")
-                    elif ywxl == '法院拍卖解封':
-                        WebTools(self.driver).choose_droplist_value('ywxl', 'xpath', "//select[@name='ywxl']/option[3]")
-                # 普通查封流程
-                else:
-                    if ywxl == '查封':
-                        WebTools(self.driver).choose_droplist_value('ywxl', 'xpath', "//select[@name='ywxl']/option[2]")
-                    elif ywxl == '轮候查封':
-                        WebTools(self.driver).choose_droplist_value('ywxl', 'xpath', "//select[@name='ywxl']/option[3]")
-                    else:
-                        logger.error("%s收件单业务小类必选！" % qllx)
-                        return
+
         # 是否发证
         if sffz == 1:
             # 领证地址

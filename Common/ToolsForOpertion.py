@@ -166,6 +166,8 @@ class WebTools(object):
                 self.driver.find_element_by_class_name(value).click()
             elif type == "id":
                 self.driver.find_element_by_id(value).click()
+            elif type == "xid":
+                self.driver.find_element_by_xid(value).click()
             elif type == "name":
                 self.driver.find_element_by_name(value).click()
             elif type == "link_text":

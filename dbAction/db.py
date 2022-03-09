@@ -1,4 +1,5 @@
 #Author: ls Liu
+'''已废弃 改用数据池'''
 import cx_Oracle as Oracle
 from Common.LogFunc import loggerConf
 import sys

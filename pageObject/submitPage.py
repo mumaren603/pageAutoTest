@@ -16,6 +16,8 @@ class submitPage():
         '''
         # 提交
         WebTools(self.driver).mouse_click('xpath', '//span[@functionname="commitBtnClick"]')
+        # 针对页面点击确定弹出框提示信息，点击确定
+        WebTools(self.driver).allow_element_is_exists('class_name', 'BeAlert_box')
         # 受理环节弹出框确定按钮
         WebTools(self.driver).check_element_is_exists('xpath', "//a[@xid='okBtn']")
         time.sleep(1)

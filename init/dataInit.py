@@ -13,28 +13,102 @@ class dataInit():
         self.djObj = DJ_DB()
         self.qjObj = QJ_DB()
 
+    # 产权未登记
+    # def getCqNotRegisterData(self,data):
+    #     cqType = data.get('initdata').get('params', None).get('cqType', None)
+    #     logger.debug("<--------查询入参数据start-------->")
+    #     if cqType == 0:
+    #         querySQL = "select bdcdyh from dc_djdcbxx " \
+    #                    "where zt='1' " \
+    #                    "and sfyx='0' " \
+    #                    "and tdzl>'0' " \
+    #                    "and qllx='3' " \
+    #                    "and bdcdyh >'0' " \
+    #                    "and qlxz>'0'  " \
+    #                    "and zdmj > '0' " \
+    #                    "and pzmj >'0' " \
+    #                    "and pzytdlbm > '0' " \
+    #                    "and rownum < 30 " \
+    #                    "order by dbms_random.value()"
+    #     elif cqType ==1:
+    #         querySQL = "select a.bdcdyh from " \
+    #                    "(select bdcdyh, fwbh, lszfwbh " \
+    #                    "from dc_h_fwzk " \
+    #                    "where zt = '1' " \
+    #                    "and sfyx = '0' " \
+    #                    "and fwyt1 > '0' " \
+    #                    "and scjzmj > '0' " \
+    #                    "and bdcdyh like '%GB%' " \
+    #                    "and (fwlx = '1' or fwlx = '2' or fwlx = '3' or fwlx = '4' or fwlx = '99'))a " \
+    #                    "left join " \
+    #                    "(select fwbh " \
+    #                    "from dc_h " \
+    #                    "where zt = '1' " \
+    #                    "and bdcdyh > '0') b " \
+    #                    "on a.fwbh = b.fwbh " \
+    #                    "left join " \
+    #                    "(select zddm, fwbh " \
+    #                    "from dc_z " \
+    #                    "where zt = '1') c " \
+    #                    "on a.lszfwbh = c.fwbh " \
+    #                    "inner join " \
+    #                    "(select zddm " \
+    #                    "from dc_djdcbxx " \
+    #                    "where zt = '1' " \
+    #                    "and sfyx = '1') d " \
+    #                    "on c.zddm = d.zddm  " \
+    #                    "order by dbms_random.value()"
+    #     queryRes = self.qjObj.fetchone(querySQL)
+    #     logger.debug("查询sql为：%s" % querySQL)
+    #     logger.debug("查询办件数据-->%s" % queryRes)
+    #     if queryRes:
+    #         # 是否已登记检查
+    #         verifyRes = verificator().cqIsRegisterVerify(cqType,queryRes)
+    #         if verifyRes:
+    #             logger.debug("待登记办件数据-->%s" % queryRes)
+    #             logger.debug("<--------查询入参数据end-------->")
+    #             return queryRes
+    #         return dataInit().getCqNotRegisterData(data)
+    #     else:
+    #         logger.error("未查询到权籍有效数据，请检查sql语句正确性或数据库是否存在符合条件数据。")
+    #         sys.exit(-1)
+
     '''国有建设用地使用权'''
     # 净地未登记
-    def getLandCqNotRegisterData(self):
+    def getLandCqNotRegisterData(self,data):
+        cqType = data.get('initdata').get('params', None).get('cqType', None)
         logger.debug("<--------查询入参数据start-------->")
-        querySQL = "select bdcdyh from dc_djdcbxx where zt='1' and sfyx='0' and tdzl>'0' and qllx='3' and bdcdyh >'0' and qlxz>'0'  and zdmj > '0' and pzmj >'0' and pzytdlbm > '0' and qlrmc > '0' and rownum < 30 order by dbms_random.value()"
+        querySQL = "select bdcdyh from dc_djdcbxx " \
+                   "where zt='1' " \
+                   "and sfyx='0' " \
+                   "and tdzl>'0' " \
+                   "and qllx='3' " \
+                   "and bdcdyh >'0' " \
+                   "and qlxz>'0'  " \
+                   "and zdmj > '0' " \
+                   "and pzmj >'0' " \
+                   "and pzytdlbm > '0' " \
+                   "and qlrmc > '0' " \
+                   "and rownum < 30 " \
+                   "order by dbms_random.value()"
         queryRes = self.qjObj.fetchone(querySQL)
         logger.debug("查询sql为：%s" % querySQL)
         logger.debug("查询办件数据-->%s" % queryRes)
         if queryRes:
-            # 检查该数据是否在登记平台做过登记,若已登记，发起流程会校验住，确保数据在权藉存在，在登记平台未做过登记
-            verifyRes = verificator().landIsRegisterVerify(queryRes)
+            # 是否已登记检查
+            verifyRes = verificator().cqIsRegisterVerify(cqType,queryRes)
             if verifyRes:
                 logger.debug("待登记办件数据-->%s" % queryRes)
                 logger.debug("<--------查询入参数据end-------->")
                 return queryRes
-            return dataInit().getLandCqNotRegisterData()
+            return dataInit().getLandCqNotRegisterData(data)
         else:
             logger.error("未查询到权籍有效数据，请检查sql语句正确性或数据库是否存在符合条件数据。")
             sys.exit(-1)
 
     # 净地已登记
-    def getLandCqRegisterData(self):
+    def getLandCqRegisterData(self,data):
+        cqType = data.get('initdata').get('params', None).get('cqType', None)
         logger.debug("<--------查询入参数据start-------->")
         querySQL = "select distinct a.bdcdyh " \
                    "from dj_jsydsyq a,dj_djben b,dj_tdxx c " \
@@ -61,14 +135,14 @@ class dataInit():
         logger.debug("查询办件数据-->%s" % queryRes)
         if queryRes:
              # 多条产权检查
-             verifyRes1 = verificator().tooManyCqResultVerify(0,queryRes)
+             verifyRes1 = verificator().tooManyCqResultVerify(cqType,queryRes)
              # 在办件检查
              verifyRes2 = verificator().processVerify(queryRes)
              if verifyRes1 and verifyRes2:
                  logger.debug("待登记办件数据-->%s" % queryRes)
                  logger.debug("<--------查询入参数据end-------->")
                  return queryRes
-             return dataInit().getLandCqRegisterData()
+             return dataInit().getLandCqRegisterData(data)
         else:
             logger.error("未查询到登记有效数据，请检查sql语句正确性或数据库是否存在符合条件数据。")
             sys.exit(-1)
@@ -658,21 +732,37 @@ class dataInit():
             sys.exit(-1)
 
     # 预告注销登记
-    def getYgCancelRegisterData(self):
+    def getYgCancelRegisterData(self,data):
+        cqType = data.get('initdata').get('params', None).get('cqType', None)
         logger.debug("<--------查询入参数据start-------->")
-        querySQL = "select a.bdcdyh " \
-                   "from dj_yg a,dj_djben b " \
-                   "where a.djbid = b.id " \
-                   "and a.zt='1' " \
-                   "and a.sfyx=1 " \
-                   "and a.fwdm >'0' " \
-                   "and b.zt='1' " \
-                   "and b.sfyx=1 " \
-                   "and b.sfyg=1 " \
-                   "and b.sfycf=0 " \
-                   "and a.bdcdyh like '%F%'" \
-                   "and rownum < 50 " \
-                   "order by dbms_random.value()"
+        if cqType == 1:
+            querySQL = "select a.bdcdyh " \
+                       "from dj_yg a,dj_djben b " \
+                       "where a.djbid = b.id " \
+                       "and a.zt='1' " \
+                       "and a.sfyx=1 " \
+                       "and a.fwdm >'0' " \
+                       "and b.zt='1' " \
+                       "and b.sfyx=1 " \
+                       "and b.sfyg=1 " \
+                       "and b.sfycf=0 " \
+                       "and a.bdcdyh like '%F%'" \
+                       "and rownum < 50 " \
+                       "order by dbms_random.value()"
+        elif cqType == 0:
+            querySQL = "select a.bdcdyh " \
+                       "from dj_yg a,dj_djben b " \
+                       "where a.djbid = b.id " \
+                       "and a.zt='1' " \
+                       "and a.sfyx=1 " \
+                       "and b.zt='1' " \
+                       "and b.sfyx=1 " \
+                       "and b.sfyg=1 " \
+                       "and b.sfycf=0 " \
+                       "and a.bdcdyh like '%W%'" \
+                       "and rownum < 50 " \
+                       "order by dbms_random.value()"
+        logger.debug("<--------查询入参数据start-------->")
         queryRes = self.djObj.fetchone(querySQL)
         logger.debug("查询sql为：%s" % querySQL)
         logger.debug("查询办件数据-->%s" % queryRes)
@@ -683,7 +773,7 @@ class dataInit():
                 logger.debug("待登记办件数据-->%s" % queryRes)
                 logger.debug("<--------查询入参数据end-------->")
                 return queryRes
-            return dataInit().getYgCancelRegisterData()
+            return dataInit().getYgCancelRegisterData(data)
         else:
             logger.error("未查询到有效数据，请检查sql语句正确性或数据库是否存在符合条件数据。")
             sys.exit(-1)
@@ -719,7 +809,11 @@ class dataInit():
                 logger.debug("待登记办件数据-->%s" % queryRes)
                 logger.debug("<--------查询入参数据end-------->")
                 return queryRes
-            return dataInit().getSpfYgRegisterData()
+            return dataInit().getYdyCancelRegisterData()
+        else:
+            logger.error("未查询到有效数据，请检查sql语句正确性或数据库是否存在符合条件数据。")
+            sys.exit(-1)
+
 
         #
         #     # 存在多条现势土地信息校验
@@ -928,32 +1022,47 @@ class dataInit():
             sys.exit(-1)
 
     # 司法裁定（房屋）
-    def getHouseSfcdRegisterData(self):
+    def getSfcdRegisterData(self,data):
+        cqType = data.get('initdata').get('params', None).get('cqType', None)
+
         logger.debug("<--------查询入参数据start-------->")
-        querySQL =  "select distinct a.bdcdyh " \
-                    "from dj_cf a,dj_fdcq2 b,dj_djben c,dj_fdcq2_djben_zs d " \
-                    "where a.cqbid = b.id " \
-                    "and b.djbid = c.id " \
-                    "and b.id = d.qlbid " \
-                    "and a.zt='1' and a.sfyx=1 and a.bdcdyh > '0' " \
-                    "and b.zt='1' and b.sfyx=1 " \
-                    "and c.zt='1' and c.sfyx=1 and c.sfcf=1 and c.sfsfcd = 0 " \
-                    "and d.sfyx=1 and d.sfcf=1 and d.sfsfcd = 0 " \
-                    "and rownum <50 " \
-                    "order by dbms_random.value("
+        if cqType == 0:
+            querySQL = "select distinct d.bdcdyh " \
+                       "from dj_dy a, dj_djben b,dj_cf c,dj_jsydsyq d " \
+                       "where a.cqbid = d.id " \
+                       "and a.djbid = b.id " \
+                       "and c.cqbid = d.id  " \
+                       "and a.zt='1' and a.sfyx=1 " \
+                       "and b.zt='1' and b.sfyx=1 and b.sfdy=1 and b.sfcf=1 " \
+                       "and c.zt='1' and c.sfyx=1 " \
+                       "and d.zt='1' and d.sfyx=1 and d.bdcdyh >'0' " \
+                       "and rownum <50 " \
+                       "order by dbms_random.value()"
+        elif cqType == 1:
+            querySQL = "select distinct d.bdcdyh " \
+                       "from dj_dy a, dj_djben b,dj_cf c,dj_fdcq2 d " \
+                       "where a.cqbid = d.id " \
+                       "and a.djbid = b.id " \
+                       "and c.cqbid = d.id  " \
+                       "and a.zt='1' and a.sfyx=1 " \
+                       "and b.zt='1' and b.sfyx=1 and b.sfdy=1 and b.sfcf=1 " \
+                       "and c.zt='1' and c.sfyx=1 " \
+                       "and d.zt='1' and d.sfyx=1 and d.bdcdyh >'0' " \
+                       "and rownum <50 " \
+                       "order by dbms_random.value()"
         queryRes = self.djObj.fetchone(querySQL)
         logger.debug("查询sql为：%s" % querySQL)
         logger.debug("查询办件数据-->%s" % queryRes)
         if queryRes:
             # 多条产权校验
-            verifyRes1 = verificator().tooManyCqResultVerify(1,queryRes)
+            verifyRes1 = verificator().tooManyCqResultVerify(cqType,queryRes)
             # 在办件检查
             verifyRes2 = verificator().processVerify(queryRes)
             if verifyRes1 and verifyRes2:
                 logger.debug("待登记办件数据-->%s" % queryRes)
                 logger.debug("<--------查询入参数据end-------->")
                 return queryRes
-            return dataInit().getHouseSfcdRegisterData()
+            return dataInit().getSfcdRegisterData(data)
         else:
             logger.error("未查询到有效数据，请检查sql语句正确性或数据库是否存在符合条件数据。")
             sys.exit(-1)

@@ -1,0 +1,11 @@
+initdata:
+  #流程
+  lcInfo:
+    qllx: 查封登记
+    djlx: 司法裁定
+    ywlxID: EF4D6596ED6347DDA33471FCFA7E973A # 批量司法裁定(净地)
+  #小类
+  params:
+    sfpl: 1
+    cqType: 0
+    sfdyzx: 1

@@ -36,7 +36,7 @@ class Test_landFirstRegister():
         self.driver = login[0]
         dbInfo = login[1]
         # 获取办件数据
-        bdcdyh = dataInit().getLandCqNotRegisterData()
+        bdcdyh = dataInit().getLandCqNotRegisterData(self.data)
         logger.debug("<--------国有建设用地使用权--首次登记--出让登记start-------->")
         logger.debug("<--------界面操作start-------->")
 

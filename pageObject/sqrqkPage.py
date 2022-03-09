@@ -19,7 +19,7 @@ class sqrqkPage():
         qllx = data.get('initdata').get('lcInfo',None).get('qllx',None)
         djlx = data.get('initdata').get('lcInfo', None).get('djlx', None)
         ywlxID = data.get('initdata').get('lcInfo', None).get('ywlxID', None)
-        ygType = data.get('initdata').get('params', None).get('ygType', None)
+        sfydy = data.get('initdata').get('params', None).get('sfydy', None)
 
         WebTools(self.driver).check_element_is_exists('link_text','申请人情况')
         WebTools(self.driver).mouse_click('link_text', '申请人情况')
@@ -200,7 +200,6 @@ class sqrqkPage():
                 # 在建房地产
             else:
                 pass
-
         elif qllx == '预告登记':
             if djlx == '首次登记':
                 # 预告和预抵义务人操作
@@ -248,7 +247,7 @@ class sqrqkPage():
                 #     # # 证件号码
                 #     # WebTools(self.driver).input_content('xpath', "//input[@xid='SQRZJH']", qlrzjhm)
                 # 预抵押
-                if ygType == 1:
+                if sfydy == 1:
                     self.driver.execute_script("document.documentElement.scrollTop=250")
                     WebTools(self.driver).check_element_is_exists('xpath',"//div[contains(text(),'抵押权人列表')]/../div[2]/span[3]")
                     WebTools(self.driver).mouse_click('xpath', '//table[@xid="underTable"]//span[contains(text(),"新增")]')
@@ -278,7 +277,7 @@ class sqrqkPage():
                 pass
         elif qllx == '查封登记':
             if djlx == '司法裁定':
-                WebTools(self.driver).mouse_click('xpath', "//div[contains(text(),'申请人信息')]/../div[2]/span[3]")
+                WebTools(self.driver).mouse_click('xpath', "//div[contains(text(),'申请人信息')]/..//span[contains(text(),'新增')]")
                 time.sleep(1)
                 # 姓名
                 WebTools(self.driver).input_content('xpath', "//input[@xid='SQRMC']", qlrmc)

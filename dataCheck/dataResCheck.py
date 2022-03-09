@@ -13,6 +13,17 @@ class dataResCheck():
         self.qjObj = QJ_DB()
 
     '''>>>>>>>>>>>>产权类<<<<<<<<<<<<'''
+    # 产权登记
+    def cqRegisterDataCheck(self,bdcdyh,data):
+        res = registerCheck().getLandCqRegisterRes(bdcdyh,data)
+        for i in res:
+            if not i:
+                logger.error("数据库数据归档错误。")
+                return False
+        logger.debug("数据库数据归档正确。")
+        return True
+
+
     # 净地登记
     def landRegisterDataCheck(self,bdcdyh,data):
         res = registerCheck().getLandCqRegisterRes(bdcdyh,data)
@@ -303,7 +314,7 @@ class dataResCheck():
         logger.debug("数据库数据归档正确。")
         return True
 
-    # 司法裁定（逻辑包括净地和房地）
+    # 司法裁定（净地和房地）
     def sfcdRegisterDataCheck(self, bdcdyh, data):
         res = registerCheck().getSfcdRegisterRes(bdcdyh,data)
         for i in res:
@@ -312,201 +323,6 @@ class dataResCheck():
                 return False
         logger.debug("数据库数据归档正确。")
         return True
-
-    # 司法裁定(房屋)(改造完作废)
-    def houseSfcdRegisterDataCheck(self,bdcdyh,data):
-        ywlxID = data.get('initdata').get('lcInfo', None).get('ywlxID', None)
-        sfpl = data.get('initdata').get('params', None).get('sfpl', None)
-        ywxl = data.get('initdata').get('params', None).get('ywxl', None)
-        try:
-            # 批量业务
-            if sfpl == 1:
-                sql_yw_sqxx_ywh = "select ywh from yw_sqxxzb t where ajzt='2' and to_char(cjsj,'yyyy-mm-dd') = to_char(sysdate,'yyyy-mm-dd') and ywlx ='" + ywlxID + "' and bdcdyh='" + bdcdyh + "'"
-                res_yw_sqxx_ywh = self.djObj.fetchone(sql_yw_sqxx_ywh)
-                logger.debug("yw_sqxxzb表查询子ywh为：%s" % res_yw_sqxx_ywh)
-            else:
-                sql_yw_sqxx_ywh = "select ywh from yw_sqxx t where ajzt='2' and to_char(cjsj,'yyyy-mm-dd') = to_char(sysdate,'yyyy-mm-dd') and ywlx ='" + ywlxID + "' and bdcdyh='" + bdcdyh + "'"
-                res_yw_sqxx_ywh = self.djObj.fetchone(sql_yw_sqxx_ywh)
-                logger.debug("yw_sqxx表查询ywh为：%s" %res_yw_sqxx_ywh)
-
-            sql_dj_qtxz_cqbid = "select cqbid from dj_qtxz where ywh='" + res_yw_sqxx_ywh + "'"
-            res_dj_qtxz_cqbid = str(self.djObj.fetchone(sql_dj_qtxz_cqbid))
-            logger.debug("dj_qtxz表查询cqbid为：%s" % res_dj_qtxz_cqbid)
-
-            sql_dj_qtxz_djbid = "select djbid from dj_qtxz where ywh='" + res_yw_sqxx_ywh + "'"
-            res_dj_qtxz_djbid = str(self.djObj.fetchone(sql_dj_qtxz_djbid))
-            logger.debug("dj_qtxz表查询djbid为：%s" % res_dj_qtxz_djbid)
-
-            sql_dj_qtxz_cfid = "select cfid from dj_qtxz where ywh='" + res_yw_sqxx_ywh + "'"
-            res_dj_qtxz_cfid = str(self.djObj.fetchone(sql_dj_qtxz_cfid))
-            logger.debug("dj_qtxz表查询cfid为：%s" % res_dj_qtxz_cfid)
-
-            sql_dj_qtxz_dyid = "select dyid from dj_qtxz where ywh='" + res_yw_sqxx_ywh + "'"
-            res_dj_qtxz_dyid = str(self.djObj.fetchone(sql_dj_qtxz_dyid))
-            logger.debug("dj_qtxz表查询dyid为：%s" % res_dj_qtxz_dyid)
-
-            sql_dj_qtxz = "select count(1) from dj_qtxz where zt='1' and sfyx=1 and xzlxmc='司法裁定'and ywh='" + res_yw_sqxx_ywh + "'"
-            res_dj_qtxz = self.djObj.fetchone(sql_dj_qtxz)
-            logger.debug("dj_qtxz表查询sql：%s" % sql_dj_qtxz)
-            logger.debug("dj_qtxz表查询记录为：%d" % res_dj_qtxz)
-
-            sql_dj_djben = "select count(1) from dj_djben where zt='1' and sfyx=1 and sfcf=0 and sfdy=1  and sfsfcd=1 and id='" + res_dj_qtxz_djbid + "'"
-            res_dj_djben = self.djObj.fetchone(sql_dj_djben)
-            logger.debug("dj_djben表查询sql：%s" % sql_dj_djben)
-            logger.debug("dj_djben表查询记录为：%d" % res_dj_djben)
-
-            sql_dj_djben2 = "select count(1) from dj_djben where zt='1' and sfyx=1 and sfcf=0 and sfdy=0 and sfsfcd=1 and id='" + res_dj_qtxz_djbid + "'"
-            res_dj_djben2 = self.djObj.fetchone(sql_dj_djben2)
-            logger.debug("dj_djben2表查询sql：%s" % sql_dj_djben2)
-            logger.debug("dj_djben2表查询记录为：%d" % res_dj_djben2)
-
-            sql_dj_fdcq2_djben_zs = "select count(1) from dj_fdcq2_djben_zs where sfyx=1 and sfcf=0  and sfdy=1 and sfsfcd=1 and  qlbid='" + res_dj_qtxz_cqbid + "'"
-            res_dj_fdcq2_djben_zs = self.djObj.fetchone(sql_dj_fdcq2_djben_zs)
-            logger.debug("dj_fdcq2_djben_zs表查询sql：%s" % sql_dj_fdcq2_djben_zs)
-            logger.debug("dj_fdcq2_djben_zs表查询记录为：%d" % res_dj_fdcq2_djben_zs)
-
-            sql_dj_fdcq2_djben_zs2 = "select count(1) from dj_fdcq2_djben_zs where sfyx=1 and sfcf=0 and  sfdy=0 and sfsfcd=1 and qlbid='" + res_dj_qtxz_cqbid + "'"
-            res_dj_fdcq2_djben_zs2 = self.djObj.fetchone(sql_dj_fdcq2_djben_zs2)
-            logger.debug("dj_fdcq2_djben_zs表查询sql：%s" % sql_dj_fdcq2_djben_zs2)
-            logger.debug("dj_fdcq2_djben_zs表查询记录为：%d" % res_dj_fdcq2_djben_zs2)
-
-            if ywxl == '法院拍卖解封':
-                sql_dj_dy_djben_zm = "select count(1) from dj_dy_djben_zm where sfyx=1 and sfcf=0 and  djbid='" + res_dj_qtxz_djbid + "'"
-                res_dj_dy_djben_zm = self.djObj.fetchone(sql_dj_dy_djben_zm)
-                logger.debug("dj_dy_djben_zm表查询sql：%s" % sql_dj_dy_djben_zm)
-                logger.debug("dj_dy_djben_zm表查询记录为：%d" % res_dj_dy_djben_zm)
-
-            if res_dj_qtxz_cfid:
-                # 抵押和查封都需解除
-                if ywxl == '司法裁定':
-                    if res_dj_qtxz and res_dj_djben2 and res_dj_fdcq2_djben_zs2:
-                        logger.debug("数据库数据归档正确")
-                        return True
-                    else:
-                        logger.error("数据库数据归档错误")
-                        return False
-                # 只解查封，抵押不解
-                elif ywxl == '法院拍卖解封':
-                    # 无抵押，无需查询抵押宽表
-                    if not res_dj_dy_djben_zm:
-                        if res_dj_qtxz and res_dj_djben2 and res_dj_fdcq2_djben_zs2:
-                            logger.debug("数据库数据归档正确")
-                            return True
-                        else:
-                            logger.error("数据库数据归档错误")
-                            return False
-                    # 有抵押 ，需查询抵押宽表
-                    else:
-                        if res_dj_qtxz and res_dj_djben and res_dj_fdcq2_djben_zs and res_dj_dy_djben_zm:
-                            logger.debug("数据库数据归档正确")
-                            return True
-                        else:
-                            logger.error("数据库数据归档错误")
-                            return False
-                else:
-                    logger.error("业务小类（ywxl）未获取到，请检查！")
-                    return
-            else:
-                logger.error("dj_qtxz表cfid字段为空，该业务办件数据不符合要求，请检查！")
-        except Exception as e:
-                logger.error("数据检查异常",e)
-        finally:
-            # 关闭数据库连接
-            self.db_dj_conn.closeConn()
-            self.db_qj_conn.closeConn()
-
-    # 司法裁定(净地)(改造完作废)
-    def landSfcdRegisterDataCheck(self,bdcdyh,data):
-        ywlxID = data.get('initdata').get('lcInfo', None).get('ywlxID', None)
-        sfpl = data.get('initdata').get('params', None).get('sfpl', None)
-        ywxl = data.get('initdata').get('params', None).get('ywxl', None)
-        try:
-            # 批量业务
-            if sfpl == 1:
-                sql_yw_sqxx_ywh = "select ywh from yw_sqxxzb t where ajzt='2' and to_char(cjsj,'yyyy-mm-dd') = to_char(sysdate,'yyyy-mm-dd') and ywlx ='" + ywlxID + "' and bdcdyh='" + bdcdyh + "'"
-                res_yw_sqxx_ywh = self.djObj.fetchone(sql_yw_sqxx_ywh)
-                logger.debug("yw_sqxxzb表查询子ywh为：%s" % res_yw_sqxx_ywh)
-            else:
-                sql_yw_sqxx_ywh = "select ywh from yw_sqxx t where ajzt='2' and to_char(cjsj,'yyyy-mm-dd') = to_char(sysdate,'yyyy-mm-dd') and ywlx ='" + ywlxID + "' and bdcdyh='" + bdcdyh + "'"
-                res_yw_sqxx_ywh = self.djObj.fetchone(sql_yw_sqxx_ywh)
-                logger.debug("yw_sqxx表查询ywh为：%s" %res_yw_sqxx_ywh)
-
-            sql_dj_qtxz_cqbid = "select cqbid from dj_qtxz where ywh='" + res_yw_sqxx_ywh + "'"
-            res_dj_qtxz_cqbid = str(self.djObj.fetchone(sql_dj_qtxz_cqbid))
-            logger.debug("dj_qtxz表查询cqbid为：%s" % res_dj_qtxz_cqbid)
-
-            sql_dj_qtxz_djbid = "select djbid from dj_qtxz where ywh='" + res_yw_sqxx_ywh + "'"
-            res_dj_qtxz_djbid = str(self.djObj.fetchone(sql_dj_qtxz_djbid))
-            logger.debug("dj_qtxz表查询djbid为：%s" % res_dj_qtxz_djbid)
-
-            sql_dj_qtxz_cfid = "select cfid from dj_qtxz where ywh='" + res_yw_sqxx_ywh + "'"
-            res_dj_qtxz_cfid = str(self.djObj.fetchone(sql_dj_qtxz_cfid))
-            logger.debug("dj_qtxz表查询cfid为：%s" % res_dj_qtxz_cfid)
-
-            sql_dj_qtxz_dyid = "select dyid from dj_qtxz where ywh='" + res_yw_sqxx_ywh + "'"
-            res_dj_qtxz_dyid = str(self.djObj.fetchone(sql_dj_qtxz_dyid))
-            logger.debug("dj_qtxz表查询dyid为：%s" % res_dj_qtxz_dyid)
-
-            sql_dj_qtxz = "select count(1) from dj_qtxz where zt='1' and sfyx=1 and xzlxmc='司法裁定（净地）'and ywh='" + res_yw_sqxx_ywh + "'"
-            res_dj_qtxz = self.djObj.fetchone(sql_dj_qtxz)
-            logger.debug("dj_qtxz表查询sql：%s" % sql_dj_qtxz)
-            logger.debug("dj_qtxz表查询记录为：%d" % res_dj_qtxz)
-
-            sql_dj_djben = "select count(1) from dj_djben where zt='1' and sfyx=1 and sfcf=0 and sfdy=1  and sfsfcd=1 and id='" + res_dj_qtxz_djbid + "'"
-            res_dj_djben = self.djObj.fetchone(sql_dj_djben)
-            logger.debug("dj_djben表查询sql：%s" % sql_dj_djben)
-            logger.debug("dj_djben表查询记录为：%d" % res_dj_djben)
-
-            sql_dj_djben2 = "select count(1) from dj_djben where zt='1' and sfyx=1 and sfcf=0 and sfdy=0 and sfsfcd=1 and id='" + res_dj_qtxz_djbid + "'"
-            res_dj_djben2 = self.djObj.fetchone(sql_dj_djben2)
-            logger.debug("dj_djben2表查询sql：%s" % sql_dj_djben2)
-            logger.debug("dj_djben2表查询记录为：%d" % res_dj_djben2)
-
-            if ywxl == '法院拍卖解封':
-                sql_dj_dy_djben_zm = "select count(1) from dj_dy_djben_zm where sfyx=1 and sfcf=0 and  djbid='" + res_dj_qtxz_djbid + "'"
-                res_dj_dy_djben_zm = self.djObj.fetchone(sql_dj_dy_djben_zm)
-                logger.debug("dj_dy_djben_zm表查询sql：%s" % sql_dj_dy_djben_zm)
-                logger.debug("dj_dy_djben_zm表查询记录为：%d" % res_dj_dy_djben_zm)
-
-            if res_dj_qtxz_cfid:
-                # 抵押和查封都需解除
-                if ywxl == '司法裁定':
-                    if res_dj_qtxz and res_dj_djben2:
-                        logger.debug("数据库数据归档正确")
-                        return True
-                    else:
-                        logger.error("数据库数据归档错误")
-                        return False
-                # 只解查封，抵押不解
-                elif ywxl == '法院拍卖解封':
-                    # 无抵押，无需查询抵押宽表
-                    if not res_dj_dy_djben_zm:
-                        if res_dj_qtxz and res_dj_djben2 :
-                            logger.debug("数据库数据归档正确")
-                            return True
-                        else:
-                            logger.error("数据库数据归档错误")
-                            return False
-                    # 有抵押 ，需查询抵押宽表
-                    else:
-                        if res_dj_qtxz and res_dj_djben and res_dj_dy_djben_zm:
-                            logger.debug("数据库数据归档正确")
-                            return True
-                        else:
-                            logger.error("数据库数据归档错误")
-                            return False
-                else:
-                    logger.error("业务小类（ywxl）未获取到，请检查！")
-                    return
-            else:
-                logger.error("dj_qtxz表cfid字段为空，该业务办件数据不符合要求，请检查！")
-                return
-        except Exception as e:
-                logger.error("数据检查异常",e)
-        finally:
-            # 关闭数据库连接
-            self.db_dj_conn.closeConn()
-            self.db_qj_conn.closeConn()
 
     # 土地小证查封
     def xzcfRegisterDataCheck(self,bdcdyh,data):

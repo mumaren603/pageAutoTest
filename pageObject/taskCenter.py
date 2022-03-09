@@ -249,6 +249,10 @@ class taskCenter():
                     if ywlxID == '9AB6783AEDAB4D6CBFF8C7F19D411BE7' or ywlxID == 'EF4D6596ED6347DDA33471FCFA7E973A' :
                         WebTools(self.driver).mouse_doubleClick('xpath', "//div[@ywlxid='9AB6783AEDAB4D6CBFF8C7F19D411BE7']/div[1]")
                         time.sleep(2)
+                    # 预告批量司法裁定（房和地）
+                    elif ywlxID == 'AEBFF1F998D846CB932F7CC0ECA0ACAF' or ywlxID == 'EB661D9603EF48E895503BDBC82EADAA':
+                        WebTools(self.driver).mouse_doubleClick('xpath',"//div[@ywlxid='AEBFF1F998D846CB932F7CC0ECA0ACAF']/div[1]")
+                        time.sleep(2)
                 elif djlx == '在建工程查封':
                     WebTools(self.driver).mouse_click('xpath', "//ul[contains(@xid,'subUl3')]/li[3]/a")
                     pass
@@ -273,19 +277,27 @@ class taskCenter():
                     elif ywlxID == 'F92E0A9F7CC8429C862DE095D6A04AD4':
                         WebTools(self.driver).mouse_doubleClick('xpath', "//div[@ywlxid='F92E0A9F7CC8429C862DE095D6A04AD4']/div[1]")
                         time.sleep(2)
+                    # 净地预告
+                    if ywlxID == '4AD2511CA0E14212AFD604CE806B1E9A':
+                        WebTools(self.driver).mouse_doubleClick('xpath', "//div[@ywlxid='4AD2511CA0E14212AFD604CE806B1E9A']/div[1]")
+                        time.sleep(2)
                 elif djlx == '转移登记':
                     WebTools(self.driver).mouse_click('xpath', "//ul[contains(@xid,'subUl5')]/li[2]/a")
                 elif djlx == '变更登记':
                     WebTools(self.driver).mouse_click('xpath', "//ul[contains(@xid,'subUl5')]/li[3]/a")
                 else:
                     WebTools(self.driver).mouse_click('xpath', "//ul[contains(@xid,'subUl5')]/li[4]/a")
-                    # 预告注销
+                    # 房地预告注销
                     if ywlxID == '8546EB5B8816468B898874A37637D08E':
                         WebTools(self.driver).mouse_doubleClick('xpath', "//div[@ywlxid='8546EB5B8816468B898874A37637D08E']/div[1]")
                         time.sleep(2)
                     # 预告抵押注销
                     elif ywlxID == 'C956D29C47DE4699AD31A620F82961EC':
                         WebTools(self.driver).mouse_doubleClick('xpath', "//div[@ywlxid='C956D29C47DE4699AD31A620F82961EC']/div[1]")
+                        time.sleep(2)
+                    # 净地预告注销
+                    elif ywlxID == '48F888726F514BB5B19ED79663D5CCBE':
+                        WebTools(self.driver).mouse_doubleClick('xpath', "//div[@ywlxid='48F888726F514BB5B19ED79663D5CCBE']/div[1]")
                         time.sleep(2)
         else:
             logger.error("权利类型和业务类型ID参数必填。")

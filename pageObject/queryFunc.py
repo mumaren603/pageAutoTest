@@ -31,40 +31,6 @@ class queryFunc():
 
         # 查封业务
         if qllx == '查封登记':
-            # # 批量查封（净地需要切换处理）,因接口合并，没有关联业务类型ID，所以需要加上净地判断
-            # if ywlxID == '80E93B91E9974F98AAE75C6AD28629B1':
-            #     if cqType == 0:
-            #         WebTools(self.driver).mouse_click('xpath', "//span[@xid='landBtn']")
-            #         WebTools(self.driver).check_element_is_exists('xpath',"//input[@xid='zddm']/../../..//input[@xid='bdcdyh']")
-            #         WebTools(self.driver).input_content('xpath', "//input[@xid='zddm']/../../..//input[@xid='bdcdyh']",bdcdyh)
-            #         WebTools(self.driver).mouse_click('xpath',"//input[@xid='zddm']/../../..//span[contains(text(),'查询')]")
-            #         time.sleep(2)
-            #         WebTools(self.driver).check_element_is_exists('xpath', "//table[@xid='resultTable']//tbody/tr[1]")
-            #         WebTools(self.driver).mouse_click('xpath', "//table[@xid='resultTable']//tbody/tr[1]")
-            #         WebTools(self.driver).mouse_click('xpath', "//input[@xid='zddm']/../../../../../../..//*[@id='confirmBtn']")
-            # # 批量预售合同查封
-            # elif ywlxID == '7C472DAB0C1D46E1B782689C057B552E':
-            #     WebTools(self.driver).mouse_click('xpath', "//span[@xid='landBtn']")
-            #     WebTools(self.driver).check_element_is_exists('xpath',"//span[@xid='landBtn']/../../div[3]/div[2]//*[@xid='bdcdyh']")
-            #     WebTools(self.driver).input_content('xpath',"//span[@xid='landBtn']/../../div[3]/div[2]//*[@xid='bdcdyh']",bdcdyh)
-            #     WebTools(self.driver).mouse_click('xpath', "//span[@xid='landBtn']/../../div[3]/div[2]//span[contains(text(),'查询')]")
-            #     time.sleep(2)
-            #     WebTools(self.driver).check_element_is_exists('xpath', "//table[@xid='resultTable']//tbody/tr[1]")
-            #     WebTools(self.driver).mouse_click('xpath', "//table[@xid='resultTable']//tbody/tr[1]")
-            #     WebTools(self.driver).mouse_click('xpath',"//input[@xid='zddm']/../../../../../../..//*[@id='confirmBtn']")
-            # # 批量司法裁定/预告司法裁定（净地需要切换处理）
-            # elif ywlxID == 'EF4D6596ED6347DDA33471FCFA7E973A' or ywlxID == 'EB661D9603EF48E895503BDBC82EADAA':
-            #     WebTools(self.driver).mouse_click('xpath', "//span[@xid='landBtn']")
-            #     WebTools(self.driver).check_element_is_exists('xpath',"//input[@xid='zdtybm']/../../..//input[@xid='bdcdyh']")
-            #     WebTools(self.driver).input_content('xpath', "//input[@xid='zdtybm']/../../..//input[@xid='bdcdyh']", bdcdyh)
-            #     WebTools(self.driver).mouse_click('xpath', "//input[@xid='zdtybm']/../../..//span[contains(text(),'查询')]")
-            #     time.sleep(2)
-            #     WebTools(self.driver).check_element_is_exists('xpath', "//table[@xid='resultTable']//tbody/tr[1]")
-            #     WebTools(self.driver).mouse_click('xpath', "//table[@xid='resultTable']//tbody/tr[1]")
-            #     WebTools(self.driver).mouse_click('xpath', "//input[@xid='zdtybm']/../../../../../../..//*[@id='confirmBtn']")
-            # 部分流程里区分房地和净地流程，净地流程需要切换净地查询页面，房地流程默认走通用模板
-
-
             # 批量司法裁定(净地)/预告司法裁定(净地)/批量查封(净地)
             '''因批量查封净地和房屋为一个接口，同一个ywlxid,只能加上产权类型判断'''
             if ywlxID == 'EF4D6596ED6347DDA33471FCFA7E973A' or ywlxID == 'EB661D9603EF48E895503BDBC82EADAA' or (ywlxID =='80E93B91E9974F98AAE75C6AD28629B1' and cqType == 0):
