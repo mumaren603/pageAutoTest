@@ -36,8 +36,7 @@ def login(request,getConfValue):
         WebTools(driver).input_content('xpath', "//input[contains(@id,'_password')]", login_user.get('passwd'))
         WebTools(driver).mouse_click('xpath', "//div[contains(@id,'_btnlogin')]")
         try:
-            WebDriverWait(driver, 10).until(
-                EC.visibility_of_element_located((By.XPATH, "//div[contains(text(),'办件中心')]")))
+            WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, "//div[contains(text(),'办件中心')]")))
             yield driver ,db_info
         except NoSuchElementException:
             logger.error('NoSuchElementException')

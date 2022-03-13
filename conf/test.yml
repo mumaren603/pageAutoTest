@@ -2,11 +2,8 @@ envinfo:
   #浏览器驱动
   browserDriver: D:/python/pageAutoTest/chromeDriver/chromedriver.exe
   #url
-  url: http://172.16.17.200:9999
+  url: http://192.168.1.200:9999
   #数据库
-#  db:
-#    qj: CSK/Cgk2021#@172.16.17.251:1521/orcl
-#    dj: djpt/Djpt2021#@172.16.17.241:1521/orcl
   db:
     qj:
       db_user: CGKCSS
@@ -17,7 +14,7 @@ envinfo:
     dj:
       db_user: DJPT
       db_pwd: DJPT
-      db_host: 172.16.17.250
+      db_host: 192.168.1.10
       db_port: 1521
       db_sid: sqdj
   #登录用户

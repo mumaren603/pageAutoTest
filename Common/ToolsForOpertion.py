@@ -4,7 +4,7 @@
 
 import os
 import time,datetime
-import allure
+# import allure
 
 from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait

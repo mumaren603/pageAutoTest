@@ -21,13 +21,11 @@ logger = loggerConf().getLogger()
 @pytest.mark.all
 class Test_landFirstRegister():
     def setup(self):
-        pass
         '''初始化用户数据获取'''
         current_file_path = os.path.abspath(__file__).replace('\\','/')
         self.data = getTestcaseData(getTestdataPath(current_file_path))
 
     def test_landFristRegister(self,login,cmdopt):
-        pass
         '''
         :流程 国有建设用地使用权--首次登记--出让登记
         :param login: 装饰器，登录操作封装，返回信息：(1) webdriver对象（2）数据库配置信息 例如：(<selenium.webdriver.chrome.webdriver.WebDriver (session="f8c32afd6fd5c944984d9aeaadfa9341")>,

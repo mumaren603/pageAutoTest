@@ -301,3 +301,7 @@ class taskCenter():
                         time.sleep(2)
         else:
             logger.error("权利类型和业务类型ID参数必填。")
+
+    def queryCenter(self):
+        WebTools(self.driver).mouse_click('xpath',"//div[@title='查询中心']")
+        time.sleep(2)
