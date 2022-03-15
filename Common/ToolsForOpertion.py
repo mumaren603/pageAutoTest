@@ -8,6 +8,7 @@ import time,datetime
 
 from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.remote.switch_to import SwitchTo
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
@@ -73,6 +74,19 @@ class WebTools(object):
     # def drag_scrollBar(self,value):
     #     ActionChains(self.driver).move_to_element(value).perform()
 
+    # iframe
+    def switch_iframe(self,value,type=None):
+        # 通过id, name切换（需唯一）
+        if type is None:
+            SwitchTo(self.driver).frame(value)
+        else:
+            webElemenet = None
+            if type == 'xpath':
+                webElemenet = self.driver.find_element_by_xpath(value)
+            elif type == 'css_selector':
+                webElemenet = self.driver.find_element_by_css_selector(value)
+            SwitchTo(self.driver).frame(webElemenet)
+
     # 浏览器前进操作
     def go_forward(self):
         self.driver.forward()
@@ -88,7 +102,7 @@ class WebTools(object):
     # 保存图片
     def get_windows_img(self,value):
         '''
-        在这里我们把file_path这个参数写死，直接保存到我们项目根目录的一个文件夹.\Screenshots下
+        在这里我们把file_path这个参数写死，直接保存到我们项目根目录的一个文件夹Screenshots下
         '''
         file_path = os.path.dirname(os.path.abspath('.')) + '/screenshots/'
         rq = time.strftime('%Y%m%d%H%M', time.localtime(time.time()))

@@ -22,6 +22,4 @@ if __name__ == '__main__':
     pass
     # collect_static_data('bttest')
 
-aa = collect_static_data('test')
-print(aa)
 

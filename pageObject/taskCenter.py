@@ -8,7 +8,7 @@ class taskCenter():
     def __init__(self,driver):
         self.driver = driver
 
-    def common(self):
+    def workCenter(self):
         # 判断办件中心菜单是否出现
         WebTools(self.driver).check_element_is_exists('xpath', "//div[@xid='mainMenu']/div[1]/div[1]")
         WebTools(self.driver).check_element_is_exists('xpath', "//div[contains(text(),'登记簿查询')]")
@@ -302,6 +302,9 @@ class taskCenter():
         else:
             logger.error("权利类型和业务类型ID参数必填。")
 
+    # 查询中心
     def queryCenter(self):
+        WebTools(self.driver).check_element_is_exists('xpath',"//div[@title='查询中心']")
         WebTools(self.driver).mouse_click('xpath',"//div[@title='查询中心']")
-        time.sleep(2)
+        WebTools(self.driver).switch_iframe("//iframe[@class='ifram ckcx cfARBJ3']",'xpath')
+        WebTools(self.driver).check_element_is_exists('xpath', "//span[@class='layout-text' and contains(text(),'查询中心')]")

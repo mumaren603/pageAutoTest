@@ -47,3 +47,4 @@ def login(request,getConfValue):
     else:
         logger.error("全局登录信息缺失，请检查yaml配置文件。")
 
+
