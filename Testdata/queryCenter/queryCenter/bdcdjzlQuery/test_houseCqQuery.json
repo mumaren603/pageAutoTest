@@ -1,11 +1,10 @@
 {
-  "data": [
-    {
+  "data": [{
       "comment": "正向场景：查询",
       "params":{"sql": "select bdcdyh from dj_fdcq2"},
       "exceptRes": ""
     },
-    {
+        {
       "comment": "反向场景：输入错误单元，查询不到结果",
       "params":"123432543534534",
       "exceptRes": "查询结果错误"

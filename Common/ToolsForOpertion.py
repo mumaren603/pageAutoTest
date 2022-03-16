@@ -75,6 +75,7 @@ class WebTools(object):
     #     ActionChains(self.driver).move_to_element(value).perform()
 
     # iframe
+    # 切换到iframe上
     def switch_iframe(self,value,type=None):
         # 通过id, name切换（需唯一）
         if type is None:
@@ -86,6 +87,10 @@ class WebTools(object):
             elif type == 'css_selector':
                 webElemenet = self.driver.find_element_by_css_selector(value)
             SwitchTo(self.driver).frame(webElemenet)
+
+    # 从iframe切回原界面
+    def switch_back_iframe(self,):
+        SwitchTo(self.driver).default_content()
 
     # 浏览器前进操作
     def go_forward(self):
@@ -276,56 +281,51 @@ class WebTools(object):
             pass
 
     # 验证元素是否存在
-    def check_element_is_exists(self, type, value):
-        try:
-            if type == "xpath":
-                WebDriverWait(self.driver, 15).until(EC.visibility_of_element_located((By.XPATH,value)))
-                time.sleep(1)
-            elif type == "id":
-                time.sleep(1)
-                WebDriverWait(self.driver, 15).until(EC.visibility_of_element_located((By.ID,value)))
-            elif type == "class_name":
-                time.sleep(1)
-                WebDriverWait(self.driver, 15).until(EC.visibility_of_element_located((By.CLASS_NAME,value)))
-            elif type == "name":
-                time.sleep(1)
-                WebDriverWait(self.driver, 15).until(EC.visibility_of_element_located((By.NAME,value)))
-            elif type == "link_text":
-                time.sleep(1)
-                WebDriverWait(self.driver, 15).until(EC.visibility_of_element_located((By.LINK_TEXT,value)))
-        except NoSuchElementException as e1:
-            logger.error("%s:%s查找页面元素不存在" %(type,value))
-            self.save_screenshot('查找页面元素不存在')
-            raise e1
-        except TimeoutException as e2:
-            logger.error("%s:%s查找页面元素超时" % (type, value))
-            self.save_screenshot('查找页面元素超时')
-            raise e2
-        except ElementNotVisibleException as e3:
-            logger.error("%s:%s查找页面元素不可见" % (type, value))
-            self.save_screenshot('查找页面元素不可见')
-            raise e3
-        except Exception as e:
-            logger.error("%s:%s元素查找错误,错误信息：%s" % (type, value, e))
-            self.save_screenshot('查找页面元素错误')
-            raise e
+    # def check_element_is_exists(self, type, value):
+    #     try:
+    #         if type == "xpath":
+    #             WebDriverWait(self.driver, 15).until(EC.visibility_of_element_located((By.XPATH,value)))
+    #             time.sleep(1)
+    #         elif type == "id":
+    #             time.sleep(1)
+    #             WebDriverWait(self.driver, 15).until(EC.visibility_of_element_located((By.ID,value)))
+    #         elif type == "class_name":
+    #             time.sleep(1)
+    #             WebDriverWait(self.driver, 15).until(EC.visibility_of_element_located((By.CLASS_NAME,value)))
+    #         elif type == "name":
+    #             time.sleep(1)
+    #             WebDriverWait(self.driver, 15).until(EC.visibility_of_element_located((By.NAME,value)))
+    #         elif type == "link_text":
+    #             time.sleep(1)
+    #             WebDriverWait(self.driver, 15).until(EC.visibility_of_element_located((By.LINK_TEXT,value)))
+    #     except NoSuchElementException as e1:
+    #         logger.error("%s:%s查找页面元素不存在" %(type,value))
+    #         self.save_screenshot('查找页面元素不存在')
+    #         raise e1
+    #     except TimeoutException as e2:
+    #         logger.error("%s:%s查找页面元素超时" % (type, value))
+    #         self.save_screenshot('查找页面元素超时')
+    #         raise e2
+    #     except ElementNotVisibleException as e3:
+    #         logger.error("%s:%s查找页面元素不可见" % (type, value))
+    #         self.save_screenshot('查找页面元素不可见')
+    #         raise e3
+    #     except Exception as e:
+    #         logger.error("%s:%s元素查找错误,错误信息：%s" % (type, value, e))
+    #         self.save_screenshot('查找页面元素错误')
+    #         raise e
 
-#有问题
-    def isElementExist(self,type,value):
-        if type == "xpath":
-            print(value)
-            if len(value) != 0:
-                for i in value:
-                    print('i:',i)
-                    # 元素1  没找到 len=0
-                    s = self.driver.find_element_by_xpath(i)
-                    if len(s) != 0:
-                        return True
-                return False
-            else:
-                print("输入校验ywh的xpath未传递")
+    # 验证元素是否存在
+    def is_element_exist(self,cssElement):
+        e = self.driver.find_element_by_css_selector(css_selector=cssElement)
+        if len(e) == 0:
+            print("%s元素未找到" % cssElement)
+            return False
+        elif len(e) == 1:
+            return True
         else:
-            print("其他校验暂不支持。")
+            print("%s 找到%d个元素" %(cssElement,len(e)))
+            return False
 
     # 获取子元素
     def select_child_elements(self, type, value1, value2):
