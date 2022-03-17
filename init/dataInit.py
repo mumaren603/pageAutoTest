@@ -905,7 +905,7 @@ class dataInit():
                 logger.debug("待登记办件数据-->%s" % queryRes)
                 logger.debug("<--------查询入参数据end-------->")
                 return queryRes
-            return dataInit().getHouseCqRegisterData()
+            return dataInit().getHouseCfRegisterData()
         else:
             logger.error("未查询到有效数据，请检查sql语句正确性或数据库是否存在符合条件数据。")
             sys.exit(-1)

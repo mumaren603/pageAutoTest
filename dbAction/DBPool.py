@@ -13,8 +13,8 @@ DJ_POOL = PooledDB(
     setsession=[],
     ping=0,
     user='DJPT',
-    password='Djpt2021#',
-    dsn = Oracle.makedsn('172.16.17.241',1521,'orcl')
+    password='DJPT',
+    dsn = Oracle.makedsn('172.16.17.250',1521,'sqdj')
 )
 
 # 权籍数据池
@@ -28,7 +28,7 @@ QJ_POOL = PooledDB(
     maxusage=None,
     setsession=[],
     ping=0,
-    user='CSK',
-    password='Cgk2021#',
+    user='CGKCSS',
+    password='CGKCSS',
     dsn = Oracle.makedsn('172.16.17.251',1521,'orcl')
 )
