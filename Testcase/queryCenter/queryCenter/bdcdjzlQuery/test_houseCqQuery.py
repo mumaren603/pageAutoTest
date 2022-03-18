@@ -7,7 +7,7 @@ from Common.LogFunc import loggerConf
 logger = loggerConf().getLogger()
 
 @pytest.mark.all
-class Test_query():
+class Test_houseCqQuery():
     def setup_class(self):
         '''初始化用户数据获取'''
         current_file_path = os.path.abspath(__file__).replace('\\','/')
@@ -15,7 +15,7 @@ class Test_query():
         print("测试数据：",self.data)
 
     # 输入正确查询条件，查询结果正确，正常出产调证明
-    def test_1(self,openQueryCenter):
+    def test_houseCqQuery_1(self,openQueryCenter):
         global driver
         driver = openQueryCenter[0]
         print("执行测试用例1啦。。。")
@@ -38,6 +38,20 @@ class Test_query():
         # WebTools(driver).switch_back_iframe()
         # WebTools(driver).mouse_click('xpath',"//a[@xid='closeFuncBtn']")
 
+    # 输入错误人名，正确身份证号码，查询房屋为空，出具无房证明
+    def test_houseCqQuery_3(self):
+        res_params = self.data.get('test_houseCqQuery_3').get('params')
+        print('res_params:', res_params)
+        qlrmc = res_params.keys
+        qlrzjhm = res_params.values
+        print(qlrmc,qlrzjhm)
+
+        print("执行测试用例3啦。。。")
+        WebTools(driver).input_content('xpath',"//th[text()='权利人姓名']/../td[1]//input",qlrmc)
+        WebTools(driver).input_content('xpath', "//th[text()='权利人证件号码']/../td[1]//input",qlrzjhm)
+        WebTools(driver).mouse_click('xpath',"//span[contains(text(),'点击生成受理编号')]")
+        WebTools(driver).mouse_click('xpath', "//span[contains(text(),'下一步')]")
+
     def test_4(self):
         print("执行测试用例4啦。。。")
         # WebTools(self.driver).mouse_click('xpath',"//span[contains(text(),'返回')]")
@@ -47,8 +61,6 @@ class Test_query():
         WebTools(driver).mouse_click('xpath',"//span[contains(text(),'点击生成受理编号')]")
         WebTools(driver).mouse_click('xpath', "//span[contains(text(),'下一步')]")
 
-        WebTools(driver).switch_back_iframe()
-
     def teardown_class(self):
         logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n")
         # 退出系统
@@ -56,5 +68,5 @@ class Test_query():
         # 退出浏览器
         driver.quit()
 
-# if __name__ == '__main__':
-#     pytest.main(['-v', 'Test_query'])
+if __name__ == '__main__':
+    pytest.main(['-v', 'Test_houseCqQuery'])

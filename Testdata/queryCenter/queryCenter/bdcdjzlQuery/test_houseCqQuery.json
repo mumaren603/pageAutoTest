@@ -1,13 +1,12 @@
 {
-  "data": [{
-      "comment": "正向场景：查询",
+  "data": {
+      "comment": "",
       "params":{"sql": "select bdcdyh from dj_fdcq2"},
       "exceptRes": ""
     },
-        {
-      "comment": "反向场景：输入错误单元，查询不到结果",
-      "params":"123432543534534",
+  "test_houseCqQuery_3":{
+      "comment": "输入错误人名，正确身份证号码，查询房屋为空，出具无房证明",
+      "params":{"刘大强5":"321020197701211816"},
       "exceptRes": "查询结果错误"
     }
-  ]
 }
