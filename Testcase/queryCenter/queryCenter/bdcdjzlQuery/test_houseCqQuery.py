@@ -7,7 +7,7 @@ from Common.LogFunc import loggerConf
 logger = loggerConf().getLogger()
 
 @pytest.mark.all
-class Test_query():
+class Test_houseCqQuery():
     def setup_class(self):
         '''初始化用户数据获取'''
         current_file_path = os.path.abspath(__file__).replace('\\','/')
@@ -18,10 +18,7 @@ class Test_query():
     def test_1(self,openQueryCenter):
         global driver
         driver = openQueryCenter[0]
-        print("执行测试用例1啦。。。")
-        print("case1:", openQueryCenter)
         bdcdyh = dataInit().getHouseCqRegisterData()
-        print('bdcdyh:',bdcdyh)
         WebTools(driver).mouse_click('xpath',"//th[contains(text(),'查询条件')]/..//label[2]/span[1]")
         WebTools(driver).input_content('xpath',"//label[contains(text(),'不动产单元号')]/..//input",bdcdyh)
         # WebTools(driver).input_content('xpath',"//label[contains(text(),'不动产单元号')]/..//input",'321322100002GB00124F50210105')
@@ -56,5 +53,5 @@ class Test_query():
         # 退出浏览器
         driver.quit()
 
-# if __name__ == '__main__':
-#     pytest.main(['-v', 'Test_query'])
+if __name__ == '__main__':
+    pytest.main(['-v', 'Test_houseCqQuery'])
