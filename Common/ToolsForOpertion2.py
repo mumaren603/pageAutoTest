@@ -19,6 +19,9 @@ from Common.LogFunc import loggerConf
 logger = loggerConf().getLogger()
 
 
+# ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
+# sys.path.append(ROOT_DIR)
+
 class WebTools(object):
     '''
     封装页面基本操作，如鼠标点击，输入框填写值，校验元素是否存在等
@@ -61,6 +64,14 @@ class WebTools(object):
             logger.error("未指定浏览器类型！")
         self.driver.maximize_window()
 
+    # 跳转页面
+    def jump_web_page(self, page, time_wait=3):
+        self.driver.get(self.get_web_page(page))
+        self.driver.maximize_window()
+
+        if isinstance(time_wait, int):
+            time.sleep(time_wait)
+
     # 滚动条
     # def drag_scrollBar(self,value):
     #     ActionChains(self.driver).move_to_element(value).perform()
@@ -82,6 +93,14 @@ class WebTools(object):
     # 从iframe切回原界面
     def switch_back_iframe(self, ):
         SwitchTo(self.driver).default_content()
+
+    # 浏览器前进操作
+    def go_forward(self):
+        self.driver.forward()
+
+    # 浏览器后退操作
+    def go_back(self):
+        self.driver.back()
 
     # 隐式等待
     def wait(self, seconds):
@@ -107,10 +126,10 @@ class WebTools(object):
             self.driver.switch_to.window(handle)
 
     # 输入内容方法
-    def input_content(self, type, val, inputvalue):
+    def input_content(self, type, value, inputvalue):
         try:
             if type == "xpath":
-                self.driver.find_element(By.XPATH,val).send_keys(inputvalue)
+                self.driver.find_element_by_xpath(value).send_keys(inputvalue)
             elif type == "class_name":
                 self.driver.find_element_by_class_name(value).send_keys(inputvalue)
             elif type == "id":

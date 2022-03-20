@@ -1,12 +1,12 @@
 {
-  "data": {
-      "comment": "",
-      "params":{"sql": "select bdcdyh from dj_fdcq2"},
-      "exceptRes": ""
+  "test_houseCqQuery_1": {
+      "comment": "输入正确查询条件，查询结果正确，正常出产调证明",
+      "params":{"sql": "getHouseCqRegisterData"},
+      "exceptRes": "True"
     },
   "test_houseCqQuery_3":{
       "comment": "输入错误人名，正确身份证号码，查询房屋为空，出具无房证明",
-      "params":{"刘大强5":"321020197701211816"},
+      "params":{"qlrmc":"刘大强5","qlrzjhm":"321020197701211816"},
       "exceptRes": "查询结果错误"
     }
 }
