@@ -12,7 +12,6 @@ from selenium.webdriver.remote.switch_to import SwitchTo
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException, TimeoutException, ElementNotVisibleException
 from Common.LogFunc import loggerConf
 
@@ -29,28 +28,40 @@ class WebTools(object):
         self.browser_type = None
 
     # 截屏
-    def save_screenshot(self, img_doc):
+    def save_screenshot(self,img_doc):
         '''
         :param img_doc: 截图说明
         :return:
         '''
         base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__))).replace('\\', '/')
-        errFilename = base_dir + '/errorInfo/error_' + datetime.datetime.now().strftime('%Y%m%d-%H%M%S') + '.png'
+        errorPicDir = '/errorInfo'
+        base_dir = base_dir+errorPicDir
+        if not os.path.exists(base_dir):
+            os.makedirs(base_dir)
+        errFilename = base_dir + '/error_' + datetime.datetime.now().strftime('%Y%m%d-%H%M%S') + '.png'
         self.driver.save_screenshot(errFilename)
-        with open(errFilename, mode='rb')as f:
-            data = f.read()
-        allure.attach(data, img_doc, allure.attachment_type.PNG)
+
+        # with open(errFilename, mode='rb')as f:
+        #     data = f.read()
+        # allure.attach(data, img_doc, allure.attachment_type.PNG)
 
     # 浏览器的设置
-    def set_browser(self, testUrl):
+    def set_browser(self, url):
+        '''
+        :param url: 访问地址
+        :return:
+        '''
         self.driver.implicitly_wait(10)
         self.driver.maximize_window()
-        self.driver.get(testUrl)  # 打开被测系统URL
-        time.sleep(5)
+        self.driver.get(url)  # 打开被测系统URL
+        # time.sleep(5)
 
-    # 打开浏览器的方法
-    # :param driver_path Driver物理路径
+    # 打开浏览器
     def open_browser(self, driver_path):
+        '''
+        :param driver_path: Driver物理路径
+        :return:
+        '''
         if self.browser_type == 'Firefox':
             self.driver = webdriver.Firefox(executable_path=driver_path)
         elif self.browser_type == 'Chrome':
@@ -61,11 +72,11 @@ class WebTools(object):
             logger.error("未指定浏览器类型！")
         self.driver.maximize_window()
 
-    # 滚动条
-    # def drag_scrollBar(self,value):
-    #     ActionChains(self.driver).move_to_element(value).perform()
+    # 显性等待时间
+    def WebDriverWait(self, MaxTime, Mimtime, value):
+        element = self.driver.find_element(By.ID, value)
+        WebDriverWait(self.driver, MaxTime, Mimtime).until(EC.presence_of_element_located(element))
 
-    # iframe
     # 切换到iframe上
     def switch_iframe(self, value, type=None):
         # 通过id, name切换（需唯一）
@@ -80,63 +91,56 @@ class WebTools(object):
             SwitchTo(self.driver).frame(webElemenet)
 
     # 从iframe切回原界面
-    def switch_back_iframe(self, ):
+    def switch_back_iframe(self):
         SwitchTo(self.driver).default_content()
 
     # 隐式等待
     def wait(self, seconds):
         self.driver.implicitly_wait(seconds)
 
-    # 保存图片
-    def get_windows_img(self, value):
-        '''
-        在这里我们把file_path这个参数写死，直接保存到我们项目根目录的一个文件夹Screenshots下
-        '''
-        file_path = os.path.dirname(os.path.abspath('.')) + '/screenshots/'
-        rq = time.strftime('%Y%m%d%H%M', time.localtime(time.time()))
-        screen_name = file_path + rq + '.png'
-        try:
-            self.driver.get_screenshot_as_file(screen_name)
-        except NameError as e:
-            self.get_windows_img()
-
+    # 切换到新窗口
     def current_handle(self):
-        # 这时切换到新窗口
         all_handles = self.driver.window_handles
         for handle in all_handles:
             self.driver.switch_to.window(handle)
 
-    # 输入内容方法
-    def input_content(self, type, val, inputvalue):
+    # 获取元素
+    def __getElement(self,type,val):
+        global elm
         try:
             if type == "xpath":
-                self.driver.find_element(By.XPATH,val).send_keys(inputvalue)
+                elm = self.driver.find_element(By.XPATH, val)
             elif type == "class_name":
-                self.driver.find_element_by_class_name(value).send_keys(inputvalue)
+                elm = self.driver.find_element(By.CLASS_NAME, val)
             elif type == "id":
-                self.driver.find_element_by_id(value).send_keys(inputvalue)
+                elm = self.driver.find_element(By.ID, val)
             elif type == "name":
-                self.driver.find_element_by_name(value).send_keys(inputvalue)
+                elm = self.driver.find_element(By.NAME, val)
             elif type == "link_text":
-                self.driver.find_element_by_link_text(value).send_keys(inputvalue)
-        except NoSuchElementException as e1:
-            logger.error("%s:%s元素未找到" % (type, value))
+                elm = self.driver.find_element(By.LINK_TEXT, val)
+            return elm
+        except NoSuchElementException:
+            logger.error("%s:%s元素未找到" % (type, val))
             self.save_screenshot('查找元素不存在')
-            raise e1
-        except TimeoutException as e2:
-            logger.error("%s:%s元素查找超时" % (type, value))
-            self.save_screenshot('查找元素超时')
-            raise e2
+            raise
         except Exception as e:
-            logger.error("%s:%s元素查找错误,错误信息：%s" % (type, value, e))
+            logger.error("%s:%s元素查找错误,错误信息：%s" % (type, val, e))
             self.save_screenshot('查找元素错误')
-            raise e
+            raise
 
-    # 下拉框选值
-    #:param droplistName 下拉框name名字
-    #:param type  下拉框值通过哪种方式选取
-    #:param value 下拉框选取具体传值
+    # 输入内容方法
+    def input_content(self, locType,locVal,val):
+        element = self.__getElement(locType,locVal)
+        element.send_keys(val)
+
+    # 下拉框操作
     def choose_droplist_value(self, droplistName, type, value):
+        '''
+        :param droplistName: 下拉框name名字
+        :param type: 下拉框值通过哪种方式选取
+        :param value: 下拉框选取具体值
+        :return:
+        '''
         try:
             if type == "xpath":
                 self.driver.find_element_by_name(droplistName).find_element_by_xpath(value).click()
@@ -160,86 +164,19 @@ class WebTools(object):
             raise e
 
     # 鼠标事件(单击)
-    def mouse_click(self, type, value):
-        try:
-            if type == "xpath":
-                self.driver.find_element_by_xpath(value).click()
-            elif type == "class_name":
-                self.driver.find_element_by_class_name(value).click()
-            elif type == "id":
-                self.driver.find_element_by_id(value).click()
-            elif type == "xid":
-                self.driver.find_element_by_xid(value).click()
-            elif type == "name":
-                self.driver.find_element_by_name(value).click()
-            elif type == "link_text":
-                self.driver.find_element_by_link_text(value).click()
-        except NoSuchElementException as e1:
-            logger.error("%s:%s元素未找到" % (type, value))
-            self.save_screenshot('单击元素未找到')
-            raise e1
-        except TimeoutException as e2:
-            logger.error("%s:%s元素查找超时" % (type, value))
-            self.save_screenshot('查找元素超时')
-            raise e2
-        except Exception as e:
-            logger.error("%s:%s元素查找错误,错误信息：%s" % (type, value, e))
-            self.save_screenshot('查找元素错误')
-            raise e
+    def mouse_click(self, locType,locVal):
+        element = self.__getElement(locType,locVal)
+        element.click()
 
     # 鼠标事件(双击)
-    def mouse_doubleClick(self, type, value):
-        try:
-            if type == "xpath":
-                elm = self.driver.find_element_by_xpath(value)
-                ActionChains(self.driver).double_click(elm).perform()
-            elif type == "class_name":
-                elm = self.driver.find_element_by_class_name(value)
-                ActionChains(self.driver).double_click(elm).perform()
-            elif type == "id":
-                elm = self.driver.find_element_by_id(value)
-                ActionChains(self.driver).double_click(elm).perform()
-            elif type == "name":
-                elm = self.driver.find_element_by_name(value)
-                ActionChains(self.driver).double_click(elm).perform()
-            elif type == "link_text":
-                elm = self.driver.find_element_by_link_text(value)
-                ActionChains(self.driver).double_click(elm).perform()
-        except NoSuchElementException as e1:
-            logger.error("%s:%s元素未找到" % (type, value))
-            self.save_screenshot('双击元素未找到。')
-            raise e1
-        except TimeoutException as e2:
-            print("%s:%s元素查找超时" % (type, value))
-            logger.error("%s:%s元素查找超时" % (type, value))
-            raise e2
-        except Exception as e:
-            logger.error("%s:%s元素查找错误,错误信息：%s" % (type, value, e))
-            self.save_screenshot('查找元素错误')
-            raise e
+    def mouse_doubleClick(self, locType,locVal):
+        element = self.__getElement(locType,locVal)
+        ActionChains(self.driver).double_click(element).perform()
 
     # 文本框清空
-    def input_clear(self, type, value):
-        try:
-            if type == "xpath":
-                self.driver.find_element_by_xpath(value).clear()
-            elif type == "id":
-                self.driver.find_element_by_id(value).clear()
-            elif type == "name":
-                self.driver.find_element_by_name(value).clear()
-            elif type == "link_text":
-                self.driver.find_element_by_link_text(value).clear()
-        except NoSuchElementException as e1:
-            logger.error("%s:%s元素未找到" % (type, value))
-            self.save_screenshot('双击元素未找到。')
-            raise e1
-        except TimeoutException as e2:
-            logger.error("%s:%s元素查找超时" % (type, value))
-            raise e2
-        except Exception as e:
-            logger.error("%s:%s元素查找错误,错误信息：%s" % (type, value, e))
-            self.save_screenshot('查找元素错误')
-            raise e
+    def input_clear(self, locType,locVal):
+        element = self.__getElement(locType,locVal)
+        element.clear()
 
     # 允许元素存在（部分数据在某个事件后可能会出现弹出提示，需要点击提示中的确定才可进行以下一步骤操作）
     def allow_element_is_exists(self, type, value):
@@ -298,138 +235,41 @@ class WebTools(object):
             self.save_screenshot('查找页面元素错误')
             raise e
 
-    # # 验证元素是否存在
-    # def is_element_exist(self, cssElement):
-    #     e = self.driver.find_element_by_css_selector(css_selector=cssElement)
-    #     if len(e) == 0:
-    #         print("%s元素未找到" % cssElement)
-    #         return False
-    #     elif len(e) == 1:
-    #         return True
-    #     else:
-    #         print("%s 找到%d个元素" % (cssElement, len(e)))
-    #         return False
-
     # 验证元素是否存在
     def is_element_exist(self, val):
         try:
-            elm = self.driver.find_element(By.XPATH,value=val)
-            print("查找元素e:",elm)
-            # 找到元素且唯一
+            self.driver.find_element(By.XPATH,value=val)
             return True
-        except NoSuchElementException:
-            print("ERROR 没找到元素")
+        except NoSuchElementException as e:
+            logger.error("查找元素失败,错误信息:%s" %e)
             return False
 
-    # 获取子元素
-    def select_child_elements(self, type, value1, value2):
-        if type == "xpath":
-            Select(self.driver.find_element_by_xpath(value1)).select_by_visible_text(value2)
-        elif type == "id":
-            Select(self.driver.find_element_by_id(value1)).select_by_visible_text(value2)
-        elif type == "name":
-            Select(self.driver.find_element_by_name(value1)).select_by_visible_text(value2)
-        elif type == "link_text":
-            Select(self.driver.find_element_by_link_text(value1)).select_by_visible_text(value2)
-        elif type == "css_selector":
-            Select(self.driver.find_element_by_css_selector(value1)).select_by_visible_text(value2)
-
-    # 获取输入框的值
-    def get_input_attribute(self, type, value1, value2):
-        if type == "xpath":
-            Value = self.driver.find_element_by_xpath(value1).get_attribute(value2)
-            return Value
-        elif type == "name":
-            Value = self.driver.find_element_by_name(value1).get_attribute(value2)
-            return Value
-        elif type == "link_text":
-            Value = self.driver.find_element_by_link_text(value1).get_attribute(value2)
-            return Value
-        elif type == "class_name":
-            Value = self.driver.find_element_by_class_name(value1).get_attribute(value2)
-            return Value
-        elif type == "id":
-            Value = self.driver.find_element_by_id(value1).get_attribute(value2)
-            return Value
-        elif type == "css_selector":
-            Value = self.driver.find_element_by_css_selector(value1).get_attribute(value2)
-            return Value
-
-    # 获取下拉框的文本的值
-    def get_droplist_text(self, type, value):
-        if type == "xpath":
-            text = self.driver.find_element_by_xpath(value).text
-            return text
-        elif type == "name":
-            text = self.driver.find_element_by_name(value).text
-            return text
-        elif type == "link_text":
-            text = self.driver.find_element_by_link_text(value).text
-            return text
-        elif type == "class_name":
-            text = self.driver.find_element_by_class_name(value).text
-            return text
-        elif type == "id":
-            text = self.driver.find_element_by_id(value).text
-            return text
-
-    # 显性等待时间
-    def WebDriverWait(self, MaxTime, Mimtime, value):
-        element = self.driver.find_element(By.ID, value)
-        WebDriverWait(self.driver, MaxTime, Mimtime).until(EC.presence_of_element_located(element))
+    # 获取属性值
+    def get_attribute(self, locType,locVal, attr):
+        element = self.__getElement(locType, locVal)
+        value  = element.get_attribute(attr)
+        return value
 
     # 鼠标移动点击
-    def mouser_move_action(self, type, value):
-        if type == "xpath":
-            xm = self.driver.find_element_by_xpath(value)
-            webdriver.ActionChains(self.driver).click(xm).perform()
-        elif type == "id":
-            xm = self.driver.find_element_by_id(value)
-            webdriver.ActionChains(self.driver).click(xm).perform()
-        elif type == "name":
-            xm = self.driver.find_element_by_name(value)
-            webdriver.ActionChains(self.driver).click(xm).perform()
-        elif type == "link_text":
-            xm = self.driver.find_element_by_link_text(value)
-            webdriver.ActionChains(self.driver).click(xm).perform()
-        elif type == "class_name":
-            self.driver.find_element_by_class_name(value).click()
+    def mouser_move_action(self, locType,locVal):
+        element = self.__getElement(locType,locVal)
+        webdriver.ActionChains(self.driver).click(element).perform()
 
     # 校验按钮是否为选中状态
-    def check_button_is_selected(self, type, value):
-        if type == "id":
-            self.driver.find_element_by_id(value).is_selected()
-        elif type == "xpath":
-            self.driver.find_element_by_xpath(value).is_selected()
-        elif type == "class_name":
-            self.driver.find_element_by_class_name(value).is_selected()
-        elif type == "name":
-            self.driver.find_element_by_name(value).is_selected()
-        elif type == "link_text":
-            self.driver.find_element_by_link_text(value).is_selected()
-
-    # 封装元素等待（1、显示等待 2、隐式等待 3、time.sleep()）
-    # 元素可见时，再进行后续操作
-    # WebDriverWait(driver, 10).until(EC.visibility_of_element_located(param))
-
-    # 界面弹出框处理
-    def alertHandle(self):
-        # time.sleep(1)
-        # # 等待alert弹出框可见
-        # WebDriverWait(self.driver, 20).until(EC.alert_is_present())
-        # 从html页面切换到alert弹框
-        alert = self.driver.switch_to.alert
-        # 获取alert的文本内容
-        print(alert.text)
-        # “确定”
-        # alert.accept()
-        # 取消
-        alert.dismiss()
+    def check_button_is_selected(self, locType,locVal):
+        element = self.__getElement(locType,locVal)
+        value = element.is_selected()
+        return value
 
     # 滚动条拖动到指定元素
-    def srollBarToElement(self, value):
-        webElement = self.driver.find_element_by_xpath(value)
-        if webElement:
+    def srollBarToElement(self, val):
+        '''
+        :param value: 滚动条将要拖动到的元素位置。
+        :return:
+        '''
+        try:
+            webElement = self.driver.find_element(By.XPATH,value=val)
             self.driver.execute_script("arguments[0].scrollIntoView(false);", webElement)
-        else:
-            logger.error("元素查找失败")
+        except NoSuchElementException as e:
+            logger.error("元素未找到,详细错误详见：%s" %e)
+

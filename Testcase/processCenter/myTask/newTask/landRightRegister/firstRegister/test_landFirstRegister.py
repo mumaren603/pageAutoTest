@@ -25,21 +25,21 @@ class Test_landFirstRegister():
         current_file_path = os.path.abspath(__file__).replace('\\','/')
         self.data = getTestcaseData(getTestdataPath(current_file_path))
 
-    def test_landFristRegister(self,login,cmdopt):
+    def test_landFristRegister(self,openProcessCenter):
         '''
         :流程 国有建设用地使用权--首次登记--出让登记
         :param login: 装饰器，登录操作封装，返回信息：(1) webdriver对象（2）数据库配置信息 例如：(<selenium.webdriver.chrome.webdriver.WebDriver (session="f8c32afd6fd5c944984d9aeaadfa9341")>,
         :return:
         '''
-        self.driver = login[0]
-        dbInfo = login[1]
+        self.driver = openProcessCenter[0]
+        dbInfo = openProcessCenter[1]
         # 获取办件数据
         bdcdyh = dataInit().getLandCqNotRegisterData(self.data)
         logger.debug("<--------国有建设用地使用权--首次登记--出让登记start-------->")
         logger.debug("<--------界面操作start-------->")
 
         # 办件中心
-        taskCenter(self.driver).common()
+        # taskCenter(self.driver).common()
         # 选择流程
         taskCenter(self.driver).chooseNode(self.data)
         # 发起查询

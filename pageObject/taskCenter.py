@@ -8,6 +8,7 @@ class taskCenter():
     def __init__(self,driver):
         self.driver = driver
 
+    # 办件中心
     def workCenter(self):
         # 判断办件中心菜单是否出现
         WebTools(self.driver).check_element_is_exists('xpath', "//div[@xid='mainMenu']/div[1]/div[1]")
@@ -23,6 +24,14 @@ class taskCenter():
         # 判断新建任务菜单页是否出现
         WebTools(self.driver).check_element_is_exists('link_text', "国有建设用地使用权")
 
+    # 查询中心
+    def queryCenter(self):
+        WebTools(self.driver).check_element_is_exists('xpath', "//div[@title='查询中心']")
+        WebTools(self.driver).mouse_click('xpath', "//div[@title='查询中心']")
+        WebTools(self.driver).switch_iframe("//iframe[@class='ifram ckcx cfARBJ3']", 'xpath')
+        WebTools(self.driver).check_element_is_exists('xpath',"//span[@class='layout-text' and contains(text(),'查询中心')]")
+
+    # 选择流程
     def chooseNode(self,data):
         '''
         流程发起菜单，包括一级菜单、二级菜单、三级菜单
@@ -39,8 +48,8 @@ class taskCenter():
             if qllx == '国有建设用地使用权':
                 if djlx =='首次登记':
                     # 出让用地
-                    if ywlxID == 'C49536D5C50F4F609FACAAAE805EC510':
-                        WebTools(self.driver).mouse_doubleClick('xpath',"//div[@ywlxid='C49536D5C50F4F609FACAAAE805EC510']/div[1]")
+                    if ywlxID == '95EA0C9EDED1481ABB1689213B53DAA0':
+                        WebTools(self.driver).mouse_doubleClick('xpath',"//div[@ywlxid='95EA0C9EDED1481ABB1689213B53DAA0']/div[1]")
                         time.sleep(2)
                 elif djlx == '转移登记':
                     WebTools(self.driver).mouse_click('xpath',"//ul[@xid='subUl0']/li[2]/a")
@@ -301,10 +310,3 @@ class taskCenter():
                         time.sleep(2)
         else:
             logger.error("权利类型和业务类型ID参数必填。")
-
-    # 查询中心
-    def queryCenter(self):
-        WebTools(self.driver).check_element_is_exists('xpath',"//div[@title='查询中心']")
-        WebTools(self.driver).mouse_click('xpath',"//div[@title='查询中心']")
-        WebTools(self.driver).switch_iframe("//iframe[@class='ifram ckcx cfARBJ3']",'xpath')
-        WebTools(self.driver).check_element_is_exists('xpath', "//span[@class='layout-text' and contains(text(),'查询中心')]")

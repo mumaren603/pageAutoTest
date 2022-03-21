@@ -1,0 +1,8 @@
+[
+  "test_spfFirstChangeRegister.py::Test_spfFirstChangeRegister::test_spfFirstChangeRegister",
+  "test_clfChangeRegister.py::Test_clfChangeRegister::test_clfChangeRegister",
+  "test_fgsfChangeRegister.py::Test_fgsfChangeRegister::test_fgsfChangeRegister",
+  "test_jcChangeRegister.py::Test_jcChangeRegister::test_jcChangeRegister",
+  "test_zygbChangeRegister.py::Test_zygbChangeRegister::test_zygbChangeRegister",
+  "test_zjczChangeRegister.py::Test_zjczChangeRegister::test_zjczChangeRegister"
+]

@@ -17,25 +17,25 @@ from Common.LogFunc import loggerConf
 
 logger = loggerConf().getLogger()
 
-@pytest.mark.test
+@pytest.mark.all
 class Test_landTransferRegister():
     def setup(self):
         current_file_path = os.path.abspath(__file__).replace('\\','/')
         self.data = getTestcaseData(getTestdataPath(current_file_path))
 
-    def test_landTransferRegister(self,login,cmdopt):
+    def test_landTransferRegister(self,openProcessCenter,cmdopt):
         '''
         :流程 国有建设用地使用权--转移登记--转移登记
         '''
-        self.driver = login[0]
-        dbInfo = login[1]
+        self.driver = openProcessCenter[0]
+        dbInfo = openProcessCenter[1]
         # 获取办件数据
         bdcdyh = dataInit().getLandCqRegisterData()
         logger.debug("<--------国有建设用地使用权--转移登记--转移登记start-------->")
         logger.debug("<--------界面操作start-------->")
 
         # 办件中心
-        taskCenter(self.driver).common()
+        # taskCenter(self.driver).common()
         # 选择流程
         taskCenter(self.driver).chooseNode(self.data)
         # 发起查询
