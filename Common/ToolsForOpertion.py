@@ -123,7 +123,7 @@ class WebTools(object):
             self.save_screenshot('查找元素错误')
             raise
 
-    # 输入内容方法
+    # 输入内容
     def input_content(self, locType,locVal,val):
         element = self.__getElement(locType,locVal)
         element.send_keys(val)
@@ -133,7 +133,7 @@ class WebTools(object):
         '''
         :param locType:  下拉框元素定位类型，eg:name,id 一般使用name
         :param locVal:   待定位元素值
-        :param val:      下拉框选项值
+        :param val:      下拉框选项值,即页面option值
         :return:
         '''
         element = self.__getElement(locType, locVal)
