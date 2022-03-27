@@ -17,7 +17,6 @@ from Common.LogFunc import loggerConf
 
 logger = loggerConf().getLogger()
 
-@pytest.mark.test
 @pytest.mark.all
 class Test_landCancelRegister():
     def setup(self):
@@ -25,19 +24,16 @@ class Test_landCancelRegister():
         current_file_path = os.path.abspath(__file__).replace('\\','/')
         self.data = getTestcaseData(getTestdataPath(current_file_path))
 
-    def test_landCancelRegister(self,login,cmdopt):
+    def test_landCancelRegister(self,openProcessCenter):
         '''
         :流程 国有建设用地使用权--注销登记--注销登记
         '''
-        self.driver = login[0]
-        dbInfo = login[1]
+        self.driver = openProcessCenter[0]
         # 获取办件数据
-        bdcdyh = dataInit().getLandCqRegisterData()
+        bdcdyh = dataInit().getLandCqRegisterData(self.data)
         logger.debug("<--------国有建设用地使用权--注销登记--注销登记start-------->")
         logger.debug("<--------界面操作start-------->")
 
-        # 办件中心
-        taskCenter(self.driver).common()
         # 选择流程
         taskCenter(self.driver).chooseNode(self.data)
         # 发起查询
@@ -59,7 +55,7 @@ class Test_landCancelRegister():
         # 受理
         submitPage(self.driver).slHandle()
         # 登簿
-        submitPage(self.driver).dbHandle(bdcdyh, self.data)
+        submitPage(self.driver).dbHandle(bdcdyh)
         logger.debug("<--------界面操作end------->")
 
         # 数据库校验
@@ -71,13 +67,14 @@ class Test_landCancelRegister():
         except AssertionError:
             raise
         logger.debug("<--------国有建设用地使用权--注销登记--注销登记end-------->")
-
-    def teardown(self):
         logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n")
-        # 退出系统
-        logout(self.driver).logout()
-        # 退出浏览器
-        self.driver.quit()
+
+    # def teardown(self):
+    #     logger.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>测试用例执行end<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n")
+    #     # 退出系统
+    #     logout(self.driver).logout()
+    #     # 退出浏览器
+    #     self.driver.quit()
 
 
 if __name__ == '__main__':

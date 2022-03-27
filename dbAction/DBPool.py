@@ -1,5 +1,5 @@
 import cx_Oracle as Oracle
-from DBUtils.PooledDB import PooledDB, SharedDBConnection
+from DBUtils.PooledDB import PooledDB
 
 # 登记数据池
 DJ_POOL = PooledDB(

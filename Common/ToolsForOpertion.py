@@ -1,17 +1,13 @@
-'''
-模拟鼠标单击、双击、键盘输入等操作
-'''
-
 import os
 import time, datetime
 # import allure
-
 from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.remote.switch_to import SwitchTo
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.select import Select
 from selenium.common.exceptions import NoSuchElementException, TimeoutException, ElementNotVisibleException
 from Common.LogFunc import loggerConf
 
@@ -20,7 +16,7 @@ logger = loggerConf().getLogger()
 
 class WebTools(object):
     '''
-    封装页面基本操作，如鼠标点击，输入框填写值，校验元素是否存在等
+    func: 封装页面基本操作，如鼠标点击，输入框填写值，校验元素是否存在等
     '''
 
     def __init__(self, driver):
@@ -53,24 +49,23 @@ class WebTools(object):
         '''
         self.driver.implicitly_wait(10)
         self.driver.maximize_window()
-        self.driver.get(url)  # 打开被测系统URL
-        # time.sleep(5)
+        self.driver.get(url)
 
-    # 打开浏览器
-    def open_browser(self, driver_path):
-        '''
-        :param driver_path: Driver物理路径
-        :return:
-        '''
-        if self.browser_type == 'Firefox':
-            self.driver = webdriver.Firefox(executable_path=driver_path)
-        elif self.browser_type == 'Chrome':
-            self.driver = webdriver.Chrome(executable_path=driver_path)
-        elif self.browser_type == 'IE':
-            self.driver = webdriver.Ie(executable_path=driver_path)
-        elif self.browser_type == '' or self.browser_type == None:
-            logger.error("未指定浏览器类型！")
-        self.driver.maximize_window()
+    # # 打开浏览器
+    # def open_browser(self, driver_path):
+    #     '''
+    #     :param driver_path: Driver物理路径
+    #     :return:
+    #     '''
+    #     if self.browser_type == 'Firefox':
+    #         self.driver = webdriver.Firefox(executable_path=driver_path)
+    #     elif self.browser_type == 'Chrome':
+    #         self.driver = webdriver.Chrome(executable_path=driver_path)
+    #     elif self.browser_type == 'IE':
+    #         self.driver = webdriver.Ie(executable_path=driver_path)
+    #     elif self.browser_type == '' or self.browser_type == None:
+    #         logger.error("未指定浏览器类型！")
+    #     self.driver.maximize_window()
 
     # 显性等待时间
     def WebDriverWait(self, MaxTime, Mimtime, value):
@@ -78,16 +73,16 @@ class WebTools(object):
         WebDriverWait(self.driver, MaxTime, Mimtime).until(EC.presence_of_element_located(element))
 
     # 切换到iframe上
-    def switch_iframe(self, value, type=None):
+    def switch_iframe(self, val, type=None):
         # 通过id, name切换（需唯一）
         if type is None:
-            SwitchTo(self.driver).frame(value)
+            SwitchTo(self.driver).frame(val)
         else:
             webElemenet = None
             if type == 'xpath':
-                webElemenet = self.driver.find_element_by_xpath(value)
+                webElemenet = self.driver.find_element(By.XPATH,val)
             elif type == 'css_selector':
-                webElemenet = self.driver.find_element_by_css_selector(value)
+                webElemenet = self.driver.find_element(By.CSS_SELECTOR,val)
             SwitchTo(self.driver).frame(webElemenet)
 
     # 从iframe切回原界面
@@ -134,34 +129,46 @@ class WebTools(object):
         element.send_keys(val)
 
     # 下拉框操作
-    def choose_droplist_value(self, droplistName, type, value):
+    def choose_droplist(self,locType,locVal,val):
         '''
-        :param droplistName: 下拉框name名字
-        :param type: 下拉框值通过哪种方式选取
-        :param value: 下拉框选取具体值
+        :param locType:  下拉框元素定位类型，eg:name,id 一般使用name
+        :param locVal:   待定位元素值
+        :param val:      下拉框选项值
         :return:
         '''
-        try:
-            if type == "xpath":
-                self.driver.find_element_by_name(droplistName).find_element_by_xpath(value).click()
-            elif type == "class_name":
-                self.driver.find_element_by_name(droplistName).find_element_by_class_name(value).click()
-            elif type == "id":
-                self.driver.find_element_by_name(droplistName).find_element_by_id(value).click()
-            elif type == "name":
-                self.driver.find_element_by_name(droplistName).find_element_by_name(value).click()
-        except NoSuchElementException as e1:
-            logger.error("%s:%s下拉框元素未找到;%s下拉框值选择失败" % (type, droplistName, value))
-            self.save_screenshot('下拉框元素未找到。')
-            raise e1
-        except TimeoutException as e2:
-            logger.error("%s:%s元素查找超时" % (type, droplistName))
-            self.save_screenshot('查找元素超时')
-            raise e2
-        except Exception as e:
-            logger.error("%s:%s元素查找错误,错误信息：%s" % (type, value, e))
-            self.save_screenshot('查找元素错误')
-            raise e
+        element = self.__getElement(locType, locVal)
+        s = Select(element)
+        s.select_by_value(val)
+
+    # def choose_droplist_value(self, droplistName, type, value):
+    #     '''
+    #     :param droplistName: 下拉框name名字
+    #     :param type: 下拉框值通过哪种方式选取
+    #     :param value: 下拉框选取具体值
+    #     :return:
+    #     '''
+    #     try:
+    #         if type == "xpath":
+    #             self.driver.find_element(By.NAME,droplistName)
+    #             self.driver.find_element_by_name(droplistName).find_element_by_xpath(value).click()
+    #         elif type == "class_name":
+    #             self.driver.find_element_by_name(droplistName).find_element_by_class_name(value).click()
+    #         elif type == "id":
+    #             self.driver.find_element_by_name(droplistName).find_element_by_id(value).click()
+    #         elif type == "name":
+    #             self.driver.find_element_by_name(droplistName).find_element_by_name(value).click()
+    #     except NoSuchElementException as e1:
+    #         logger.error("%s:%s下拉框元素未找到;%s下拉框值选择失败" % (type, droplistName, value))
+    #         self.save_screenshot('下拉框元素未找到。')
+    #         raise e1
+    #     except TimeoutException as e2:
+    #         logger.error("%s:%s元素查找超时" % (type, droplistName))
+    #         self.save_screenshot('查找元素超时')
+    #         raise e2
+    #     except Exception as e:
+    #         logger.error("%s:%s元素查找错误,错误信息：%s" % (type, value, e))
+    #         self.save_screenshot('查找元素错误')
+    #         raise e
 
     # 鼠标事件(单击)
     def mouse_click(self, locType,locVal):

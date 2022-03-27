@@ -43,7 +43,7 @@ class sqrqkPage():
                 # 是否通知
                 WebTools(self.driver).mouse_click('name', 'SFTZR')
                 # 证件类型
-                WebTools(self.driver).choose_droplist_value('SQRZJZL', 'xpath', "//select[@name='SQRZJZL']/option[4]")
+                WebTools(self.driver).choose_droplist('name', 'SQRZJZL', '3')
                 # 证件号码
                 WebTools(self.driver).input_content('xpath', "//input[@xid='SQRZJH']", qlrzjhm)
                 # 电话
@@ -51,7 +51,7 @@ class sqrqkPage():
                 # 通讯地址
                 WebTools(self.driver).input_content('xpath', "//input[@xid='SQRTXDZ']", qlrtxdz)
                 # 共有方式
-                WebTools(self.driver).choose_droplist_value('GYFS', 'xpath', "//select[@name='GYFS']/option[2]")
+                WebTools(self.driver).choose_droplist('name', 'GYFS', '1')
             elif djlx == '转移登记':
                 # 预转现，裁定过户（地），裁定过户批量（地），裁定过户（房），裁定过户批量（房 ）
                 qlrlist=[
@@ -62,14 +62,13 @@ class sqrqkPage():
                          'BF8570D83B5F4B95A0AD22D9603477D2'
                          ]
                 if ywlxID in qlrlist:
-                # if ywlxID == '08B6FBC363E745C3ABF0DFDD13ECCD0B' or ywlxID == 'E53B3B2C4EE0453D9BCAD57B0107F184' or ywlxID == 'BF8570D83B5F4B95A0AD22D9603477D2':
                     WebTools(self.driver).check_element_is_exists('xpath', "//table[@xid='underTable']/tbody/tr[1]/td[9]//span[contains(text(),'编辑')]")
                     WebTools(self.driver).mouse_click('xpath', "//table[@xid='underTable']/tbody/tr[1]/td[9]//span[contains(text(),'编辑')]")
                     time.sleep(1)
                     # 是否通知
                     WebTools(self.driver).mouse_click('name', 'SFTZR')
                     # 证件类型
-                    WebTools(self.driver).choose_droplist_value('SQRZJZL', 'xpath',"//select[@name='SQRZJZL']/option[4]")
+                    WebTools(self.driver).choose_droplist('name', 'SQRZJZL', '3')
                     # 证件号码
                     WebTools(self.driver).input_clear('xpath', "//input[@xid='SQRZJH']")
                     WebTools(self.driver).input_content('xpath', "//input[@xid='SQRZJH']", qlrzjhm)
@@ -85,7 +84,7 @@ class sqrqkPage():
                     # 是否通知
                     WebTools(self.driver).mouse_click('name', 'SFTZR')
                     # 证件类型
-                    WebTools(self.driver).choose_droplist_value('SQRZJZL', 'xpath',"//select[@name='SQRZJZL']/option[4]")
+                    WebTools(self.driver).choose_droplist('name','SQRZJZL','4')
                     # 证件号码
                     WebTools(self.driver).input_content('xpath', "//input[@xid='SQRZJH']", qlrzjhm)
                     # 电话
@@ -93,7 +92,7 @@ class sqrqkPage():
                     # 通讯地址
                     WebTools(self.driver).input_content('xpath', "//input[@xid='SQRTXDZ']", qlrtxdz)
                     # 共有方式
-                    WebTools(self.driver).choose_droplist_value('GYFS', 'xpath', "//select[@name='GYFS']/option[2]")
+                    WebTools(self.driver).choose_droplist('name', 'GYFS', '0')
         elif qllx == '抵押权':
             if djlx == '首次登记':
                 # 在建工程抵押首次
@@ -128,7 +127,7 @@ class sqrqkPage():
                     # 姓名
                     WebTools(self.driver).input_content('xpath', "//input[@xid='SQRMC']", '绿地中国地产开发有限公司')
                     # 证件类型
-                    WebTools(self.driver).choose_droplist_value('SQRZJZL', 'xpath', "//select[@name='SQRZJZL']/option[8]")
+                    WebTools(self.driver).choose_droplist('name', 'SQRZJZL', '3')
                     # 证件号码
                     WebTools(self.driver).input_content('xpath', "//input[@xid='SQRZJH']", '999999999991N')
                     # 保存
@@ -151,13 +150,13 @@ class sqrqkPage():
                     # 是否通知
                     WebTools(self.driver).mouse_click('name', 'SFTZR')
                     # 证件类型
-                    WebTools(self.driver).choose_droplist_value('SQRZJZL', 'xpath',"//select[@name='SQRZJZL']/option[4]")
+                    WebTools(self.driver).choose_droplist('name', 'SQRZJZL', '3')
                     # 证件号码
                     WebTools(self.driver).input_content('xpath', "//input[@xid='SQRZJH']", qlrzjhm)
                     # 电话
                     WebTools(self.driver).input_content('xpath', "//input[@xid='SQRDHHM']", qlrdhhm)
                     # 共有方式
-                    WebTools(self.driver).choose_droplist_value('GYFS', 'xpath', "//select[@name='GYFS']/option[2]")
+                    WebTools(self.driver).choose_droplist('name', 'GYFS', '1')
                     # 通讯地址
                     WebTools(self.driver).input_content('xpath', "//input[@xid='SQRTXDZ']", qlrtxdz)
             elif djlx =='转移登记':
@@ -180,13 +179,13 @@ class sqrqkPage():
                     # 是否通知
                     WebTools(self.driver).mouse_click('name', 'SFTZR')
                     # 证件类型
-                    WebTools(self.driver).choose_droplist_value('SQRZJZL', 'xpath',"//select[@name='SQRZJZL']/option[4]")
+                    WebTools(self.driver).choose_droplist('name', 'SQRZJZL', '3')
                     # 证件号码
                     WebTools(self.driver).input_content('xpath', "//input[@xid='SQRZJH']", qlrzjhm)
                     # 电话
                     WebTools(self.driver).input_content('xpath', "//input[@xid='SQRDHHM']", qlrdhhm)
                     # 共有方式
-                    WebTools(self.driver).choose_droplist_value('GYFS', 'xpath', "//select[@name='GYFS']/option[2]")
+                    WebTools(self.driver).choose_droplist('name', 'GYFS', '1')
                     # 通讯地址
                     WebTools(self.driver).input_content('xpath', "//input[@xid='SQRTXDZ']", qlrtxdz)
             elif djlx == '变更登记':
@@ -264,13 +263,13 @@ class sqrqkPage():
                 # 是否通知
                 WebTools(self.driver).mouse_click('name', 'SFTZR')
                 # 证件类型
-                WebTools(self.driver).choose_droplist_value('SQRZJZL', 'xpath', "//select[@name='SQRZJZL']/option[4]")
+                WebTools(self.driver).choose_droplist('name', 'SQRZJZL', '3')
                 # 证件号码
                 WebTools(self.driver).input_content('xpath', "//input[@xid='SQRZJH']", qlrzjhm)
                 # 电话
                 WebTools(self.driver).input_content('xpath', "//input[@xid='SQRDHHM']", qlrdhhm)
                 # 共有方式
-                WebTools(self.driver).choose_droplist_value('GYFS', 'xpath', "//select[@name='GYFS']/option[2]")
+                WebTools(self.driver).choose_droplist('name', 'GYFS', '1')
                 # 通讯地址
                 WebTools(self.driver).input_content('xpath', "//input[@xid='SQRTXDZ']", qlrtxdz)
             else:
@@ -284,7 +283,7 @@ class sqrqkPage():
                 # 是否通知
                 WebTools(self.driver).mouse_click('name', 'SFTZR')
                 # 证件类型
-                WebTools(self.driver).choose_droplist_value('SQRZJZL', 'xpath', "//select[@name='SQRZJZL']/option[4]")
+                WebTools(self.driver).choose_droplist('name', 'SQRZJZL', '3')
                 # 证件号码
                 WebTools(self.driver).input_content('xpath', "//input[@xid='SQRZJH']", qlrzjhm)
                 # 电话
@@ -292,8 +291,7 @@ class sqrqkPage():
                 # 通讯地址
                 WebTools(self.driver).input_content('xpath', "//input[@xid='SQRTXDZ']", qlrtxdz)
                 # 共有方式
-                WebTools(self.driver).choose_droplist_value('GYFS', 'xpath', "//select[@name='GYFS']/option[2]")
-
+                WebTools(self.driver).choose_droplist('name', 'GYFS', '1')
         # 公共操作
         if djlx != '注销登记':
             # 将页面滚动条拖到顶部

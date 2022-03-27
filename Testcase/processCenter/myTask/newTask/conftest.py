@@ -11,8 +11,9 @@ def openProcessCenter(login):
     '''
     print("打开办件中心模块")
     driver = login[0]
-    # 查询中心
+    # 打开查询中心
     taskCenter(driver).workCenter()
     yield login
-    # WebTools(driver).is_element_exist("//i[@class='icon-close-round cFNvY7v']")
-    # WebTools(driver).mouse_click('xpath',"//i[@class='icon-close-round cFNvY7v']")
+    # 关闭办件中心
+    WebTools(driver).is_element_exist("//i[@class='icon-close-round cFNvY7v']")
+    WebTools(driver).mouse_click('xpath',"//i[@class='icon-close-round cFNvY7v']")

@@ -18,7 +18,7 @@ def cmdopt(request):
     return request.config.getoption('--env')
 
 # 参数传递给collect_static_data 获取对应配置文件值
-@pytest.fixture(scope='module',autouse=True)
+@pytest.fixture(scope='session',autouse=True)
 def getConfValue(request,cmdopt):
     '''装饰器：根据环境配置文件获取配置文件yaml值'''
     request.config.base_data = collect_static_data(cmdopt)

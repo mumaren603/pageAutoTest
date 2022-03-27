@@ -1,15 +1,12 @@
-import pytest
+import pytest,sys
 from selenium import webdriver
 from Common.ToolsForOpertion import WebTools
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import NoSuchElementException
-from selenium.webdriver.common.by import By
+from pageObject.logout import logout
 from Common.LogFunc import loggerConf
 
 logger = loggerConf().getLogger()
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="session")
 def login(request,getConfValue):
     logger.debug("yaml中读取配置内容：%s" % getConfValue)
 
@@ -19,32 +16,27 @@ def login(request,getConfValue):
     login_url = getConfValue.get('envinfo').get('url', None)
     logger.debug("url路径：%s" % login_url)
 
-    login_user = getConfValue.get('envinfo').get('loginUser', None)
-    logger.debug("登录用户信息：%s" % login_user)
-
-    db_info = getConfValue.get('envinfo').get('db',None)
+    login_info = getConfValue.get('envinfo').get('loginInfo', None)
+    logger.debug("登录用户信息：%s" % login_info)
     logger.debug("<--------读取初始化配置数据end-------->")
 
-    if driver_path and login_url and login_user:
+    if driver_path and login_url and login_info:
         driver = webdriver.Chrome(executable_path=driver_path)
         WebTools(driver).set_browser(login_url)
         #登录
         WebTools(driver).check_element_is_exists('xpath', "//div[contains(@id,'_btnlogin')]")
         WebTools(driver).input_clear('xpath', "//input[contains(@id,'_name')]")
         WebTools(driver).input_clear('xpath', "//input[contains(@id,'_password')]")
-        WebTools(driver).input_content('xpath', "//input[contains(@id,'_name')]", login_user.get('user'))
-        WebTools(driver).input_content('xpath', "//input[contains(@id,'_password')]", login_user.get('passwd'))
+        WebTools(driver).input_content('xpath', "//input[contains(@id,'_name')]", login_info.get('user'))
+        WebTools(driver).input_content('xpath', "//input[contains(@id,'_password')]", login_info.get('passwd'))
         WebTools(driver).mouse_click('xpath', "//div[contains(@id,'_btnlogin')]")
-        try:
-            WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, "//div[contains(text(),'办件中心')]")))
-            yield driver ,db_info
-        except NoSuchElementException:
-            logger.error('NoSuchElementException')
-            raise
-        except Exception as e:
-            logger.error('登录异常：',e)
-            raise
+        WebTools(driver).check_element_is_exists('xpath',"//div[contains(text(),'办件中心')]")
+        yield driver
+        # 登出系统、退出浏览器
+        logout(driver).logout()
+        driver.quit()
     else:
         logger.error("全局登录信息缺失，请检查yaml配置文件。")
+        sys.exit(-1)
 
 

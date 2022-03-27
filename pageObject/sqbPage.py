@@ -100,12 +100,12 @@ class sqbPage():
                 fetureDate = time.strftime('%Y-%m-%d', time.localtime(time.time() + 86400 * 365 * 10))
 
                 #抵押方式
-                WebTools(self.driver).choose_droplist_value('DYFS', 'xpath', "//select[@name='DYFS']/option[2]")
+                WebTools(self.driver).choose_droplist('name', 'DYFS', '1')
                 # 抵押不动产类型
                 if cqType == 0:
-                    WebTools(self.driver).choose_droplist_value('DYBDCLX', 'xpath', "//select[@name='DYBDCLX']/option[2]")
+                    WebTools(self.driver).choose_droplist('name', 'DYBDCLX', '1')
                 elif cqType == 1:
-                    WebTools(self.driver).choose_droplist_value('DYBDCLX', 'xpath', "//select[@name='DYBDCLX']/option[3]")
+                    WebTools(self.driver).choose_droplist('name', 'DYBDCLX', '2')
                 else:
                     logger.error("产权类型【cqType】未传值，请检查yml文件")
                     sys.exit(-1)
@@ -286,12 +286,12 @@ class sqbPage():
                     # 将页面滚动条拖动中间
                     self.driver.execute_script("document.documentElement.scrollTop=300")
                     # 抵押方式
-                    WebTools(self.driver).choose_droplist_value('DYFS', 'xpath', "//select[@name='DYFS']/option[2]")
+                    WebTools(self.driver).choose_droplist('name', 'DYFS', '1')
                     # 抵押不动产类型
                     if cqType == 0:
-                        WebTools(self.driver).choose_droplist_value('DYBDCLX', 'xpath', "//select[@name='DYBDCLX']/option[2]")
+                        WebTools(self.driver).choose_droplist('name', 'DYBDCLX', '1')
                     elif cqType == 1:
-                        WebTools(self.driver).choose_droplist_value('DYBDCLX', 'xpath', "//select[@name='DYBDCLX']/option[3]")
+                        WebTools(self.driver).choose_droplist('name', 'DYBDCLX', '2')
                     else:
                         logger.error("产权类型【cqType】未传值，请检查yml文件")
                         sys.exit(-1)
@@ -327,9 +327,9 @@ class sqbPage():
                     if ywlxID == '1CEDE7DF7E0F481BB5AF3C8700028F1B':
                         # 预告登记种类
                         if ywxl == '预售商品房预告登记':
-                            WebTools(self.driver).choose_droplist_value('YGDJZL', 'xpath',"//select[@name='YGDJZL']/option[2]")
+                            WebTools(self.driver).choose_droplist('name', 'YGDJZL', '1')
                         elif ywxl == '其它不动产买卖预告登记':
-                            WebTools(self.driver).choose_droplist_value('YGDJZL', 'xpath',"//select[@name='YGDJZL']/option[3]")
+                            WebTools(self.driver).choose_droplist('name', 'YGDJZL', '2')
                     # 将页面滚动条拖到底部
                     self.driver.execute_script("document.documentElement.scrollTop=3000")
                     # 其他
