@@ -2,7 +2,6 @@ import pytest,os
 from utils.getTestdataForJson import getTestcaseData,getTestdataPath
 from Common.ToolsForOpertion import WebTools
 from init.dataInit import dataInit
-from pageObject.logout import logout
 from Common.LogFunc import loggerConf
 logger = loggerConf().getLogger()
 

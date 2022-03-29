@@ -5,21 +5,22 @@ from Common.LogFunc import loggerConf
 
 logger = loggerConf().getLogger()
 
-@pytest.fixture(scope="function",autouse=True)
+@pytest.fixture(scope="function")
 def openQueryCenter(login):
     '''
     :param login: 装饰器 调取登录方法（login(fixture)-->conftest）
-    :return: driver对象和数据库配置信息
+    :return: driver对象
     :action: 模块下每个用例执行前需打开查询中心模块，执行后关闭查询中心
     '''
-    logger.debug("打开查询中心模块")
-    # driver = login[0]
     driver = login
-    print('driver:',driver)
+
+    logger.debug("打开查询中心模块")
     # 查询中心
     taskCenter(driver).queryCenter()
-    yield login
+    yield driver
+    logger.debug("关闭查询中心模块")
     WebTools(driver).switch_back_iframe()
     WebTools(driver).mouse_click('xpath', "//a[@xid='closeFuncBtn']")
+
 
 
