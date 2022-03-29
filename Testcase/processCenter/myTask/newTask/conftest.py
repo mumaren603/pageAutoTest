@@ -10,7 +10,7 @@ def openProcessCenter(login):
     :action: 模块下每个用例执行前需打开办件中心模块，执行后关闭办件中心
     '''
     print("打开办件中心模块")
-    driver = login[0]
+    driver = login
     # 打开查询中心
     taskCenter(driver).workCenter()
     yield login
