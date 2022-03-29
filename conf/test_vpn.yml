@@ -1,0 +1,23 @@
+envinfo:
+  #浏览器驱动
+  browserDriver: D:/python/pageAutoTest/chromeDriver/chromedriver.exe
+  #url
+  url: http://192.168.1.200:9999
+  #数据库
+  db:
+    qj:
+      db_user: CGKCSS
+      db_pwd: CGKCSS
+      db_host: 192.168.1.251
+      db_port: 1521
+      db_sid: orcl
+    dj:
+      db_user: DJPT
+      db_pwd: DJPT
+      db_host: 192.168.1.10
+      db_port: 1521
+      db_sid: sqdj
+  #登录用户
+  loginInfo:
+    user: zjx
+    passwd: 123
