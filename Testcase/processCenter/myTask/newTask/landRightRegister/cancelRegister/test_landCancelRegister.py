@@ -28,7 +28,7 @@ class Test_landCancelRegister():
         '''
         :流程 国有建设用地使用权--注销登记--注销登记
         '''
-        self.driver = openProcessCenter[0]
+        self.driver = openProcessCenter
         # 获取办件数据
         bdcdyh = dataInit().getLandCqRegisterData(self.data)
         logger.debug("<--------国有建设用地使用权--注销登记--注销登记start-------->")

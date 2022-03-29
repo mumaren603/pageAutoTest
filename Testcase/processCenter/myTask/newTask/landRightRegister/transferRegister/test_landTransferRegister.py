@@ -27,8 +27,7 @@ class Test_landTransferRegister():
         '''
         :流程 国有建设用地使用权--转移登记--转移登记
         '''
-        self.driver = openProcessCenter[0]
-        dbInfo = openProcessCenter[1]
+        self.driver = openProcessCenter
         # 获取办件数据
         bdcdyh = dataInit().getLandCqRegisterData(self.data)
         logger.debug("<--------国有建设用地使用权--转移登记--转移登记start-------->")

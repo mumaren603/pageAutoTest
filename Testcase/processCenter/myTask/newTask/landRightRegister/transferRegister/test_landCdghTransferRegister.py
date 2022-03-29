@@ -26,7 +26,7 @@ class Test_landCdghTransferRegister():
         '''
         :流程 国有建设用地使用权--转移登记--裁定过户
         '''
-        self.driver = openProcessCenter[0]
+        self.driver = openProcessCenter
         # 获取办件数据
         bdcdyh = dataInit().getLandCdghRegisterData()
         logger.debug("<--------国有建设用地使用权--转移登记--裁定过户start-------->")
